@@ -11,6 +11,10 @@
 # Sample Usage:
 #
 class glassfish {
+	
+	# Include default params
+	require glassfish::params
+	
   Domain {
     user         => 'gfish',
     asadminuser  => 'admin',
