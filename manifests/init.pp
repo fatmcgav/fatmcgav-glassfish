@@ -15,6 +15,8 @@ class glassfish {
 	# Include default params
 	require glassfish::params
 	
+	
+	/*
   Domain {
     user         => 'gfish',
     asadminuser  => 'admin',
@@ -113,4 +115,6 @@ class glassfish {
       properties => ['jaas-context=agentRealm:foo=bar'],
       require    => Domain['mydomain'];
   }
+
+	*/
 }

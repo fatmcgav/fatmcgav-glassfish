@@ -23,11 +23,6 @@ Puppet::Type.newtype(:domain) do
     defaultto "4800"
   end
 
-  newparam(:profile) do
-    desc "Glassfish domain profile: cluster, devel, etc. Default: cluster"
-    defaultto "cluster"
-  end
-
   newparam(:asadminuser) do
     desc "The internal Glassfish user asadmin uses. Default: admin"
     defaultto "admin"
@@ -52,4 +47,9 @@ Puppet::Type.newtype(:domain) do
       end
     end
   end
+  
+  newparam(:asadminpath) do
+   desc "The path to asadmin file."
+  end
+
 end
