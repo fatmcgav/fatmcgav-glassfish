@@ -1,8 +1,10 @@
 require 'puppet/provider/asadmin'
 Puppet::Type.type(:domain).provide(:asadmin,
                                    :parent => Puppet::Provider::Asadmin) do
-  desc "Glassfish support."
-  commands :asadmin => "asadmin"
+  desc "Glassfish EL Domain support."
+  
+  defaultfor :osfamily => :RedHat
+  confine :osfamily => :RedHat
 
   def create
     args = []
