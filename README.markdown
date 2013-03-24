@@ -22,4 +22,4 @@ i.e. /etc/puppet/modules/glassfish/lib/...
 Example:
 ========
 
-    GW - tbc.
+    include glassfish

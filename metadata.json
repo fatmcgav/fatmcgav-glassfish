@@ -1,0 +1,29 @@
+{
+  "version": "0.1.0",
+  "project_page": "http://github.com/fatmcgav/puppet-glassfish",
+  "source": "git://github.com/fatmcgav/puppet-glassfish.git",
+  "checksums": {
+    "Modulefile": "",
+    "files/java.preseed": "7e39d91ad5e8514ea8627ba773f0d840",
+    "manifests/init.pp": "01a9ec9a475e66ed6e69e19a2d8ff452",
+    "README.markdown": "59beb4e499a5738aac23b59e964956b0"
+  },
+  "types": [
+
+  ],
+  "author": "Gavin Williams",
+  "dependencies": [
+    {
+      "version_requirement": ">= 0.1.0",
+      "name": "softek/java7"
+    },
+    {
+      "version_requirement": ">= 1.0.1",
+      "name": "puppetlabs/apt"
+    }
+  ],
+  "license": "GPLv3",
+  "summary": "A resource type to manage Glassfish domains, system-properties, jdbc-connection-pools and jdbc-resources and application deployment.",
+  "description": "A resource type to manage Glassfish domains, system-properties, jdbc-connection-pools and jdbc-resources and application deployment.",
+  "name": "fatmcgav-glassfish"
+}

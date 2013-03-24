@@ -1,6 +1,6 @@
 # Class: glassfish
 #
-# This module manages glassfish
+# This module installs and manages glassfish
 #
 # Parameters:
 #
@@ -11,110 +11,43 @@
 # Sample Usage:
 #
 class glassfish {
-	
-	# Include default params
-	require glassfish::params
-	
-	
-	/*
-  Domain {
-    user         => 'gfish',
-    asadminuser  => 'admin',
-    passwordfile => '/home/gfish/.aspass',
+  include glassfish::params
+  include glassfish::download
+  
+  case $glassfish::params::glassfish_java {
+    'java-7-oracle': {
+      include java7 
+    }
+    'java-7-openjdk': {
+      package {'openjdk-7-jdk':
+        ensure => "installed"
+      }
+    }
+    'java-6-oracle': {
+      package {'sun-java6-jdk':
+        ensure => "installed"
+      }
+    }
+    'java-6-openjdk': {
+      package {'openjdk-6-jdk':
+        ensure => "installed"
+      }
+    }
+    default: { 
+      fail("Unrecognized Java version. Choose one of: java-7-oracle, java-7-openjdk, java-6-oracle, java-6-openjdk")
+    }
   }
-
-  domain {
-    'mydomain':
-      ensure => present;
-
-    'devdomain':
-      ensure   => present,
-      portbase => '5000',
-      profile  => 'devel';
-
-    'myolddomain':
-      ensure => absent;
+  
+  file { $glassfish::params::glassfish_path:
+      ensure => "directory",
   }
-
-  Systemproperty {
-    user         => 'gfish',
-    asadminuser  => 'admin',
-    passwordfile => '/home/gfish/.aspass',
+  
+  glassfish::download::download_file { $glassfish::params::glassfish_download_file:
+    site => $glassfish::params::glassfish_download_site,                                                                           
+    cwd => $glassfish::params::glassfish_path,                                                                            
+    creates => "$glassfish::params::glassfish_path/$glassfish::params::glassfish_download_file",                                                                  
+    require => File[$glassfish::params::glassfish_path],                                                                  
+    user => $glassfish::params::glassfish_user
   }
-
-  systemproperty {
-    'search-url':
-      ensure   => present,
-      portbase => '5000',
-      value    => 'http://www.google.com',
-      require  => Domain['devdomain'];
-  }
-
-  Jdbcconnectionpool {
-    ensure              => present,
-    user                => 'gfish',
-    asadminuser         => 'admin',
-    passwordfile        => '/home/gfish/.aspass',
-    datasourceclassname => 'com.mysql.jdbc.jdbc2.optional.MysqlConnectionPoolDataSource',
-    resourcetype        => 'javax.sql.ConnectionPoolDataSource',
-    require             => Glassfish['mydomain'],
-  }
-
-  jdbcconnectionpool {
-    'MyPool':
-      properties => 'password=mYPasS:user=myuser:url=jdbc\:mysql\://host.ex.com\:3306/mydatabase:useUnicode=true:characterEncoding=utf8:characterResultSets=utf:autoReconnect=true:autoReconnectForPools=true';
-  }
-
-  Jdbcresource {
-    ensure       => present,
-    user         => 'gfish',
-    passwordfile => '/home/gfish/.aspass',
-  }
-
-  jdbcresource {
-    'jdbc/MyPool':
-      connectionpool => 'MyPool',
-  }
-
-  Application {
-    ensure       => present,
-    user         => 'gfish',
-    passwordfile => '/home/gfish/.aspass',
-  }
-
-  application {
-    'pluto':
-      source => '/home/gfish/pluto.war';
-
-    'myhello':
-      source  => '/home/gfish/hello.war',
-      require => Application['pluto'];
-  }
-
-  Jvmoption {
-    ensure       => present,
-    user         => 'gfish',
-    passwordfile => '/home/gfish/.aspass',
-  }
-
-  jvmoption {
-    ['-DjvmRoute=01', '-server']:
-  }
-
-  Authrealm {
-    ensure       => present,
-    user         => 'gfish',
-    asadminuser  => 'admin',
-    passwordfile => '/Users/larstobi/.aspass',
-  }
-
-  authrealm {
-    'agentRealm':
-      ensure     => present,
-      classname  => 'com.sun.identity.agents.appserver.v81.AmASRealm',
-      properties => ['jaas-context=agentRealm:foo=bar'],
-      require    => Domain['mydomain'];
-  }
-
-	*/
+  
 }
