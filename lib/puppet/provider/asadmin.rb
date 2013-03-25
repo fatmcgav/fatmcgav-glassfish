@@ -11,7 +11,7 @@ class Puppet::Provider::Asadmin < Puppet::Provider
     command = "#{@resource[:asadminpath]} #{exec_args}"
     Puppet.debug("Command = #{command}")
     command = "su - #{@resource[:user]} -c \"#{command}\"" if @resource[:user] and
-      not command.match /create-service/
+      not command.match(/create-service/)
     self.debug command
     result = `#{command}`
     self.fail result unless $?.exitstatus == 0

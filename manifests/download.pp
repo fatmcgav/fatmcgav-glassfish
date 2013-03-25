@@ -1,18 +1,18 @@
 
 class glassfish::download {
-  define download_file(
-          $site="",
-          $cwd="",
-          $creates="",
-          $require="",
-          $user="") {                                                                                         
   
-      exec { $name:                                                                                                                     
-          command => "/usr/bin/wget ${site}/${name}",                                                         
-          cwd => $cwd,
-          creates => "${cwd}/${name}",                                                              
-          require => $require,
-          user => $user,                                                                                                          
+  package { "wget":
+    ensure => "installed"
+  }
+  
+  define download ($uri, $timeout = 300) {
+      exec {
+          "download $name":
+              command => "wget -q '$uri' -O $name",
+              path => "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+              creates => $name,
+              timeout => $timeout,
+              require => Package[ "wget" ],
       }
   }
 }

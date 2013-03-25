@@ -13,8 +13,7 @@ domain {
 
   'devdomain':
     ensure   => present,
-    portbase => '5000',
-    profile  => 'devel';
+    portbase => '5000';
 
   'myolddomain':
     ensure => absent;

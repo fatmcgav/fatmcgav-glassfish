@@ -10,44 +10,128 @@
 #
 # Sample Usage:
 #
-class glassfish {
-  include glassfish::params
+
+class glassfish (
+  $java = $glassfish::params::glassfish_java # JDK version: java-7-oracle, java-7-openjdk, java-6-oracle, java-6-openjdk 
+) inherits glassfish::params {
   include glassfish::download
-  
-  case $glassfish::params::glassfish_java {
-    'java-7-oracle': {
-      include java7 
+
+  case $java {
+    'java-7-oracle'  : {
+      include java7
     }
-    'java-7-openjdk': {
-      package {'openjdk-7-jdk':
-        ensure => "installed"
-      }
+    'java-7-openjdk' : {
+      package { 'openjdk-7-jdk': ensure => "installed" }
     }
-    'java-6-oracle': {
-      package {'sun-java6-jdk':
-        ensure => "installed"
-      }
+    'java-6-oracle'  : {
+      package { 'sun-java6-jdk': ensure => "installed" }
     }
-    'java-6-openjdk': {
-      package {'openjdk-6-jdk':
-        ensure => "installed"
-      }
+    'java-6-openjdk' : {
+      package { 'openjdk-6-jdk': ensure => "installed" }
     }
-    default: { 
+    default          : {
       fail("Unrecognized Java version. Choose one of: java-7-oracle, java-7-openjdk, java-6-oracle, java-6-openjdk")
     }
   }
-  
-  file { $glassfish::params::glassfish_path:
-      ensure => "directory",
+
+  $download_dir = '/opt/download' 
+
+  file { $download_dir: ensure => "directory" }
+  file { "$download_dir/$glassfish::params::glassfish_download_file":  }
+  file { "$download_dir/$glassfish::params::glassfish_dir":  }
+  file { $glassfish::params::glassfish_path: 
+    group => $glassfish::params::glassfish_group,
+    owner => $glassfish::params::glassfish_user,
+    mode => 2775
+  }
+
+  user { $glassfish::params::glassfish_user:
+    ensure     => "present",
+    managehome => true
   }
   
-  glassfish::download::download_file { $glassfish::params::glassfish_download_file:
-    site => $glassfish::params::glassfish_download_site,                                                                           
-    cwd => $glassfish::params::glassfish_path,                                                                            
-    creates => "$glassfish::params::glassfish_path/$glassfish::params::glassfish_download_file",                                                                  
-    require => File[$glassfish::params::glassfish_path],                                                                  
-    user => $glassfish::params::glassfish_user
+  group { $glassfish::params::glassfish_group:
+    ensure    => "present",
+    require   => User[$glassfish::params::glassfish_user],
+    members   => User[$glassfish::params::glassfish_user],
+  }
+
+  glassfish::download::download { "$download_dir/$glassfish::params::glassfish_download_file":
+    uri => "$glassfish::params::glassfish_download_site/$glassfish::params::glassfish_download_file",
+    require => [
+      File[$glassfish::params::glassfish_path], 
+      File[$download_dir]
+    ]
+  }
+
+  package { unzip:
+    ensure => "installed"
   }
   
+  exec {'unzip-downloaded':
+    command => "unzip $glassfish::params::glassfish_download_file",
+    path => "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",                                                         
+    cwd => $download_dir,
+    creates => $glassfish::params::glassfish_path,                                                              
+    require => [
+      File["$download_dir/$glassfish::params::glassfish_download_file"],
+      Package[unzip]
+    ]
+  }
+  
+  define setgroupaccess ($user, $group, $dir) {
+      exec { "rwX $name":
+          command => "chmod -R g+rwX $dir",
+          path => "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+          creates => $glassfish::params::glassfish_path,
+      }
+      exec { "find $name":
+          command => "find $dir -type d -exec chmod g+s {} +",
+          path => "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+          creates => $glassfish::params::glassfish_path,
+      }
+      exec { "group $name":
+          command => "chown -R $user:$group $dir",
+          path => "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+          creates => $glassfish::params::glassfish_path,
+      }
+  }
+  
+  setgroupaccess {'set-perm':
+    user => $glassfish::params::glassfish_user,
+    group => $glassfish::params::glassfish_group,
+    require => Group[$glassfish::params::glassfish_group],
+    dir => "$download_dir/glassfish3",                                                             
+  }
+  
+  exec {'move-downloaded':
+    command => "mv $download_dir/glassfish3 $glassfish::params::glassfish_path",
+    path => "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",                                                         
+    cwd => $download_dir,
+    creates => $glassfish::params::glassfish_path,                                                              
+  }
+  
+  file {servicefile:
+    path => "/etc/init.d/glassfish",
+    mode => 755,
+    content => template('glassfish/glassfish-init.erb'),
+    notify  => Service["glassfish"]
+  }
+  
+  service { "glassfish":
+	  ensure  => "running",
+    enable  => "true",
+    require => [
+      File[$glassfish::params::glassfish_path],
+      File[servicefile]
+    ]
+	} 
+    
+  Glassfish::Download::Download["$download_dir/$glassfish::params::glassfish_download_file"] 
+  -> Exec['unzip-downloaded'] 
+  -> Setgroupaccess['set-perm'] 
+  -> Exec['move-downloaded'] 
+  -> File [servicefile]
+  -> Service['glassfish']
+
 }

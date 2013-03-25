@@ -1,4 +1,4 @@
-require 'puppet/provider/asadmin'
+require 'lib/puppet/provider/asadmin'
 Puppet::Type.type(:systemproperty).provide(:asadmin, :parent =>
                                            Puppet::Provider::Asadmin) do
   desc "Glassfish system-properties support."
