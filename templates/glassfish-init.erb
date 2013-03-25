@@ -27,9 +27,10 @@ function procStart() {
 	_isOk=0
 	sudo -u $USER $GLASSFISHPATH/asadmin start-domain > /dev/null
 	if [[ $? -ne 0 ]]; then
-		_isOk=1
+		_isOk=2
 	fi
 	log_end_msg $_isOk
+	return $_isOk
 }
 function procStop() {
 	# Make sure only root can run our script
@@ -41,17 +42,20 @@ function procStop() {
 	_isOk=0
 	sudo -u $USER ${GLASSFISHPATH}/asadmin stop-domain > /dev/null
 	if [[ $? -ne 0 ]]; then
-		_isOk=1
+		_isOk=3
 	fi
 	log_end_msg $_isOk
+	return $_isOk
 }
 
 case "$1" in
 	start)
 		procStart
+		exit $?
 	;;
 	stop)
 		procStop
+		exit $?
 	;;
 	status)
 		echo -n "$__NAME status: "
@@ -60,13 +64,19 @@ case "$1" in
 			realpath=`dirname $(readlink -f $GLASSFISHPATH)`
 			pid=`ps aux | grep $realpath | grep -v grep | awk '{print $2}'`
 			echo "running (pid: $pid)"
+			exit 0
 		else
 			echo stopped
+			exit 4
 		fi
 	;;
 	restart)
 		procStop
+		if test "$?" != "0"; then
+		    exit 3
+		fi
 		procStart
+		exit $?
 	;;
 	*)
 		echo $"usage: $0 {start|stop|status|restart}"

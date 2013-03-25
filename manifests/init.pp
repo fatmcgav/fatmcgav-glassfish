@@ -119,8 +119,10 @@ class glassfish (
   }
   
   service { "glassfish":
-	  ensure  => "running",
-    enable  => "true",
+    ensure     => running,
+    enable     => true,
+    hasstatus  => true,
+    hasrestart => true,
     require => [
       File[$glassfish::params::glassfish_path],
       File[servicefile]
