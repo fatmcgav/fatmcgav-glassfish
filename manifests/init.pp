@@ -102,7 +102,7 @@ class glassfish (
 	
 	case $java {
     'java-7-oracle'  : {
-      java7 { instalation: }
+      require java7
       service { "glassfish":
 		    ensure     => running,
 		    enable     => true,
@@ -111,7 +111,7 @@ class glassfish (
 		    require => [
 		      File[$glassfish::params::glassfish_path],
 		      File[servicefile],
-		      Java7[instalation],
+		      Class[java7],
 		    ]
 		  }
     }
