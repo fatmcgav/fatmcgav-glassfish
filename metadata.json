@@ -29,7 +29,7 @@
     "lib/puppet/type/systemproperty.rb": "c314bac07a28b0d3272f03ff9d9755c2",
     "manifests/domain.pp": "ad36b9f4dd13d159a13173f63f108c89",
     "manifests/download.pp": "402ea4b26de3e2d2929176ea60134d6f",
-    "manifests/init.pp": "fcae62a8a82403800fa386faaf2e1900",
+    "manifests/init.pp": "f0e5d41baeba2cfaafb9e08518feb96d",
     "manifests/params.pp": "4c186c8cbe348f05c1829cdd950024e4",
     "templates/glassfish-init.erb": "8932803282f28b62d7ae2b1992feb8c0",
     "tests/init.pp": "f469a73c245e900164e46ac6eeec4b1a"

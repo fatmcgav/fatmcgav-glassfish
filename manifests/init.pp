@@ -16,24 +16,6 @@ class glassfish (
 ) inherits glassfish::params {
   include glassfish::download
 
-  case $java {
-    'java-7-oracle'  : {
-      include java7
-    }
-    'java-7-openjdk' : {
-      package { 'openjdk-7-jdk': ensure => "installed" }
-    }
-    'java-6-oracle'  : {
-      package { 'sun-java6-jdk': ensure => "installed" }
-    }
-    'java-6-openjdk' : {
-      package { 'openjdk-6-jdk': ensure => "installed" }
-    }
-    default          : {
-      fail("Unrecognized Java version. Choose one of: java-7-oracle, java-7-openjdk, java-6-oracle, java-6-openjdk")
-    }
-  }
-
   $download_dir = '/opt/download' 
 
   file { $download_dir: ensure => "directory" }
@@ -116,18 +98,69 @@ class glassfish (
     mode => 755,
     content => template('glassfish/glassfish-init.erb'),
     notify  => Service["glassfish"]
+  } 
+	
+	case $java {
+    'java-7-oracle'  : {
+      java7 { instalation: }
+      service { "glassfish":
+		    ensure     => running,
+		    enable     => true,
+		    hasstatus  => true,
+		    hasrestart => true,
+		    require => [
+		      File[$glassfish::params::glassfish_path],
+		      File[servicefile],
+		      Java7[instalation],
+		    ]
+		  }
+    }
+    'java-7-openjdk' : {
+      package { 'openjdk-7-jdk': ensure => "installed" }
+      service { "glassfish":
+        ensure     => running,
+        enable     => true,
+        hasstatus  => true,
+        hasrestart => true,
+        require => [
+          File[$glassfish::params::glassfish_path],
+          File[servicefile],
+          Package['openjdk-7-jdk'],
+        ]
+      }
+    }
+    'java-6-oracle'  : {
+      package { 'sun-java6-jdk': ensure => "installed" }
+      service { "glassfish":
+        ensure     => running,
+        enable     => true,
+        hasstatus  => true,
+        hasrestart => true,
+        require => [
+          File[$glassfish::params::glassfish_path],
+          File[servicefile],
+          Package['sun-java6-jdk'],
+        ]
+      }
+    }
+    'java-6-openjdk' : {
+      package { 'openjdk-6-jdk': ensure => "installed" }
+      service { "glassfish":
+        ensure     => running,
+        enable     => true,
+        hasstatus  => true,
+        hasrestart => true,
+        require => [
+          File[$glassfish::params::glassfish_path],
+          File[servicefile],
+          Package['openjdk-6-jdk'],
+        ]
+      }
+    }
+    default          : {
+      fail("Unrecognized Java version. Choose one of: java-7-oracle, java-7-openjdk, java-6-oracle, java-6-openjdk")
+    }
   }
-  
-  service { "glassfish":
-    ensure     => running,
-    enable     => true,
-    hasstatus  => true,
-    hasrestart => true,
-    require => [
-      File[$glassfish::params::glassfish_path],
-      File[servicefile]
-    ]
-	} 
     
   Glassfish::Download::Download["$download_dir/$glassfish::params::glassfish_download_file"] 
   -> Exec['unzip-downloaded'] 
