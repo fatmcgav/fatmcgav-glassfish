@@ -1,4 +1,4 @@
-require 'lib/puppet/provider/asadmin'
+require 'puppet/provider/asadmin'
 Puppet::Type.type(:jvmoption).provide(:asadmin, :parent =>
                                            Puppet::Provider::Asadmin) do
   desc "Glassfish jvm-options support."
