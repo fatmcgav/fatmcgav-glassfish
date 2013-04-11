@@ -1,14 +1,24 @@
 class Puppet::Provider::Asadmin < Puppet::Provider
 
+  @@glversion = "3.1.2.2" # Default Glassfish version
+  @@gldir     = "glassfish-#{@@glversion}"
+  @@glpath    = "/usr/local/lib/#{@@gldir}" # Default Glassfish path
+  @@asadmin   = "#{@@glpath}/bin/asadmin"
+  
+  def self.asadminpath
+    @@asadmin
+  end
+  
   def asadmin_exec(passed_args)
     port = @resource[:portbase].to_i + 48
     args = []
     args << "--port" << port.to_s
     args << "--user" << @resource[:asadminuser]
-    args << "--passwordfile" << @resource[:passwordfile]
+    args << "--passwordfile" << @resource[:passwordfile] if @resource[:passwordfile] and 
+      not @resource[:passwordfile].empty?
     passed_args.each { |arg| args << arg }
     exec_args = args.join " "
-    command = "#{@resource[:asadminpath]} #{exec_args}"
+    command = "#{@@asadmin} #{exec_args}"
     Puppet.debug("Command = #{command}")
     command = "su - #{@resource[:user]} -c \"#{command}\"" if @resource[:user] and
       not command.match(/create-service/)
@@ -24,7 +34,7 @@ class Puppet::Provider::Asadmin < Puppet::Provider
   end
   
   def exists?
-      commands :asadmin => "#{@resource[:asadminpath]}"
+      commands :asadmin => "#{@@asadmin}"
       version = asadmin("version")
       return false if version.length == 0
       

@@ -2,7 +2,7 @@ require 'puppet/provider/asadmin'
 Puppet::Type.type(:application).provide(:asadmin, :parent =>
                                            Puppet::Provider::Asadmin) do
   desc "Glassfish application deployment support."
-  commands :asadmin => "asadmin"
+  commands :asadmin => "#{Puppet::Provider::Asadmin.asadminpath}"
 
   def create
     args = []

@@ -161,7 +161,7 @@ class glassfish (
       fail("Unrecognized Java version. Choose one of: java-7-oracle, java-7-openjdk, java-6-oracle, java-6-openjdk")
     }
   }
-    
+  
   Glassfish::Download::Download["$download_dir/$glassfish::params::glassfish_download_file"] 
   -> Exec['unzip-downloaded'] 
   -> Setgroupaccess['set-perm'] 

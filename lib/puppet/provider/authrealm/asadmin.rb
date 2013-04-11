@@ -2,7 +2,7 @@ require 'puppet/provider/asadmin'
 Puppet::Type.type(:authrealm).provide(:asadmin, :parent =>
                                       Puppet::Provider::Asadmin) do
   desc "Glassfish authentication realms support."
-  commands :asadmin => "asadmin"
+  commands :asadmin => "#{Puppet::Provider::Asadmin.asadminpath}"
 
   def create
     args = []
