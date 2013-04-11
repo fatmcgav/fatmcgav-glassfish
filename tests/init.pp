@@ -25,12 +25,11 @@ Systemproperty {
   passwordfile => '/home/gfish/.aspass',
 }
 
-systemproperty {
-  'search-url':
-    ensure   => present,
-    portbase => '5000',
-    value    => 'http://www.google.com',
-    require  => Domain['devdomain'];
+systemproperty { 'search-url':
+  ensure   => present,
+  portbase => '5000',
+  value    => 'http://www.google.com',
+  require  => Domain['devdomain'];
 }
 
 Jdbcconnectionpool {
@@ -43,9 +42,17 @@ Jdbcconnectionpool {
   require             => Glassfish['mydomain'],
 }
 
-jdbcconnectionpool {
-  'MyPool':
-    properties => 'password=mYPasS:user=myuser:url=jdbc\:mysql\://host.ex.com\:3306/mydatabase:useUnicode=true:characterEncoding=utf8:characterResultSets=utf:autoReconnect=true:autoReconnectForPools=true';
+jdbcconnectionpool {'MyPool':
+  properties => {
+    'password' => 'mYPasS',
+    'user' => 'myuser',
+    'url' => 'jdbc:mysql://host.ex.com:3306/mydatabase',
+    'useUnicode' => true,
+    'characterEncoding' => 'utf8',
+    'characterResultSets' => 'utf',
+    'autoReconnect' => true,
+    'autoReconnectForPools' => true,
+  }
 }
 
 Jdbcresource {
@@ -54,9 +61,21 @@ Jdbcresource {
   passwordfile => '/home/gfish/.aspass',
 }
 
-jdbcresource {
-  'jdbc/MyPool':
-    connectionpool => 'MyPool',
+jdbcresource { 'jdbc/MyPool':
+  connectionpool => 'MyPool',
+}
+
+Customresource {
+  ensure       => present,
+  restype => 'java.util.Properties',
+  factoryclass => 'org.glassfish.resources.custom.factory.PropertiesFactory',
+}
+
+customresource { 'custom/SampleProperties':
+  properties => {
+    "type" => 'local',
+    "path" => '/tmp/published',
+  }
 }
 
 Application {

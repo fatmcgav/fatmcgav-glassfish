@@ -44,7 +44,6 @@ Puppet::Type.type(:jdbcconnectionpool).provide(:asadmin, :parent =>
       rvalue = value.gsub(/([=:])/, '\\\\\\1')
       list << "#{rkey}=#{rvalue}"
     end
-    Puppet.debug("Properties = #{list}")
     return list.join ':'
   end
 end
