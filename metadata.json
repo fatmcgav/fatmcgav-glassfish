@@ -10,7 +10,7 @@
   "checksums": {
     "LICENSE": "d32239bcb673463ab874e80d47fae504",
     "Modulefile": "7a808381d89adb98c833c74cae61d63f",
-    "README.markdown": "8871146492c33de0002ac4d7ef0680cf",
+    "README.markdown": "d289bea7cb7a58bc3beb8b1de15c0288",
     "Rakefile": "f37e6131fe7de9a49b09d31596f5fbf1",
     "lib/puppet/provider/application/asadmin.rb": "f7b56eaae21eb7c86494364db20d0af6",
     "lib/puppet/provider/asadmin.rb": "be94084d6031b721db96fde69cd716b1",
