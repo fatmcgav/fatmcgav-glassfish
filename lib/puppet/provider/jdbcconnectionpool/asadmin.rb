@@ -11,8 +11,10 @@ Puppet::Type.type(:jdbcconnectionpool).provide(:asadmin, :parent =>
     args << "create-jdbc-connection-pool"
     args << "--datasourceclassname" << @resource[:datasourceclassname]
     args << "--restype" << @resource[:resourcetype]
-    args << "--property"
-    args << "\"#{prepareProperties @resource[:properties]}\""
+    if hasProperties? @resource[:properties]
+      args << "--property"
+      args << "\"#{prepareProperties @resource[:properties]}\""
+    end   
     args << @resource[:name]
     asadmin_exec(args)
   end
@@ -28,22 +30,5 @@ Puppet::Type.type(:jdbcconnectionpool).provide(:asadmin, :parent =>
       return true if @resource[:name] == line.chomp
     end
     return false
-  end
-  
-  private
-  def prepareProperties properties
-    if properties.is_a? String
-      return properties
-    end
-    if not properties.is_a? Hash
-      return properties.to_s
-    end
-    list = []
-    properties.each do |key, value|
-      rkey = key.gsub(/([=:])/, '\\\\\\1')
-      rvalue = value.gsub(/([=:])/, '\\\\\\1')
-      list << "#{rkey}=#{rvalue}"
-    end
-    return list.join ':'
   end
 end

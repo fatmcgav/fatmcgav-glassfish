@@ -8,7 +8,10 @@ Puppet::Type.type(:authrealm).provide(:asadmin, :parent =>
     args = []
     args << "create-auth-realm"
     args << "--classname" << @resource[:classname]
-    args << "--property" << "\\\"#{@resource[:properties]}\\\""
+    if hasProperties? @resource[:properties]
+      args << "--property"
+      args << "\"#{prepareProperties @resource[:properties]}\""
+    end 
     args << @resource[:name]
     asadmin_exec(args)
   end
@@ -25,4 +28,5 @@ Puppet::Type.type(:authrealm).provide(:asadmin, :parent =>
     end
     return false
   end
+  
 end

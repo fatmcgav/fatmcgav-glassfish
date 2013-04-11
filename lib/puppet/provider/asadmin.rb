@@ -46,6 +46,33 @@ class Puppet::Provider::Asadmin < Puppet::Provider
         end
       end
   end
-    
+
+  protected
+  
+  def hasProperties? props
+    unless props.nil?
+      return (not props.to_s.empty?)
+    end
+    return false
+  end
+  
+  def prepareProperties properties
+    if properties.is_a? String
+      return properties
+    end
+    if properties.is_a? Array
+      return properties.join ':'
+    end    
+    if not properties.is_a? Hash
+      return properties.to_s
+    end
+    list = []
+    properties.each do |key, value|
+      rkey = key.gsub(/([=:])/, '\\\\\\1')
+      rvalue = value.gsub(/([=:])/, '\\\\\\1')
+      list << "#{rkey}=#{rvalue}"
+    end
+    return list.join ':'
+  end  
     
 end
