@@ -2,14 +2,19 @@ require 'puppet/provider/asadmin'
 Puppet::Type.type(:jdbcconnectionpool).provide(:asadmin, :parent =>
                                            Puppet::Provider::Asadmin) do
   desc "Glassfish JDBC connection pool support."
-  commands :asadmin => "asadmin"
+  
+  commands :asadmin => "#{Puppet::Provider::Asadmin.asadminpath}"
+
 
   def create
     args = []
     args << "create-jdbc-connection-pool"
     args << "--datasourceclassname" << @resource[:datasourceclassname]
     args << "--restype" << @resource[:resourcetype]
-    args << "--property" << "\\\"#{@resource[:properties]}\\\""
+    if hasProperties? @resource[:properties]
+      args << "--property"
+      args << "\"#{prepareProperties @resource[:properties]}\""
+    end   
     args << @resource[:name]
     asadmin_exec(args)
   end

@@ -2,7 +2,7 @@ require 'puppet/provider/asadmin'
 Puppet::Type.type(:jvmoption).provide(:asadmin, :parent =>
                                            Puppet::Provider::Asadmin) do
   desc "Glassfish jvm-options support."
-  commands :asadmin => "asadmin"
+  commands :asadmin => "#{Puppet::Provider::Asadmin.asadminpath}"
 
   def create
     args = []
