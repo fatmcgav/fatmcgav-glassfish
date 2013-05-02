@@ -1,7 +1,7 @@
 class Puppet::Provider::Asadmin < Puppet::Provider
 
-  @@glversion = "3.1.2.2" # Default Glassfish version
-  @@gldir     = "glassfish-#{@@glversion}"
+  @@glversion = `cat /etc/glassfish-version` # Default Glassfish version
+  @@gldir     = "glassfish"
   @@glpath    = "/usr/local/lib/#{@@gldir}" # Default Glassfish path
   @@asadmin   = "#{@@glpath}/bin/asadmin"
   

@@ -12,14 +12,20 @@
 #
 
 class glassfish (
-  $java = $glassfish::params::glassfish_java # JDK version: java-7-oracle, java-7-openjdk, java-6-oracle, java-6-openjdk 
+  $java = $glassfish::params::glassfish_java, # JDK version: java-7-oracle, java-7-openjdk, java-6-oracle, java-6-openjdk
+  $version = $glassfish::params::glassfish_version # '3.1.2.2' 
 ) inherits glassfish::params {
   include glassfish::download
 
   $download_dir = '/opt/download' 
+  $download_file = "glassfish-$version.zip"
 
   file { $download_dir: ensure => "directory" }
-  file { "$download_dir/$glassfish::params::glassfish_download_file":  }
+  file { versionfile:
+    source => $version,
+    path => '/etc/glassfish-version',
+  }
+  file { "$download_dir/$download_file":  }
   file { "$download_dir/$glassfish::params::glassfish_dir":  }
   file { $glassfish::params::glassfish_path: 
     group => $glassfish::params::glassfish_group,
@@ -38,8 +44,8 @@ class glassfish (
     members   => User[$glassfish::params::glassfish_user],
   }
 
-  glassfish::download::download { "$download_dir/$glassfish::params::glassfish_download_file":
-    uri => "$glassfish::params::glassfish_download_site/$glassfish::params::glassfish_download_file",
+  glassfish::download::download { "$download_dir/$download_file":
+    uri => "$glassfish::params::glassfish_download_site/$download_file",
     require => [
       File[$glassfish::params::glassfish_path], 
       File[$download_dir]
@@ -51,12 +57,12 @@ class glassfish (
   }
   
   exec {'unzip-downloaded':
-    command => "unzip $glassfish::params::glassfish_download_file",
+    command => "unzip $download_file",
     path => "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",                                                         
     cwd => $download_dir,
     creates => $glassfish::params::glassfish_path,                                                              
     require => [
-      File["$download_dir/$glassfish::params::glassfish_download_file"],
+      File["$download_dir/$download_file"],
       Package[unzip]
     ]
   }
@@ -162,11 +168,13 @@ class glassfish (
     }
   }
   
-  Glassfish::Download::Download["$download_dir/$glassfish::params::glassfish_download_file"] 
+  Glassfish::Download::Download["$download_dir/$download_file"] 
   -> Exec['unzip-downloaded'] 
   -> Setgroupaccess['set-perm'] 
   -> Exec['move-downloaded'] 
   -> File [servicefile]
-  -> Service['glassfish']
+  -> File [versionfile]
+  
+  File [servicefile] -> Service['glassfish']
 
 }

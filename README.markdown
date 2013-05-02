@@ -28,7 +28,8 @@ Example simple usage:
 or
 
     class { glassfish:
-      java => 'java-6-openjdk'
+      java => 'java-7-openjdk',
+      version => '3.1.2.2',
     }
    
 More examples on using various types:
