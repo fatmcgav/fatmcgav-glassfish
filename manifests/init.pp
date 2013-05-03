@@ -13,21 +13,30 @@
 
 class glassfish (
   $java = $glassfish::params::glassfish_java, # JDK version: java-7-oracle, java-7-openjdk, java-6-oracle, java-6-openjdk
-  $version = $glassfish::params::glassfish_version # '3.1.2.2' 
+  $version = $glassfish::params::glassfish_version, # '3.1.2.2'
+  $extrajars = [], # extra jars 
 ) inherits glassfish::params {
   include glassfish::download
 
   $download_dir = '/opt/download' 
   $download_file = "glassfish-$version.zip"
+  $glassfish_dir              = "glassfish-$version"
+  $glassfish_parent_dir       = '/usr/local/lib'
+  $glassfish_path             = "$glassfish_parent_dir/$glassfish_dir" # Default Glassfish path
+  $glassfish_asadmin_path     = "$glassfish_path/bin/asadmin" # Default Glassfish Asadmin path
+  $glassfish_download_site    = "http://download.java.net/glassfish/$version/release" # Default Glassfish download
 
   file { $download_dir: ensure => "directory" }
   file { versionfile:
-    source => $version,
+    content => $version,
     path => '/etc/glassfish-version',
   }
   file { "$download_dir/$download_file":  }
-  file { "$download_dir/$glassfish::params::glassfish_dir":  }
-  file { $glassfish::params::glassfish_path: 
+  file { $glassfish_parent_dir:
+    ensure => directory,
+  }
+  file { "$download_dir/$glassfish_dir":  }
+  file { $glassfish_path: 
     group => $glassfish::params::glassfish_group,
     owner => $glassfish::params::glassfish_user,
     mode => 2775
@@ -45,10 +54,11 @@ class glassfish (
   }
 
   glassfish::download::download { "$download_dir/$download_file":
-    uri => "$glassfish::params::glassfish_download_site/$download_file",
+    uri => "$glassfish_download_site/$download_file",
     require => [
-      File[$glassfish::params::glassfish_path], 
-      File[$download_dir]
+      File[$glassfish_path], 
+      File[$glassfish_parent_dir],
+      File[$download_dir],
     ]
   }
 
@@ -60,43 +70,66 @@ class glassfish (
     command => "unzip $download_file",
     path => "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",                                                         
     cwd => $download_dir,
-    creates => $glassfish::params::glassfish_path,                                                              
+    creates => $glassfish_path,                                                              
     require => [
       File["$download_dir/$download_file"],
       Package[unzip]
     ]
   }
   
-  define setgroupaccess ($user, $group, $dir) {
+  define setgroupaccess ($user, $group, $dir, $glpath) {
       exec { "rwX $name":
           command => "chmod -R g+rwX $dir",
           path => "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
-          creates => $glassfish::params::glassfish_path,
+          creates => $glpath,
       }
       exec { "find $name":
           command => "find $dir -type d -exec chmod g+s {} +",
           path => "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
-          creates => $glassfish::params::glassfish_path,
+          creates => $glpath,
       }
       exec { "group $name":
           command => "chown -R $user:$group $dir",
           path => "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
-          creates => $glassfish::params::glassfish_path,
+          creates => $glpath,
       }
   }
+  define install_jars ($glpath, $domain) {
+    $jaraddress = $name
+    $jar = basename($jaraddress)
+    $jardest = "$glpath/glassfish/domains/$domain/lib/$jar"
+	  exec { "download $name":
+      command => "wget -O $jardest $jaraddress",
+      path => "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+      creates => $jardest,
+      cwd => $glpath,
+	    require => [
+	      File[$glpath], 
+	    ],
+	    notify => Service["glassfish"],
+	  }
+	}
   
   setgroupaccess {'set-perm':
     user => $glassfish::params::glassfish_user,
     group => $glassfish::params::glassfish_group,
     require => Group[$glassfish::params::glassfish_group],
-    dir => "$download_dir/glassfish3",                                                             
+    dir => "$download_dir/glassfish3",
+    glpath => $glassfish_path,                                                             
   }
   
   exec {'move-downloaded':
-    command => "mv $download_dir/glassfish3 $glassfish::params::glassfish_path",
+    command => "mv $download_dir/glassfish3 $glassfish_path",
     path => "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",                                                         
     cwd => $download_dir,
-    creates => $glassfish::params::glassfish_path,                                                              
+    creates => $glassfish_path,                                                              
+  }
+  
+  install_jars { $extrajars:
+    domain => $glassfish::params::glassfish_domain,
+    glpath => $glassfish_path,
+    require => Exec['move-downloaded'],
+    
   }
   
   file {servicefile:
@@ -115,7 +148,7 @@ class glassfish (
 		    hasstatus  => true,
 		    hasrestart => true,
 		    require => [
-		      File[$glassfish::params::glassfish_path],
+		      File[$glassfish_path],
 		      File[servicefile],
 		      Class[java7],
 		    ]
@@ -129,7 +162,7 @@ class glassfish (
         hasstatus  => true,
         hasrestart => true,
         require => [
-          File[$glassfish::params::glassfish_path],
+          File[$glassfish_path],
           File[servicefile],
           Package['openjdk-7-jdk'],
         ]
@@ -143,7 +176,7 @@ class glassfish (
         hasstatus  => true,
         hasrestart => true,
         require => [
-          File[$glassfish::params::glassfish_path],
+          File[$glassfish_path],
           File[servicefile],
           Package['sun-java6-jdk'],
         ]
@@ -157,7 +190,7 @@ class glassfish (
         hasstatus  => true,
         hasrestart => true,
         require => [
-          File[$glassfish::params::glassfish_path],
+          File[$glassfish_path],
           File[servicefile],
           Package['openjdk-6-jdk'],
         ]

@@ -1,12 +1,14 @@
 class Puppet::Provider::Asadmin < Puppet::Provider
 
-  @@glversion = `cat /etc/glassfish-version` # Default Glassfish version
-  @@gldir     = "glassfish"
-  @@glpath    = "/usr/local/lib/#{@@gldir}" # Default Glassfish path
-  @@asadmin   = "#{@@glpath}/bin/asadmin"
-  
   def self.asadminpath
-    @@asadmin
+    glversion = `cat /etc/glassfish-version 2>/dev/null` # Default Glassfish version
+    unless $? == 0
+       return nil
+    end
+    gldir     = "glassfish-#{glversion}"
+    glpath    = "/usr/local/lib/#{gldir}" # Default Glassfish path
+    asadmin   = "#{glpath}/bin/asadmin"
+    asadmin
   end
   
   def asadmin_exec(passed_args)
@@ -18,13 +20,14 @@ class Puppet::Provider::Asadmin < Puppet::Provider
       not @resource[:passwordfile].empty?
     passed_args.each { |arg| args << arg }
     exec_args = args.join " "
-    command = "#{@@asadmin} #{exec_args}"
+    path = Puppet::Provider::Asadmin.asadminpath
+    command = "#{path} #{exec_args}"
     Puppet.debug("Command = #{command}")
     command = "su - #{@resource[:user]} -c \"#{command}\"" if @resource[:user] and
       not command.match(/create-service/)
     self.debug command
     result = `#{command}`
-    self.fail result unless $?.exitstatus == 0
+    self.fail result unless $? == 0
     result
   end
 

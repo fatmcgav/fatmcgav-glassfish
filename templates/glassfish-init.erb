@@ -6,11 +6,11 @@
 # Required-Stop:
 # Default-Start:	2 3 4 5
 # Default-Stop:		0 1 6
-# Short-Description:	Oracle Glassfish Java EE 6 Application Server ver. <%= scope.lookupvar('glassfish::params::glassfish_version') %>
+# Short-Description:	Oracle Glassfish Java EE 6 Application Server ver. <%= scope.lookupvar('version') %>
 ### END INIT INFO
 
 USER=<%= scope.lookupvar('glassfish::params::glassfish_user') %>
-GLASSFISHPATH=<%= scope.lookupvar('glassfish::params::glassfish_path') %>/glassfish/bin
+GLASSFISHPATH=<%= scope.lookupvar('glassfish_path') %>/glassfish/bin
 __NAME="Oracle Glassfish Java EE 6 Application Server"
 
 test -x ${GLASSFISHPATH}/asadmin || exit 2
