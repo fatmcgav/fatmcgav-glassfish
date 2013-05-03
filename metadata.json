@@ -1,0 +1,312 @@
+{
+  "name": "fatmcgav-glassfish",
+  "author": "fatmcgav",
+  "description": "A resource type to manage Glassfish domains, system-properties, jdbc-connection-pools and jdbc-resources and application deployment.",
+  "license": "GPLv3",
+  "project_page": "http://github.com/fatmcgav/puppet-glassfish",
+  "source": "git://github.com/fatmcgav/puppet-glassfish.git",
+  "summary": "A resource type to manage Glassfish domains, system-properties, jdbc-connection-pools and jdbc-resources and application deployment.",
+  "version": "0.1.0",
+  "checksums": {
+    "LICENSE": "d32239bcb673463ab874e80d47fae504",
+    "Modulefile": "6893878df7b2578d72816201b21bf107",
+    "README.markdown": "824a8573804317719ba11951b53e83de",
+    "lib\\puppet\\provider\\application\\asadmin.rb": "a2829a3e5340c2673864dc9351cef8a3",
+    "lib\\puppet\\provider\\asadmin.rb": "12e5def08b43458108e80181dcedd2f6",
+    "lib\\puppet\\provider\\authrealm\\asadmin.rb": "7e3a06ff39c37e3fbb4143b76e1aaeb4",
+    "lib\\puppet\\provider\\domain\\el.rb": "e1c70f0791552a80cf89dd584bd7b158",
+    "lib\\puppet\\provider\\jdbcconnectionpool\\asadmin.rb": "abac98143dbe71427220feb3d3233fe4",
+    "lib\\puppet\\provider\\jdbcresource\\asadmin.rb": "325d06fa2532ba982220af757784235e",
+    "lib\\puppet\\provider\\jvmoption\\asadmin.rb": "c99249babb9a0a29e17dcbc35ebd866c",
+    "lib\\puppet\\provider\\systemproperty\\asadmin.rb": "928d92f5787080302cce0026f7ffb0a4",
+    "lib\\puppet\\type\\application.rb": "53427501f7b9f083082c1a5b3ad1219d",
+    "lib\\puppet\\type\\authrealm.rb": "c326cf32fa6a98ca58eea02e698d698c",
+    "lib\\puppet\\type\\domain.rb": "5a802eb23ef4be9463d154d5d463c85f",
+    "lib\\puppet\\type\\jdbcconnectionpool.rb": "b73364b33a3af76d7639954bb22103b7",
+    "lib\\puppet\\type\\jdbcresource.rb": "da4d3bd1e8a09a60fa901231af651df6",
+    "lib\\puppet\\type\\jvmoption.rb": "8c54c291872630f3275550706bd8e306",
+    "lib\\puppet\\type\\systemproperty.rb": "c314bac07a28b0d3272f03ff9d9755c2",
+    "manifests\\domain.pp": "27625f12509179fd2c3118fcf96de689",
+    "manifests\\init.pp": "c94a2c46f41c308688ccf14286cf14ff",
+    "manifests\\params.pp": "f1782b156d2b395c2b960dcaa281a45d"
+  },
+  "types": [
+    {
+      "parameters": [
+        {
+          "name": "name",
+          "doc": "The application name."
+        },
+        {
+          "name": "contextroot",
+          "doc": "The URL context root."
+        },
+        {
+          "name": "source",
+          "doc": "The WAR file."
+        },
+        {
+          "name": "portbase",
+          "doc": "The Glassfish domain port base. Default: 4800"
+        },
+        {
+          "name": "asadminuser",
+          "doc": "The internal Glassfish user asadmin uses. Default: admin"
+        },
+        {
+          "name": "passwordfile",
+          "doc": "The file containing the password for the user."
+        },
+        {
+          "name": "user",
+          "doc": "The user to run the command as."
+        }
+      ],
+      "providers": [
+        {
+          "name": "asadmin",
+          "doc": "Glassfish application deployment support."
+        }
+      ],
+      "name": "application",
+      "doc": "Manage applications of Glassfish domains"
+    },
+    {
+      "parameters": [
+        {
+          "name": "name",
+          "doc": "The realm name."
+        },
+        {
+          "name": "classname",
+          "doc": "The Java class name. Ex. com.sun.identity.agents.appserver.v81.AmASRealm"
+        },
+        {
+          "name": "properties",
+          "doc": "The properties. Ex. jaas-context\u003dagentRealm"
+        },
+        {
+          "name": "isdefault",
+          "doc": "Sets realm to default if true."
+        },
+        {
+          "name": "portbase",
+          "doc": "The Glassfish domain port base. Default: 4800"
+        },
+        {
+          "name": "asadminuser",
+          "doc": "The internal Glassfish user asadmin uses. Default: admin"
+        },
+        {
+          "name": "passwordfile",
+          "doc": "The file containing the password for the user."
+        },
+        {
+          "name": "user",
+          "doc": "The user to run the command as."
+        }
+      ],
+      "providers": [
+        {
+          "name": "asadmin",
+          "doc": "Glassfish authentication realms support."
+        }
+      ],
+      "name": "authrealm",
+      "doc": "Manage authentication realms of Glassfish domains"
+    },
+    {
+      "parameters": [
+        {
+          "name": "name",
+          "doc": "The Glassfish domain name."
+        },
+        {
+          "name": "smf",
+          "doc": "Create Solaris SMF service. Default: true"
+        },
+        {
+          "name": "startoncreate",
+          "doc": "Start the domain immediately after it is created. Default: true"
+        },
+        {
+          "name": "portbase",
+          "doc": "The Glassfish domain port base. Default: 4800"
+        },
+        {
+          "name": "asadminuser",
+          "doc": "The internal Glassfish user asadmin uses. Default: admin"
+        },
+        {
+          "name": "passwordfile",
+          "doc": "The file containing the password for the user."
+        },
+        {
+          "name": "user",
+          "doc": "The user to run the command as."
+        },
+        {
+          "name": "asadminpath",
+          "doc": "The path to asadmin file."
+        }
+      ],
+      "providers": [
+        {
+          "name": "asadmin",
+          "doc": "Glassfish EL Domain support."
+        }
+      ],
+      "name": "domain",
+      "doc": "Manage Glassfish domains"
+    },
+    {
+      "parameters": [
+        {
+          "name": "name",
+          "doc": "The JDBC connection pool name."
+        },
+        {
+          "name": "datasourceclassname",
+          "doc": "The data source class name. Ex. com.mysql.jdbc.jdbc2.optional.MysqlConnectionPoolDataSource"
+        },
+        {
+          "name": "resourcetype",
+          "doc": "The resource type. Ex. javax.sql.ConnectionPoolDataSource"
+        },
+        {
+          "name": "properties",
+          "doc": "The properties. Ex. user\u003dmyuser:password\u003dmypass:url\u003djdbc:mysql://myhost.ex.com:3306/mydatabase"
+        },
+        {
+          "name": "portbase",
+          "doc": "The Glassfish domain port base. Default: 4800"
+        },
+        {
+          "name": "asadminuser",
+          "doc": "The internal Glassfish user asadmin uses. Default: admin"
+        },
+        {
+          "name": "passwordfile",
+          "doc": "The file containing the password for the user."
+        },
+        {
+          "name": "user",
+          "doc": "The user to run the command as."
+        }
+      ],
+      "providers": [
+        {
+          "name": "asadmin",
+          "doc": "Glassfish JDBC connection pool support."
+        }
+      ],
+      "name": "jdbcconnectionpool",
+      "doc": "Manage JDBC connection pools of Glassfish domains"
+    },
+    {
+      "parameters": [
+        {
+          "name": "name",
+          "doc": "The JDBC resource name."
+        },
+        {
+          "name": "connectionpool",
+          "doc": "The JDBC connection pool name"
+        },
+        {
+          "name": "portbase",
+          "doc": "The Glassfish domain port base. Default: 4800"
+        },
+        {
+          "name": "asadminuser",
+          "doc": "The internal Glassfish user asadmin uses. Default: admin"
+        },
+        {
+          "name": "passwordfile",
+          "doc": "The file containing the password for the user."
+        },
+        {
+          "name": "user",
+          "doc": "The user to run the command as."
+        }
+      ],
+      "providers": [
+        {
+          "name": "asadmin",
+          "doc": "Glassfish JDBC connection pool support."
+        }
+      ],
+      "name": "jdbcresource",
+      "doc": "Manage JDBC resources of Glassfish domains"
+    },
+    {
+      "parameters": [
+        {
+          "name": "name",
+          "doc": "The jvm-option."
+        },
+        {
+          "name": "portbase",
+          "doc": "The Glassfish domain port base. Default: 4800"
+        },
+        {
+          "name": "asadminuser",
+          "doc": "The internal Glassfish user asadmin uses. Default: admin"
+        },
+        {
+          "name": "passwordfile",
+          "doc": "The file containing the password for the user."
+        },
+        {
+          "name": "user",
+          "doc": "The user to run the command as."
+        }
+      ],
+      "providers": [
+        {
+          "name": "asadmin",
+          "doc": "Glassfish jvm-options support."
+        }
+      ],
+      "name": "jvmoption",
+      "doc": "Manage jvm-options of Glassfish domains"
+    },
+    {
+      "parameters": [
+        {
+          "name": "name",
+          "doc": "The system property key."
+        },
+        {
+          "name": "value",
+          "doc": "The system property value."
+        },
+        {
+          "name": "portbase",
+          "doc": "The Glassfish domain port base. Default: 4800"
+        },
+        {
+          "name": "asadminuser",
+          "doc": "The internal Glassfish user asadmin uses. Default: admin"
+        },
+        {
+          "name": "passwordfile",
+          "doc": "The file containing the password for the user."
+        },
+        {
+          "name": "user",
+          "doc": "The user to run the command as."
+        }
+      ],
+      "providers": [
+        {
+          "name": "asadmin",
+          "doc": "Glassfish system-properties support."
+        }
+      ],
+      "name": "systemproperty",
+      "doc": "Manage system-properties of Glassfish domains"
+    }
+  ],
+  "dependencies": []
+}

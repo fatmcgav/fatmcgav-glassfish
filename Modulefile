@@ -1,7 +1,7 @@
 name 'fatmcgav-glassfish'
 version '0.1.0'
 
-author 'gavinw'
+author 'fatmcgav'
 license 'GPLv3'
 project_page 'http://github.com/fatmcgav/puppet-glassfish'
 source 'git://github.com/fatmcgav/puppet-glassfish.git'
