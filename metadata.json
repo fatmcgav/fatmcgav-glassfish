@@ -10,7 +10,7 @@
   "checksums": {
     "LICENSE": "d32239bcb673463ab874e80d47fae504",
     "Modulefile": "7a808381d89adb98c833c74cae61d63f",
-    "README.markdown": "2c3c8f341bb0eee1a218e8deb455936c",
+    "README.markdown": "8cfd4251ce7a4fa6f9ff6968b49d32e1",
     "Rakefile": "f37e6131fe7de9a49b09d31596f5fbf1",
     "lib/puppet/parser/functions/basename.rb": "df195fdf6ee16e19d419e07b96f28fe1",
     "lib/puppet/provider/application/asadmin.rb": "f7b56eaae21eb7c86494364db20d0af6",
@@ -35,7 +35,7 @@
     "manifests/init.pp": "f24ada445edbd1eac349283732d29d0e",
     "manifests/params.pp": "091aded682e873bf4f4b927243e630aa",
     "templates/glassfish-init.erb": "54d7a22b4e9d1770702acccae6133156",
-    "tests/init.pp": "4fd1ef0402fecdf32f4723795ae636a6"
+    "tests/init.pp": "98b412a3c360f76685cf15cc9e24e395"
   },
   "types": [
     {

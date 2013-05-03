@@ -28,8 +28,11 @@ Example simple usage:
 or
 
     class { glassfish:
-      java => 'java-7-openjdk',
-      version => '3.1.2.2',
+      java => 'java-7-openjdk', # optional, can be one of: java-7-oracle, java-7-openjdk, java-6-oracle, java-6-openjdk
+      version => '3.1.2.2',     # glassfish version
+      extrajars => [            # extra jars to install
+        "http://jdbc.postgresql.org/download/postgresql-9.2-1002.jdbc4.jar",
+      ],
     }
    
 More examples on using various types:
