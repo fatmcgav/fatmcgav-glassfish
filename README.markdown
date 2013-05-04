@@ -12,20 +12,22 @@ application deployment by using the asadmin command line tool.
 
 License: GPLv3
 
-Installation:
-=============
+Default settings:
+=================
 This plugin uses the executable `asadmin` of Glassfish instalation. Plugin 
-installs Glassfish in version 3.1.2.2 using `java-7-oracle` (also supports 
-other JDK versions: `java-7-oracle`, `java-7-openjdk`, `java-6-oracle`, 
+installs Glassfish in version `3.1.2.2` as standard and using `java-7-oracle`
+(also supports other JDK versions: `java-7-oracle`, `java-7-openjdk`, `java-6-oracle`, 
 `java-6-openjdk`). It will also starts it as a service.
 
 
-Example simple usage:
-=====================
+Example instalation usage:
+==========================
+
+Simple (using defaults):
 
     include glassfish
     
-or
+or explicit:
 
     class { glassfish:
       java => 'java-7-openjdk', # optional, can be one of: java-7-oracle, java-7-openjdk, java-6-oracle, java-6-openjdk

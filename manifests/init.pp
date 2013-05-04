@@ -27,10 +27,6 @@ class glassfish (
   $glassfish_download_site    = "http://download.java.net/glassfish/$version/release" # Default Glassfish download
 
   file { $download_dir: ensure => "directory" }
-  file { versionfile:
-    content => $version,
-    path => '/etc/glassfish-version',
-  }
   file { "$download_dir/$download_file":  }
   file { $glassfish_parent_dir:
     ensure => directory,
@@ -138,6 +134,13 @@ class glassfish (
     content => template('glassfish/glassfish-init.erb'),
     notify  => Service["glassfish"]
   } 
+  
+  file { asadminbin:
+    content => template('glassfish/asadmin.erb'),
+    mode => 755,
+    path => '/usr/bin/asadmin',
+    notify  => Service["glassfish"]
+  }
 	
 	case $java {
     'java-7-oracle'  : {
@@ -206,7 +209,7 @@ class glassfish (
   -> Setgroupaccess['set-perm'] 
   -> Exec['move-downloaded'] 
   -> File [servicefile]
-  -> File [versionfile]
+  -> File [asadminbin]
   
   File [servicefile] -> Service['glassfish']
 

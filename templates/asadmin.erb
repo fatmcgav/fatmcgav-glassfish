@@ -1,0 +1,11 @@
+#! /bin/bash
+
+GLASSFISHPATH=<%= scope.lookupvar('glassfish_path') %>
+ASADMIN=glassfish/bin/asadmin
+
+CWD=`pwd`
+cd $GLASSFISHPATH
+$ASADMIN $@
+RET=$?
+cd $CWD
+exit $RET

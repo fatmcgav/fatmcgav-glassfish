@@ -1,13 +1,7 @@
 class Puppet::Provider::Asadmin < Puppet::Provider
 
   def self.asadminpath
-    glversion = `cat /etc/glassfish-version 2>/dev/null` # Default Glassfish version
-    unless $? == 0
-       return nil
-    end
-    gldir     = "glassfish-#{glversion}"
-    glpath    = "/usr/local/lib/#{gldir}" # Default Glassfish path
-    asadmin   = "#{glpath}/bin/asadmin"
+    asadmin   = "/usr/bin/asadmin"
     asadmin
   end
   
