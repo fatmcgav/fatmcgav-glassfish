@@ -1,6 +1,6 @@
 {
   "name": "fatmcgav-glassfish",
-  "author": "fatmcgav",
+  "author": "Gavin Williams",
   "description": "A resource type to manage Glassfish domains, system-properties, jdbc-connection-pools and jdbc-resources and application deployment.",
   "license": "GPLv3",
   "project_page": "http://github.com/fatmcgav/puppet-glassfish",
@@ -9,26 +9,33 @@
   "version": "0.1.0",
   "checksums": {
     "LICENSE": "d32239bcb673463ab874e80d47fae504",
-    "Modulefile": "6893878df7b2578d72816201b21bf107",
+    "Modulefile": "6d59dd71f9615ef38658396548bbc33f",
     "README.markdown": "824a8573804317719ba11951b53e83de",
-    "lib\\puppet\\provider\\application\\asadmin.rb": "a2829a3e5340c2673864dc9351cef8a3",
-    "lib\\puppet\\provider\\asadmin.rb": "12e5def08b43458108e80181dcedd2f6",
-    "lib\\puppet\\provider\\authrealm\\asadmin.rb": "7e3a06ff39c37e3fbb4143b76e1aaeb4",
-    "lib\\puppet\\provider\\domain\\el.rb": "e1c70f0791552a80cf89dd584bd7b158",
-    "lib\\puppet\\provider\\jdbcconnectionpool\\asadmin.rb": "abac98143dbe71427220feb3d3233fe4",
-    "lib\\puppet\\provider\\jdbcresource\\asadmin.rb": "325d06fa2532ba982220af757784235e",
-    "lib\\puppet\\provider\\jvmoption\\asadmin.rb": "c99249babb9a0a29e17dcbc35ebd866c",
-    "lib\\puppet\\provider\\systemproperty\\asadmin.rb": "928d92f5787080302cce0026f7ffb0a4",
-    "lib\\puppet\\type\\application.rb": "53427501f7b9f083082c1a5b3ad1219d",
-    "lib\\puppet\\type\\authrealm.rb": "c326cf32fa6a98ca58eea02e698d698c",
-    "lib\\puppet\\type\\domain.rb": "5a802eb23ef4be9463d154d5d463c85f",
-    "lib\\puppet\\type\\jdbcconnectionpool.rb": "b73364b33a3af76d7639954bb22103b7",
-    "lib\\puppet\\type\\jdbcresource.rb": "da4d3bd1e8a09a60fa901231af651df6",
-    "lib\\puppet\\type\\jvmoption.rb": "8c54c291872630f3275550706bd8e306",
-    "lib\\puppet\\type\\systemproperty.rb": "c314bac07a28b0d3272f03ff9d9755c2",
-    "manifests\\domain.pp": "27625f12509179fd2c3118fcf96de689",
-    "manifests\\init.pp": "c94a2c46f41c308688ccf14286cf14ff",
-    "manifests\\params.pp": "f1782b156d2b395c2b960dcaa281a45d"
+    "lib\\puppet\\provider\\application\\asadmin.rb": "0cffbcbccacb5a1e6f981a40aa8a2ac8",
+    "lib\\puppet\\provider\\asadmin.rb": "07e2253e86edd9a66f49af941e1af4f7",
+    "lib\\puppet\\provider\\authrealm\\asadmin.rb": "4d212776b5e842965617482c47c8ee47",
+    "lib\\puppet\\provider\\customresource\\asadmin.rb": "487d3da9ab30fb51ea36b4b69a9abe0a",
+    "lib\\puppet\\provider\\domain\\asadmin.rb": "918dcf4c25d93c5fda11b6f919d57041",
+    "lib\\puppet\\provider\\jdbcconnectionpool\\asadmin.rb": "7aa76c266d07c6448a7a7796c4e714aa",
+    "lib\\puppet\\provider\\jdbcresource\\asadmin.rb": "35afe309a2ac25291931b0a8f3948f5d",
+    "lib\\puppet\\provider\\jvmoption\\asadmin.rb": "016f9e9c703a5ed8adf01f2c8d197851",
+    "lib\\puppet\\provider\\systemproperty\\asadmin.rb": "4c9328a23aea4b86c63cbb9cab2c4e14",
+    "lib\\puppet\\type\\application.rb": "83564abd2d6632f2b254e1e445652104",
+    "lib\\puppet\\type\\authrealm.rb": "12e3acbf5518a4a0e7165b6504d5fadc",
+    "lib\\puppet\\type\\customresource.rb": "5c0a11037c5d3104088b3fb066401bf7",
+    "lib\\puppet\\type\\domain.rb": "d0c10ec22cce402e1d666c068c9bc510",
+    "lib\\puppet\\type\\jdbcconnectionpool.rb": "78af64fbe5d03321322ca4d452695ae4",
+    "lib\\puppet\\type\\jdbcresource.rb": "848409f7572f33d31825f168943c52ba",
+    "lib\\puppet\\type\\jvmoption.rb": "6934b6bc50e2adc6b33308da838db29f",
+    "lib\\puppet\\type\\systemproperty.rb": "effe2f3a2517de6b854179d577da22e1",
+    "manifests\\domain.pp": "ad36b9f4dd13d159a13173f63f108c89",
+    "manifests\\init.pp": "e87aa0e5ba57ecbbe460c2df8088df0c",
+    "manifests\\install.pp": "dca1871970a7620a9fdd5b0cb3770c1d",
+    "manifests\\java.pp": "3f91f702a3c22e991da36c9262f6af5b",
+    "manifests\\params.pp": "8416fd7bbf5db679908805e60c78b061",
+    "manifests\\service.pp": "35a42bd6bfcc211de147f88baf824d6c",
+    "templates\\glassfish-init-debian.erb": "7fc4bcb84b63640a0958eaa705f476da",
+    "templates\\glassfish-init-el.erb": "ebe5701ce17b19ffe47d5cf280d288ed"
   },
   "types": [
     {
@@ -60,6 +67,10 @@
         {
           "name": "user",
           "doc": "The user to run the command as."
+        },
+        {
+          "name": "asadminpath",
+          "doc": "The path to asadmin file."
         }
       ],
       "providers": [
@@ -104,6 +115,10 @@
         {
           "name": "user",
           "doc": "The user to run the command as."
+        },
+        {
+          "name": "asadminpath",
+          "doc": "The path to asadmin file."
         }
       ],
       "providers": [
@@ -119,11 +134,55 @@
       "parameters": [
         {
           "name": "name",
-          "doc": "The Glassfish domain name."
+          "doc": "The custom resource name."
         },
         {
-          "name": "smf",
-          "doc": "Create Solaris SMF service. Default: true"
+          "name": "restype",
+          "doc": "The type of custom resource to be created. Specify a fully qualified type definition, for example javax.naming.spi.ObjectFactory. The resource type definition follows the format, xxx.xxx."
+        },
+        {
+          "name": "factoryclass",
+          "doc": "Factory class name for the custom resource. This class implements the javax.naming.spi.ObjectFactory interface."
+        },
+        {
+          "name": "properties",
+          "doc": "Optional attribute name/value pairs for configuring the resource. As String or Hash. Ex. \"user\u003dmyuser:password\u003dmypass\""
+        },
+        {
+          "name": "portbase",
+          "doc": "The Glassfish domain port base. Default: 4800"
+        },
+        {
+          "name": "asadminuser",
+          "doc": "The internal Glassfish user asadmin uses. Default: admin"
+        },
+        {
+          "name": "passwordfile",
+          "doc": "The file containing the password for the user."
+        },
+        {
+          "name": "user",
+          "doc": "The user to run the command as."
+        },
+        {
+          "name": "asadminpath",
+          "doc": "The path to asadmin file."
+        }
+      ],
+      "providers": [
+        {
+          "name": "asadmin",
+          "doc": "Glassfish custom resources support."
+        }
+      ],
+      "name": "customresource",
+      "doc": "Manage custom resources of Glassfish domains"
+    },
+    {
+      "parameters": [
+        {
+          "name": "name",
+          "doc": "The Glassfish domain name."
         },
         {
           "name": "startoncreate",
@@ -153,7 +212,7 @@
       "providers": [
         {
           "name": "asadmin",
-          "doc": "Glassfish EL Domain support."
+          "doc": "Glassfish Domain support."
         }
       ],
       "name": "domain",
@@ -192,6 +251,10 @@
         {
           "name": "user",
           "doc": "The user to run the command as."
+        },
+        {
+          "name": "asadminpath",
+          "doc": "The path to asadmin file."
         }
       ],
       "providers": [
@@ -228,6 +291,10 @@
         {
           "name": "user",
           "doc": "The user to run the command as."
+        },
+        {
+          "name": "asadminpath",
+          "doc": "The path to asadmin file."
         }
       ],
       "providers": [
@@ -260,6 +327,10 @@
         {
           "name": "user",
           "doc": "The user to run the command as."
+        },
+        {
+          "name": "asadminpath",
+          "doc": "The path to asadmin file."
         }
       ],
       "providers": [
@@ -296,6 +367,10 @@
         {
           "name": "user",
           "doc": "The user to run the command as."
+        },
+        {
+          "name": "asadminpath",
+          "doc": "The path to asadmin file."
         }
       ],
       "providers": [

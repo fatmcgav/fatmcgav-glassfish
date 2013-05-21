@@ -1,33 +1,28 @@
 require 'puppet/provider/asadmin'
 Puppet::Type.type(:domain).provide(:asadmin,
                                    :parent => Puppet::Provider::Asadmin) do
-  desc "Glassfish EL Domain support."
-  
-  defaultfor :osfamily => :RedHat
-  confine :osfamily => :RedHat
+  desc "Glassfish Domain support."
 
   def create
-    args = []
+    # Start a new args array
+    args = Array.new
     args << "create-domain"
     # args << "--profile" << @resource[:profile] # Deprecated in GF 3.1
     args << "--portbase" << @resource[:portbase]
-    args << "--savelogin" << @resource[:name]
+    args << "--savelogin" 
+    args << @resource[:name]
+    
+    # Run the create command
     asadmin_exec(args)
 
+    # Start the domain upon creation if required
     if @resource[:startoncreate]
-      asadmin_exec(["start-domain", @resource[:name]])
-#      if @resource[:smf]
-#        asadmin_exec(["create-service", "--name", @resource[:name]])
-#        asadmin_exec(["stop-domain", @resource[:name]])
-#        `svccfg -s @resource[:name] setprop start/user = astring: @resource[:user]`
-#        `svccfg -s @resource[:name] setprop stop/user = astring: @resource[:user]`
-#        `svcadm refresh @resource[:name]`
-#      end
+      asadmin_exec(['start-domain', @resource[:name]])
     end
   end
 
   def destroy
-    args = []
+    args = Array.new
     args << "delete-domain" << @resource[:name]
     asadmin_exec(args)
   end

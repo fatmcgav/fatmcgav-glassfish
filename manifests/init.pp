@@ -3,6 +3,15 @@
 # This module manages glassfish
 #
 # Parameters:
+#   [*extra_jars*]      - Should additional jars be installed by this module?
+#   [*install_method*]  - Glassfish installation method. Defaults to 'yum'. Other options: 'zip'.
+#   [*java_ver*]        - Java version to install if managing Java.
+#   [*manage_accounts*] - Should this module manage user accounts and groups required for Glassfish? Defaults to true.
+#   [*manage_java*]     - Should Java installation be managed by this module? Defaults to false.
+#   [*package_prefix*]  - Glassfish package name prefix. Defaults to 'glassfish3'.
+#   [*parent_dir*]      - Glassfish parent directory. Defaults to '/usr/local'.
+#   [*tmp_dir*]         - Glassfish temporary directory. Defaults to '/tmp'. Only used if installing using zip method.
+#   [*version*]         - Glassfish version, defaults to '3.1.2.2'.
 #
 # Actions:
 #
@@ -10,111 +19,42 @@
 #
 # Sample Usage:
 #
-class glassfish {
-	
-	# Include default params
-	require glassfish::params
-	
-	
-	/*
-  Domain {
-    user         => 'gfish',
-    asadminuser  => 'admin',
-    passwordfile => '/home/gfish/.aspass',
+class glassfish (
+  $extrajars       = [],
+  $group           = $glassfish::params::glassfish_group,
+  $install_method  = $glassfish::params::glassfish_install_method,
+  $java_ver        = $glassfish::params::glassfish_java_ver,
+  $manage_accounts = $glassfish::params::glassfish_manage_accounts,
+  $manage_java     = $glassfish::params::glassfish_manage_java,
+  $package_prefix  = $glassfish::params::glassfish_package_prefix,
+  $parent_dir      = $glassfish::params::glassfish_parent_dir,
+  $tmp_dir         = $glassfish::params::glassfish_tmp_dir,
+  $user            = $glassfish::params::glassfish_user,
+  $version         = $glassfish::params::glassfish_version) inherits glassfish::params {
+  # Calculate some vars based on passed parameters
+  $glassfish_dir = "${parent_dir}/glassfish-${version}"
+  $glassfish_asadmin_path = "${glassfish_dir}/bin/asadmin"
+
+  #
+  # # Start to run through the install process
+  #
+
+  # Ensure that the $parent_dir exists
+  file { $parent_dir: ensure => directory }
+
+  # Do we need to manage Java?
+  if $manage_java {
+    class { 'glassfish::java': }
+
+    # Set the dependencies
+    Class['glassfish::java'] -> Class['glassfish::install']
   }
 
-  domain {
-    'mydomain':
-      ensure => present;
-
-    'devdomain':
-      ensure   => present,
-      portbase => '5000',
-      profile  => 'devel';
-
-    'myolddomain':
-      ensure => absent;
+  # Call the install method
+  class { 'glassfish::install':
   }
 
-  Systemproperty {
-    user         => 'gfish',
-    asadminuser  => 'admin',
-    passwordfile => '/home/gfish/.aspass',
-  }
+  # Make sure parent_dir runs before glassfish::install.
+  File[$parent_dir] -> Class['glassfish::install']
 
-  systemproperty {
-    'search-url':
-      ensure   => present,
-      portbase => '5000',
-      value    => 'http://www.google.com',
-      require  => Domain['devdomain'];
-  }
-
-  Jdbcconnectionpool {
-    ensure              => present,
-    user                => 'gfish',
-    asadminuser         => 'admin',
-    passwordfile        => '/home/gfish/.aspass',
-    datasourceclassname => 'com.mysql.jdbc.jdbc2.optional.MysqlConnectionPoolDataSource',
-    resourcetype        => 'javax.sql.ConnectionPoolDataSource',
-    require             => Glassfish['mydomain'],
-  }
-
-  jdbcconnectionpool {
-    'MyPool':
-      properties => 'password=mYPasS:user=myuser:url=jdbc\:mysql\://host.ex.com\:3306/mydatabase:useUnicode=true:characterEncoding=utf8:characterResultSets=utf:autoReconnect=true:autoReconnectForPools=true';
-  }
-
-  Jdbcresource {
-    ensure       => present,
-    user         => 'gfish',
-    passwordfile => '/home/gfish/.aspass',
-  }
-
-  jdbcresource {
-    'jdbc/MyPool':
-      connectionpool => 'MyPool',
-  }
-
-  Application {
-    ensure       => present,
-    user         => 'gfish',
-    passwordfile => '/home/gfish/.aspass',
-  }
-
-  application {
-    'pluto':
-      source => '/home/gfish/pluto.war';
-
-    'myhello':
-      source  => '/home/gfish/hello.war',
-      require => Application['pluto'];
-  }
-
-  Jvmoption {
-    ensure       => present,
-    user         => 'gfish',
-    passwordfile => '/home/gfish/.aspass',
-  }
-
-  jvmoption {
-    ['-DjvmRoute=01', '-server']:
-  }
-
-  Authrealm {
-    ensure       => present,
-    user         => 'gfish',
-    asadminuser  => 'admin',
-    passwordfile => '/Users/larstobi/.aspass',
-  }
-
-  authrealm {
-    'agentRealm':
-      ensure     => present,
-      classname  => 'com.sun.identity.agents.appserver.v81.AmASRealm',
-      properties => ['jaas-context=agentRealm:foo=bar'],
-      require    => Domain['mydomain'];
-  }
-
-	*/
 }

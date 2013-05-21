@@ -14,6 +14,11 @@ Puppet::Type.newtype(:application) do
 
   newparam(:source) do
     desc "The WAR file."
+    validate do |value|
+       unless File.exists? value
+         raise ArgumentError, "%s does not exists" % value
+       end
+     end
   end
 
   newparam(:portbase) do
@@ -42,6 +47,16 @@ Puppet::Type.newtype(:application) do
     validate do |user|
       unless Puppet.features.root?
         self.fail "Only root can execute commands as other users"
+      end
+    end
+  end
+  
+  newparam(:asadminpath) do
+   desc "The path to asadmin file."
+   
+   validate do |value|
+      unless File.exists? value
+        raise ArgumentError, "%s does not exists" % value
       end
     end
   end

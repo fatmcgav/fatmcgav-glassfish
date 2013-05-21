@@ -37,4 +37,14 @@ Puppet::Type.newtype(:jvmoption) do
       end
     end
   end
+  
+  newparam(:asadminpath) do
+   desc "The path to asadmin file."
+   
+   validate do |value|
+      unless File.exists? value
+        raise ArgumentError, "%s does not exists" % value
+      end
+    end
+  end
 end

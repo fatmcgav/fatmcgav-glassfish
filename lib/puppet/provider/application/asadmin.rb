@@ -2,10 +2,9 @@ require 'puppet/provider/asadmin'
 Puppet::Type.type(:application).provide(:asadmin, :parent =>
                                            Puppet::Provider::Asadmin) do
   desc "Glassfish application deployment support."
-  commands :asadmin => "asadmin"
 
   def create
-    args = []
+    args = Array.new
     args << "deploy" << "--precompilejsp=true"
     unless @resource[:contextroot] == ""
       args << "--contextroot" << @resource[:contextroot]

@@ -2,10 +2,9 @@ require 'puppet/provider/asadmin'
 Puppet::Type.type(:jdbcresource).provide(:asadmin, :parent =>
                                            Puppet::Provider::Asadmin) do
   desc "Glassfish JDBC connection pool support."
-  commands :asadmin => "asadmin"
 
   def create
-    args = []
+    args = Array.new
     args << "create-jdbc-resource"
     args << "--connectionpoolid" << @resource[:connectionpool]
     args << @resource[:name]
@@ -13,7 +12,7 @@ Puppet::Type.type(:jdbcresource).provide(:asadmin, :parent =>
   end
 
   def destroy
-    args = []
+    args = Array.new
     args << "delete-jdbc-resource" << @resource[:name]
     asadmin_exec(args)
   end

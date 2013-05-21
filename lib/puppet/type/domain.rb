@@ -8,11 +8,6 @@ Puppet::Type.newtype(:domain) do
     isnamevar
   end
 
-  newparam(:smf) do
-    desc "Create Solaris SMF service. Default: true"
-    defaultto true
-  end
-
   newparam(:startoncreate) do
     desc "Start the domain immediately after it is created. Default: true"
     defaultto true
@@ -57,5 +52,4 @@ Puppet::Type.newtype(:domain) do
       end
     end
   end
-
 end
