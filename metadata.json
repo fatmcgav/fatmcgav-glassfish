@@ -19,7 +19,7 @@
     "lib\\puppet\\provider\\domain\\asadmin.rb": "918dcf4c25d93c5fda11b6f919d57041",
     "lib\\puppet\\provider\\jdbcconnectionpool\\asadmin.rb": "7aa76c266d07c6448a7a7796c4e714aa",
     "lib\\puppet\\provider\\jdbcresource\\asadmin.rb": "35afe309a2ac25291931b0a8f3948f5d",
-    "lib\\puppet\\provider\\jmsresource\\asadmin.rb": "7acaa47cb70ce0b0ecbe8a715c264cd4",
+    "lib\\puppet\\provider\\jmsresource\\asadmin.rb": "9fdea0fe5c10d01ad57467a4f26f900b",
     "lib\\puppet\\provider\\jvmoption\\asadmin.rb": "016f9e9c703a5ed8adf01f2c8d197851",
     "lib\\puppet\\provider\\systemproperty\\asadmin.rb": "4c9328a23aea4b86c63cbb9cab2c4e14",
     "lib\\puppet\\type\\application.rb": "0ab90f86c8ef148b3f2dbd04d2ac122b",

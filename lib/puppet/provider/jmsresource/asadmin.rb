@@ -9,9 +9,9 @@ Puppet::Type.type(:jmsresource).provide(:asadmin, :parent =>
     args << '--restype' << @resource[:restype]
     if hasProperties? @resource[:properties]
       args << '--property'
-      args << "\"#{prepareProperties @resource[:properties]}\""
+      args << "\'#{prepareProperties @resource[:properties]}\'"
     end 
-    args << '--description' << "\"#{@resource[:description]}\"" if @resource[:description] and
+    args << '--description' << "\'#{@resource[:description]}\'" if @resource[:description] and
       not @resource[:description].empty?
     args << @resource[:name]
     asadmin_exec(args)
