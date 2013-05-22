@@ -10,7 +10,7 @@ Puppet::Type.type(:jdbcconnectionpool).provide(:asadmin, :parent =>
     args << "--restype" << @resource[:resourcetype]
     if hasProperties? @resource[:properties]
       args << "--property"
-      args << "\"#{prepareProperties @resource[:properties]}\""
+      args << "\'#{prepareProperties @resource[:properties]}\'"
     end 
     args << @resource[:name]
     asadmin_exec(args)

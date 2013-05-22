@@ -25,7 +25,7 @@ Puppet::Type.type(:jmsresource).provide(:asadmin, :parent =>
 
   def exists?
     asadmin_exec(['list-jms-resources']).each do |line|
-      return true if @resource[:name] == line.split(" ")[0]
+      return true if @resource[:name] == line.chomp
     end
     return false
   end
