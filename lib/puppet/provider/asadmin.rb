@@ -1,7 +1,7 @@
 class Puppet::Provider::Asadmin < Puppet::Provider
 
   def self.asadminpath
-    asadmin = "/usr/bin/asadmin"
+    asadmin = '/usr/bin/asadmin'
     asadmin
   end
   
@@ -9,10 +9,10 @@ class Puppet::Provider::Asadmin < Puppet::Provider
     port = @resource[:portbase].to_i + 48
     # Compile an array of command args
     args = Array.new
-    args << "--port" << port.to_s
-    args << "--user" << @resource[:asadminuser]
+    args << '--port' << port.to_s
+    args << '--user' << @resource[:asadminuser]
     # Only add passwordfile if specified
-    args << "--passwordfile" << @resource[:passwordfile] if @resource[:passwordfile] and
+    args << '--passwordfile' << @resource[:passwordfile] if @resource[:passwordfile] and
       not @resource[:passwordfile].empty?
         
     # Need to add the passed_args to args array.  
@@ -20,7 +20,7 @@ class Puppet::Provider::Asadmin < Puppet::Provider
     
     # Transform args array into a exec args string.  
     exec_args = args.join " "
-    path = Puppet::Provider::Asadmin.asadminpat
+    path = Puppet::Provider::Asadmin.asadminpath
     command = "#{path} #{exec_args}"
     Puppet.debug("Command = #{command}")
     
@@ -45,7 +45,7 @@ class Puppet::Provider::Asadmin < Puppet::Provider
   
   def exists?
       commands :asadmin => "#{@@asadmin}"
-      version = asadmin("version")
+      version = asadmin('version')
       return false if version.length == 0
       
       version.each do |line|
