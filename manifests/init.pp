@@ -3,7 +3,10 @@
 # This module manages glassfish
 #
 # Parameters:
+#   [*create_domain*]   - Should a glassfish domain be created on installation?
+#   [*domain*]          - Glassfish domain name.
 #   [*extra_jars*]      - Should additional jars be installed by this module?
+#   [*group*]           - Glassfish group name.
 #   [*install_method*]  - Glassfish installation method. Defaults to 'yum'. Other options: 'zip'.
 #   [*java_ver*]        - Java version to install if managing Java.
 #   [*manage_accounts*] - Should this module manage user accounts and groups required for Glassfish? Defaults to true.
@@ -11,6 +14,8 @@
 #   [*package_prefix*]  - Glassfish package name prefix. Defaults to 'glassfish3'.
 #   [*parent_dir*]      - Glassfish parent directory. Defaults to '/usr/local'.
 #   [*tmp_dir*]         - Glassfish temporary directory. Defaults to '/tmp'. Only used if installing using zip method.
+#   [*user*]
+#   - Glassfish user name.
 #   [*version*]         - Glassfish version, defaults to '3.1.2.2'.
 #
 # Actions:
@@ -20,6 +25,8 @@
 # Sample Usage:
 #
 class glassfish (
+  $create_domain   = $glassfish::params::glassfish_create_domain,
+  $domain          = $glassfish::params::glassfish_domain,
   $extrajars       = [],
   $group           = $glassfish::params::glassfish_group,
   $install_method  = $glassfish::params::glassfish_install_method,
@@ -56,5 +63,14 @@ class glassfish (
 
   # Make sure parent_dir runs before glassfish::install.
   File[$parent_dir] -> Class['glassfish::install']
+
+  if $create_domain {
+    # Install extrajars if required, only if creating a domain.
+    install_jars { $extrajars:
+      domain  => $glassfish::params::glassfish_domain,
+      require => Exec['move-downloaded'],
+    }
+
+  }
 
 }

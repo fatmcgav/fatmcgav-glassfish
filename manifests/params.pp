@@ -25,12 +25,14 @@ class glassfish::params {
   # Default Glassfish Group
   $glassfish_group = 'glassfish'
 
-  # Default Glassfish asadmin username.
+  # Default Glassfish asadmin username
   $glassfish_asadmin_user = 'admin'
   # Default Glassfish asadmin password file
   $glassfish_asadmin_passfile = ''
 
-  # Default Glassfish domain, portbase and profile.
+  # Should a glassfish domain be created on installation?
+  $glassfish_create_domain = false
+  # Default Glassfish domain, portbase and profile
   $glassfish_domain = 'domain1'
   $glassfish_portbase = '8000'
   $glassfish_profile = 'server'

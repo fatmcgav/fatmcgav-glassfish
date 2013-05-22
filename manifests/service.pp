@@ -1,6 +1,6 @@
 # Define: glassfish::service
 #
-# Manages java installation if required
+# Manages Linux service installation if required
 #
 define glassfish::service ($domain = $name, $runuser = $glassfish::params::glassfish_user) {
   # Check that we've got a domain name.
