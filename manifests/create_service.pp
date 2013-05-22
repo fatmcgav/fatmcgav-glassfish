@@ -1,8 +1,8 @@
-# Define: glassfish::service
+# Define: glassfish::create_service
 #
 # Manages Linux service installation if required
 #
-define glassfish::service ($domain = $name, $runuser = $glassfish::params::glassfish_user) {
+define glassfish::create_service ($domain = $name, $runuser = $glassfish::user) {
   # Check that we've got a domain name.
   unless $domain {
     fail("Domain name must be specified to install service.")
@@ -16,7 +16,7 @@ define glassfish::service ($domain = $name, $runuser = $glassfish::params::glass
       'Debian' => template('glassfish/glassfish-init-debian.erb'),
       default  => fail("OSFamily ${::osfamily} not supported.")
     },
-    notify  => Service["glassfish"]
+    notify  => Service["glassfish_${domain}"]
   }
 
   service { "glassfish_${domain}":
@@ -24,6 +24,6 @@ define glassfish::service ($domain = $name, $runuser = $glassfish::params::glass
     enable     => true,
     hasstatus  => true,
     hasrestart => true,
-    require    => [File[$glassfish::glassfish_dir], File["${domain}_servicefile"]]
+    require    => File["${domain}_servicefile"]
   }
 }

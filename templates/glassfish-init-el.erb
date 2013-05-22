@@ -17,12 +17,12 @@ USER="<%= @runuser %>"
 
 start() {
    echo -n $"Starting glassfish domain $DOMAIN: "
-   daemon --user $USER --pidfile /var/run/$DOMAIN.pid "$GLASSFISH_BIN/asadmin start-domain $DOMAIN"
+   daemon --user $USER --pidfile /var/run/glassfish_$DOMAIN.pid "$GLASSFISH_BIN/asadmin start-domain $DOMAIN"
    RETVAL=$?
    if [ $RETVAL -eq 0 ]; then
         PID=`ps U $USER | grep $DOMAIN | awk '{ print $1}'`
-        echo $PID > /var/run/$DOMAIN.pid
-        touch /var/lock/subsys/$DOMAIN
+        echo $PID > /var/run/glassfish_$DOMAIN.pid
+        touch /var/lock/subsys/glassfish_$DOMAIN
    fi
    echo
 }
@@ -31,7 +31,7 @@ stop() {
     echo -n $"Stopping glassfish domain $DOMAIN: "
     $GLASSFISH_BIN/asadmin stop-domain $DOMAIN
     RETVAL=$?
-    [ $RETVAL -eq 0 ] && rm -f /var/lock/subsys/$DOMAIN && rm -f /var/run/$DOMAIN && success || failure
+    [ $RETVAL -eq 0 ] && rm -f /var/lock/subsys/glassfish_$DOMAIN && rm -f /var/run/glassfish_$DOMAIN && success || failure
     echo
 }
 
@@ -47,7 +47,7 @@ case "$1" in
         start
         ;;
     status)
-        status $DOMAIN
+        status glassfish_$DOMAIN
         RETVAL=$?
         ;;
     *)

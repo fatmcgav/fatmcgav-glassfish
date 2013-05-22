@@ -29,14 +29,16 @@
     "lib\\puppet\\type\\jdbcresource.rb": "848409f7572f33d31825f168943c52ba",
     "lib\\puppet\\type\\jvmoption.rb": "6934b6bc50e2adc6b33308da838db29f",
     "lib\\puppet\\type\\systemproperty.rb": "effe2f3a2517de6b854179d577da22e1",
-    "manifests\\init.pp": "2e6f3a41efc883d2c9aca8e9a2b6282f",
-    "manifests\\install.pp": "eb11458804c9b49fedaade6f5d303d2a",
+    "manifests\\create_domain.pp": "c17caadf4cd368beec125d4a70d27515",
+    "manifests\\create_service.pp": "13bbb1b3fd4018a0969afc375d313b34",
+    "manifests\\init.pp": "6854cdc3f90cb8c54a981617d7e744cd",
+    "manifests\\install.pp": "2328ed8abe44001f3c02b20e53418538",
     "manifests\\install_jars.pp": "10053fd6050a61862f044ae5a5118060",
     "manifests\\java.pp": "66116ebb69634f66c5ef92b5879febac",
-    "manifests\\params.pp": "6bb0eb04d70294db400cfebb5f11e475",
-    "manifests\\service.pp": "e5e23198079a11ae05375aa5a1454fb2",
+    "manifests\\params.pp": "3326e891044dd235cc980d3b489907c0",
+    "templates\\asadmin.erb": "d41d8cd98f00b204e9800998ecf8427e",
     "templates\\glassfish-init-debian.erb": "bd2efbb8b8f4f4103b6fec5597288bce",
-    "templates\\glassfish-init-el.erb": "82bc987c23c564d0c78633f1d41be086"
+    "templates\\glassfish-init-el.erb": "c87de12a08f05a5df1eea4865d632664"
   },
   "types": [
     {

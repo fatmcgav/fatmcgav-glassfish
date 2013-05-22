@@ -32,10 +32,11 @@ class glassfish::params {
 
   # Should a glassfish domain be created on installation?
   $glassfish_create_domain = false
+  # Should a glassfish service be created on installation?
+  $glassfish_create_service = false
   # Default Glassfish domain, portbase and profile
   $glassfish_domain = 'domain1'
   $glassfish_portbase = '8000'
-  $glassfish_profile = 'server'
 
   # Should this module manage Java installation?
   $glassfish_manage_java = false

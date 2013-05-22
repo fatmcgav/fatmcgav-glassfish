@@ -98,4 +98,10 @@ class glassfish::install {
 
   }
 
+  file { 'asadminbin':
+    content => template('glassfish/asadmin.erb'),
+    mode    => '0755',
+    path    => '/usr/bin/asadmin',
+  }
+
 }
