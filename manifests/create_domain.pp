@@ -17,7 +17,6 @@ define glassfish::create_domain (
     passwordfile  => $asadmin_passfile,
     ensure        => $ensure,
     portbase      => $portbase,
-    asadminpath   => $asadmin_path,
     startoncreate => false
   }
 

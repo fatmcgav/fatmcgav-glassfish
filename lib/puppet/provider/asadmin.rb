@@ -1,5 +1,10 @@
 class Puppet::Provider::Asadmin < Puppet::Provider
 
+  def self.asadminpath
+    asadmin = "/usr/bin/asadmin"
+    asadmin
+  end
+  
   def asadmin_exec(passed_args)
     port = @resource[:portbase].to_i + 48
     # Compile an array of command args
@@ -15,7 +20,8 @@ class Puppet::Provider::Asadmin < Puppet::Provider
     
     # Transform args array into a exec args string.  
     exec_args = args.join " "
-    command = "#{@resource[:asadminpath]} #{exec_args}"
+    path = Puppet::Provider::Asadmin.asadminpat
+    command = "#{path} #{exec_args}"
     Puppet.debug("Command = #{command}")
     
     # Compile the actual command as the specified user. 
@@ -38,7 +44,7 @@ class Puppet::Provider::Asadmin < Puppet::Provider
   end
   
   def exists?
-      commands :asadmin => "#{@resource[:asadminpath]}"
+      commands :asadmin => "#{@@asadmin}"
       version = asadmin("version")
       return false if version.length == 0
       

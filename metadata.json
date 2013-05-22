@@ -10,10 +10,10 @@
   "checksums": {
     "LICENSE": "d32239bcb673463ab874e80d47fae504",
     "Modulefile": "85fa176f0dc81743f0259e329dc9aa89",
-    "README.markdown": "824a8573804317719ba11951b53e83de",
+    "README.markdown": "db32b49d5f7223e05a77569bab3f6367",
     "lib\\puppet\\parser\\functions\\basename.rb": "ef0c293a707fdf471a3f1d95aab759f5",
     "lib\\puppet\\provider\\application\\asadmin.rb": "0cffbcbccacb5a1e6f981a40aa8a2ac8",
-    "lib\\puppet\\provider\\asadmin.rb": "07e2253e86edd9a66f49af941e1af4f7",
+    "lib\\puppet\\provider\\asadmin.rb": "68a3205945f82179211271a4f4e676bf",
     "lib\\puppet\\provider\\authrealm\\asadmin.rb": "4d212776b5e842965617482c47c8ee47",
     "lib\\puppet\\provider\\customresource\\asadmin.rb": "8eaa4e0528f81b3b0b4e1422f0ba4157",
     "lib\\puppet\\provider\\domain\\asadmin.rb": "918dcf4c25d93c5fda11b6f919d57041",
@@ -21,22 +21,22 @@
     "lib\\puppet\\provider\\jdbcresource\\asadmin.rb": "35afe309a2ac25291931b0a8f3948f5d",
     "lib\\puppet\\provider\\jvmoption\\asadmin.rb": "016f9e9c703a5ed8adf01f2c8d197851",
     "lib\\puppet\\provider\\systemproperty\\asadmin.rb": "4c9328a23aea4b86c63cbb9cab2c4e14",
-    "lib\\puppet\\type\\application.rb": "83564abd2d6632f2b254e1e445652104",
-    "lib\\puppet\\type\\authrealm.rb": "12e3acbf5518a4a0e7165b6504d5fadc",
-    "lib\\puppet\\type\\customresource.rb": "a8e94befdeff56ce51f98010580708d0",
-    "lib\\puppet\\type\\domain.rb": "d0c10ec22cce402e1d666c068c9bc510",
-    "lib\\puppet\\type\\jdbcconnectionpool.rb": "78af64fbe5d03321322ca4d452695ae4",
-    "lib\\puppet\\type\\jdbcresource.rb": "848409f7572f33d31825f168943c52ba",
-    "lib\\puppet\\type\\jvmoption.rb": "6934b6bc50e2adc6b33308da838db29f",
-    "lib\\puppet\\type\\systemproperty.rb": "effe2f3a2517de6b854179d577da22e1",
-    "manifests\\create_domain.pp": "c17caadf4cd368beec125d4a70d27515",
+    "lib\\puppet\\type\\application.rb": "0ab90f86c8ef148b3f2dbd04d2ac122b",
+    "lib\\puppet\\type\\authrealm.rb": "c326cf32fa6a98ca58eea02e698d698c",
+    "lib\\puppet\\type\\customresource.rb": "a222e35df974956cd65f5cf3f2a71805",
+    "lib\\puppet\\type\\domain.rb": "b0e77f4d148a6279bd41a340a8823832",
+    "lib\\puppet\\type\\jdbcconnectionpool.rb": "b73364b33a3af76d7639954bb22103b7",
+    "lib\\puppet\\type\\jdbcresource.rb": "da4d3bd1e8a09a60fa901231af651df6",
+    "lib\\puppet\\type\\jvmoption.rb": "8c54c291872630f3275550706bd8e306",
+    "lib\\puppet\\type\\systemproperty.rb": "c314bac07a28b0d3272f03ff9d9755c2",
+    "manifests\\create_domain.pp": "4071864f635eefd9b8300cac448e9994",
     "manifests\\create_service.pp": "13bbb1b3fd4018a0969afc375d313b34",
     "manifests\\init.pp": "6854cdc3f90cb8c54a981617d7e744cd",
     "manifests\\install.pp": "2328ed8abe44001f3c02b20e53418538",
     "manifests\\install_jars.pp": "10053fd6050a61862f044ae5a5118060",
     "manifests\\java.pp": "66116ebb69634f66c5ef92b5879febac",
     "manifests\\params.pp": "3326e891044dd235cc980d3b489907c0",
-    "templates\\asadmin.erb": "d41d8cd98f00b204e9800998ecf8427e",
+    "templates\\asadmin.erb": "faa2bc45a654822ea184b20d37ea4e8e",
     "templates\\glassfish-init-debian.erb": "bd2efbb8b8f4f4103b6fec5597288bce",
     "templates\\glassfish-init-el.erb": "c87de12a08f05a5df1eea4865d632664"
   },
@@ -70,10 +70,6 @@
         {
           "name": "user",
           "doc": "The user to run the command as."
-        },
-        {
-          "name": "asadminpath",
-          "doc": "The path to asadmin file."
         }
       ],
       "providers": [
@@ -118,10 +114,6 @@
         {
           "name": "user",
           "doc": "The user to run the command as."
-        },
-        {
-          "name": "asadminpath",
-          "doc": "The path to asadmin file."
         }
       ],
       "providers": [
@@ -166,10 +158,6 @@
         {
           "name": "user",
           "doc": "The user to run the command as."
-        },
-        {
-          "name": "asadminpath",
-          "doc": "The path to asadmin file."
         }
       ],
       "providers": [
@@ -206,10 +194,6 @@
         {
           "name": "user",
           "doc": "The user to run the command as."
-        },
-        {
-          "name": "asadminpath",
-          "doc": "The path to asadmin file."
         }
       ],
       "providers": [
@@ -254,10 +238,6 @@
         {
           "name": "user",
           "doc": "The user to run the command as."
-        },
-        {
-          "name": "asadminpath",
-          "doc": "The path to asadmin file."
         }
       ],
       "providers": [
@@ -294,10 +274,6 @@
         {
           "name": "user",
           "doc": "The user to run the command as."
-        },
-        {
-          "name": "asadminpath",
-          "doc": "The path to asadmin file."
         }
       ],
       "providers": [
@@ -330,10 +306,6 @@
         {
           "name": "user",
           "doc": "The user to run the command as."
-        },
-        {
-          "name": "asadminpath",
-          "doc": "The path to asadmin file."
         }
       ],
       "providers": [
@@ -370,10 +342,6 @@
         {
           "name": "user",
           "doc": "The user to run the command as."
-        },
-        {
-          "name": "asadminpath",
-          "doc": "The path to asadmin file."
         }
       ],
       "providers": [
