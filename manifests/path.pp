@@ -11,7 +11,7 @@ class glassfish::path {
         owner   => 'root',
         group   => 'root',
         mode    => '0644',
-        content => template('glassfish/asadmin-profile-el.erb'),
+        content => template('glassfish/glassfish-profile-el.erb'),
         require => Class['glassfish::install']
       }
     }
