@@ -10,7 +10,7 @@
   "checksums": {
     "LICENSE": "d32239bcb673463ab874e80d47fae504",
     "Modulefile": "85fa176f0dc81743f0259e329dc9aa89",
-    "README.markdown": "db32b49d5f7223e05a77569bab3f6367",
+    "README.markdown": "536f08032796b512be4c48e2d829a8b2",
     "lib\\puppet\\parser\\functions\\basename.rb": "ef0c293a707fdf471a3f1d95aab759f5",
     "lib\\puppet\\provider\\application\\asadmin.rb": "0cffbcbccacb5a1e6f981a40aa8a2ac8",
     "lib\\puppet\\provider\\asadmin.rb": "4944678e147b4c596a7ca06d37376345",
@@ -35,14 +35,16 @@
     "lib\\puppet\\type\\systemproperty.rb": "c314bac07a28b0d3272f03ff9d9755c2",
     "manifests\\create_domain.pp": "4071864f635eefd9b8300cac448e9994",
     "manifests\\create_service.pp": "13bbb1b3fd4018a0969afc375d313b34",
-    "manifests\\init.pp": "6854cdc3f90cb8c54a981617d7e744cd",
+    "manifests\\init.pp": "8508322a23b4a80185c23967efb18ce4",
     "manifests\\install.pp": "2328ed8abe44001f3c02b20e53418538",
     "manifests\\install_jars.pp": "10053fd6050a61862f044ae5a5118060",
     "manifests\\java.pp": "66116ebb69634f66c5ef92b5879febac",
-    "manifests\\params.pp": "3326e891044dd235cc980d3b489907c0",
+    "manifests\\params.pp": "1459fac6dc23b6ec55eeb34ed8f8c7b4",
+    "manifests\\path.pp": "662ebb67e6e68fa7923bc86ab9f2c87a",
     "templates\\asadmin.erb": "faa2bc45a654822ea184b20d37ea4e8e",
     "templates\\glassfish-init-debian.erb": "bd2efbb8b8f4f4103b6fec5597288bce",
-    "templates\\glassfish-init-el.erb": "c87de12a08f05a5df1eea4865d632664"
+    "templates\\glassfish-init-el.erb": "c87de12a08f05a5df1eea4865d632664",
+    "templates\\glassfish-profile-el.erb": "8fcac953441a0275622d519bac1411ad"
   },
   "types": [
     {

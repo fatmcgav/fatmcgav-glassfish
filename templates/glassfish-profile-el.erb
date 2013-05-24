@@ -1,0 +1,4 @@
+# File managed by Puppet
+if ! echo ${PATH} | /bin/grep -q <%= scope.lookupvar('glassfish_dir') %>/glassfish/bin ; then
+        PATH=<%= scope.lookupvar('glassfish_dir') %>/glassfish/bin:${PATH}
+fi

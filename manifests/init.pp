@@ -27,6 +27,7 @@
 # Sample Usage:
 #
 class glassfish (
+  $add_path                = $glassfish::params::glassfish_add_path,
   $create_domain           = $glassfish::params::glassfish_create_domain,
   $create_service          = $glassfish::params::glassfish_create_service,
   $domain_asadmin_user     = $glassfish::params::glassfish_asadmin_user,
@@ -89,6 +90,11 @@ class glassfish (
       }
     }
 
+  }
+
+  # Need to manage path?
+  if $add_path {
+    class { 'glassfish::path': }
   }
 
 }

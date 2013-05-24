@@ -38,6 +38,9 @@ class glassfish::params {
   $glassfish_domain = 'domain1'
   $glassfish_portbase = '8000'
 
+  # Should the path be updated?
+  $glassfish_add_path = true
+
   # Should this module manage Java installation?
   $glassfish_manage_java = false
   # JDK version: java-7-oracle, java-7-openjdk, java-6-oracle, java-6-openjdk
