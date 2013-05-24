@@ -21,6 +21,7 @@
     "lib\\puppet\\provider\\jdbcresource\\asadmin.rb": "35afe309a2ac25291931b0a8f3948f5d",
     "lib\\puppet\\provider\\jmsresource\\asadmin.rb": "d6f62bfa82badb6e22194f50ea32681e",
     "lib\\puppet\\provider\\jvmoption\\asadmin.rb": "016f9e9c703a5ed8adf01f2c8d197851",
+    "lib\\puppet\\provider\\set\\asadmin.rb": "02ca115cc973c10e3df398b03c362b49",
     "lib\\puppet\\provider\\systemproperty\\asadmin.rb": "4c9328a23aea4b86c63cbb9cab2c4e14",
     "lib\\puppet\\type\\application.rb": "0ab90f86c8ef148b3f2dbd04d2ac122b",
     "lib\\puppet\\type\\authrealm.rb": "c326cf32fa6a98ca58eea02e698d698c",
@@ -30,6 +31,7 @@
     "lib\\puppet\\type\\jdbcresource.rb": "da4d3bd1e8a09a60fa901231af651df6",
     "lib\\puppet\\type\\jmsresource.rb": "f6784ef45643c0e283b0576998d2f366",
     "lib\\puppet\\type\\jvmoption.rb": "8c54c291872630f3275550706bd8e306",
+    "lib\\puppet\\type\\set.rb": "d9c1c092cc22569c06e6bfae824871e7",
     "lib\\puppet\\type\\systemproperty.rb": "c314bac07a28b0d3272f03ff9d9755c2",
     "manifests\\create_domain.pp": "4071864f635eefd9b8300cac448e9994",
     "manifests\\create_service.pp": "13bbb1b3fd4018a0969afc375d313b34",
@@ -362,6 +364,42 @@
       ],
       "name": "jvmoption",
       "doc": "Manage jvm-options of Glassfish domains"
+    },
+    {
+      "parameters": [
+        {
+          "name": "name",
+          "doc": "The attribute name."
+        },
+        {
+          "name": "value",
+          "doc": "The attribute value."
+        },
+        {
+          "name": "portbase",
+          "doc": "The Glassfish domain port base. Default: 4800"
+        },
+        {
+          "name": "asadminuser",
+          "doc": "The internal Glassfish user asadmin uses. Default: admin"
+        },
+        {
+          "name": "passwordfile",
+          "doc": "The file containing the password for the user."
+        },
+        {
+          "name": "user",
+          "doc": "The user to run the command as."
+        }
+      ],
+      "providers": [
+        {
+          "name": "asadmin",
+          "doc": "Glassfish domain attribute support."
+        }
+      ],
+      "name": "set",
+      "doc": "Manage configurable attributes of Glassfish domains"
     },
     {
       "parameters": [
