@@ -36,12 +36,11 @@
     "manifests\\create_domain.pp": "4071864f635eefd9b8300cac448e9994",
     "manifests\\create_service.pp": "13bbb1b3fd4018a0969afc375d313b34",
     "manifests\\init.pp": "8508322a23b4a80185c23967efb18ce4",
-    "manifests\\install.pp": "2328ed8abe44001f3c02b20e53418538",
+    "manifests\\install.pp": "8906b4a391ffcace9119561bac78b244",
     "manifests\\install_jars.pp": "10053fd6050a61862f044ae5a5118060",
     "manifests\\java.pp": "66116ebb69634f66c5ef92b5879febac",
     "manifests\\params.pp": "1459fac6dc23b6ec55eeb34ed8f8c7b4",
     "manifests\\path.pp": "662ebb67e6e68fa7923bc86ab9f2c87a",
-    "templates\\asadmin.erb": "faa2bc45a654822ea184b20d37ea4e8e",
     "templates\\glassfish-init-debian.erb": "bd2efbb8b8f4f4103b6fec5597288bce",
     "templates\\glassfish-init-el.erb": "c87de12a08f05a5df1eea4865d632664",
     "templates\\glassfish-profile-el.erb": "8fcac953441a0275622d519bac1411ad"
