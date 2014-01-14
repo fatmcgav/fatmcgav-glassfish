@@ -90,6 +90,13 @@ class glassfish::install {
         creates => $glassfish::glassfish_dir,
         require => Exec['change-mod']
       }
+      
+      # Remove default domain1. 
+      file { 'remove-domain1':
+        ensure => absent,
+        path   => "${glassfish::glassfish_dir}/glassfish/domains/domain1",
+        force  => true
+      }
 
     }
     default : {
