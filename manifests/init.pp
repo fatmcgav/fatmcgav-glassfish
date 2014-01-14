@@ -30,6 +30,8 @@ class glassfish (
   $add_path                = $glassfish::params::glassfish_add_path,
   $create_domain           = $glassfish::params::glassfish_create_domain,
   $create_service          = $glassfish::params::glassfish_create_service,
+  $start_domain            = $glassfish::params::glassfish_start_domain,
+  $enable_secure_admin     = $glassfish::params::glassfish_enable_secure_admin,
   $domain_asadmin_user     = $glassfish::params::glassfish_asadmin_user,
   $domain_asadmin_passfile = $glassfish::params::glassfish_asadmin_passfile,
   $domain_name             = $glassfish::params::glassfish_domain,

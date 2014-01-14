@@ -38,13 +38,19 @@ class glassfish::params {
   $glassfish_domain = 'domain1'
   $glassfish_portbase = '8000'
 
+  # Should the glassfish domain be started upon creation? 
+  $glassfish_start_domain = true
+  
+  # Should secure-admin be enabled upon creation? 
+  $glassfish_enable_secure_admin = true
+  
   # Should the path be updated?
   $glassfish_add_path = true
 
   # Should this module manage Java installation?
-  $glassfish_manage_java = false
+  $glassfish_manage_java = true
   # JDK version: java-7-oracle, java-7-openjdk, java-6-oracle, java-6-openjdk
-  $glassfish_java_ver = 'java-7-oracle'
+  $glassfish_java_ver = 'java-7-openjdk'
 
   # Set package names based on Operating System...
   case $::osfamily {
