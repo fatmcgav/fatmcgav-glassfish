@@ -29,11 +29,4 @@ class glassfish::java {
     package { $package: ensure => "installed" }
   }
 
-  # service { "glassfish":
-  #  ensure     => running,
-  #  enable     => true,
-  #  hasstatus  => true,
-  #  hasrestart => true,
-  #  require    => [File[$glassfish_path], File[servicefile], Package['openjdk-6-jdk'],]
-  #}
 }

@@ -4,8 +4,8 @@
 #
 define glassfish::install_jars ($domain) {
   $jaraddress = $name
-  $jar = basename($jaraddress)
-  $jardest = "${glassfish::glassfish_dir}/glassfish/domains/${domain}/lib/${jar}"
+  $jar        = basename($jaraddress)
+  $jardest    = "${glassfish::glassfish_dir}/glassfish/domains/${domain}/lib/${jar}"
 
   exec { "download ${name}":
     command => "wget -O ${jardest} ${jaraddress}",
@@ -16,4 +16,4 @@ define glassfish::install_jars ($domain) {
     notify  => Service["glassfish_${domain}"]
   }
 
-}
+} 
