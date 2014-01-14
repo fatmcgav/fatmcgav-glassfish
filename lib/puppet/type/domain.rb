@@ -42,4 +42,15 @@ Puppet::Type.newtype(:domain) do
       end
     end
   end
+  
+  newparam(:enablesecureadmin) do
+    desc "Should secure admin be enabled. Default: true"
+    defaultto true
+    
+    validate do |value|
+      if value 
+        # Need to make sure that startoncreate is set to true, otherwise enable-secure-admin will fail. 
+      end
+    end
+  end
 end

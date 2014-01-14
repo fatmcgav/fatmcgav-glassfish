@@ -19,6 +19,11 @@ Puppet::Type.type(:domain).provide(:asadmin,
     if @resource[:startoncreate]
       asadmin_exec(['start-domain', @resource[:name]])
     end
+    
+    # Enable secure admin if required
+    if @resource[:enablesecureadmin]
+      asadmin_exec(['enable-secure-admin'])
+    end
   end
 
   def destroy
