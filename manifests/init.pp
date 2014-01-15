@@ -88,7 +88,7 @@ glassfish::params {
     # Install extrajars if required, only if creating a domain.
     install_jars { $extrajars:
       domain  => $domain_name,
-      require => Create_domain[$domain]
+      require => Create_domain[$domain_name]
     }
 
     # Need to create a service?
@@ -106,4 +106,4 @@ glassfish::params {
     class { 'glassfish::path': require => Class['glassfish::install'] }
   }
 
-}
+}

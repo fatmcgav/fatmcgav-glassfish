@@ -1,5 +1,7 @@
-Puppet Glassfish Domain type
+Puppet Glassfish module
 ============================
+
+[![Build Status](https://secure.travis-ci.org/fatmcgav/puppet-glassfish.png)](http://travis-ci.org/fatmcgav/puppet-glassfish)
 
 This plugin for Puppet adds resource types and providers for managing Glassfish
 domains, system-properties, jdbc-connection-pools, jdbc-resources, auth-realms
