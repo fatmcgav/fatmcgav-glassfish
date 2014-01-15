@@ -20,6 +20,7 @@ define glassfish::create_service (
 
   # Create the init file
   file { "${domain}_servicefile":
+    ensure  => present,
     path    => "/etc/init.d/glassfish_${domain}",
     mode    => '0755',
     content => $service_file,
@@ -44,4 +45,4 @@ define glassfish::create_service (
     require    => File["${domain}_servicefile"]
   }
 
-}
+}
