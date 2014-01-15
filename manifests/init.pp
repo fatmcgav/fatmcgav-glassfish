@@ -3,21 +3,28 @@
 # This module manages glassfish
 #
 # Parameters:
-#   [*create_domain*]   - Should a glassfish domain be created on installation?
+#   [*create_domain*]   - Should a glassfish domain be created on
+# installation?
 #   [*domain_name*]     - Glassfish domain name.
 #   [*extra_jars*]      - Should additional jars be installed by this module?
+#
 #   [*group*]           - Glassfish group name.
-#   [*install_method*]  - Glassfish installation method. Defaults to 'yum'. Other options: 'zip'.
+#   [*install_method*]  - Glassfish installation method. Defaults to 'yum'.
+#   Other options: 'zip'.
 #   [*java_ver*]        - Java version to install if managing Java.
-#   [*manage_accounts*] - Should this module manage user accounts and groups required for Glassfish? Defaults to true.
-#   [*manage_java*]     - Should Java installation be managed by this module? Defaults to false.
-#   [*package_prefix*]  - Glassfish package name prefix. Defaults to 'glassfish3'.
+#   [*manage_accounts*] - Should this module manage user accounts and groups
+#   required for Glassfish? Defaults to true.
+#   [*manage_java*]     - Should Java installation be managed by this module?
+#   Defaults to false.
+#   [*package_prefix*]  - Glassfish package name prefix. Defaults to
+#   'glassfish3'.
 #   [*parent_dir*]      - Glassfish parent directory. Defaults to '/usr/local'.
-#   [*portbase*]        - Glassfish portbase. Used
+#   #   [*portbase*]        - Glassfish portbase. Used
 #   when creating a domain on install.
-#   [*tmp_dir*]         - Glassfish temporary directory. Defaults to '/tmp'. Only used if installing using zip method.
-#   [*user*]
-#   - Glassfish user name.
+#   [*tmp_dir*]         - Glassfish temporary directory. Defaults to '/tmp'.
+#   Only used if installing using zip method.
+#   [*user*]            -
+#   Glassfish user name.
 #   [*version*]         - Glassfish version, defaults to '3.1.2.2'.
 #
 # Actions:
@@ -46,7 +53,8 @@ class glassfish (
   $portbase                = $glassfish::params::glassfish_portbase,
   $tmp_dir                 = $glassfish::params::glassfish_tmp_dir,
   $user                    = $glassfish::params::glassfish_user,
-  $version                 = $glassfish::params::glassfish_version) inherits glassfish::params {
+  $version                 = $glassfish::params::glassfish_version) inherits 
+glassfish::params {
   # Calculate some vars based on passed parameters
   $glassfish_dir          = "${parent_dir}/glassfish-${version}"
   $glassfish_asadmin_path = "${glassfish_dir}/bin/asadmin"

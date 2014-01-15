@@ -20,13 +20,14 @@ class glassfish::java {
     }
 
     default          : {
-      fail("Unrecognized Java version. Choose one of: java-7-oracle, java-7-openjdk, java-6-oracle, java-6-openjdk")
+      fail("Unrecognized Java version ${glassfish::java_ver}. Choose one of: java-7-oracle, java-7-openjdk, java-6-oracle, java-6-openjdk"
+      )
     }
   }
 
   # Install the required package, if set.
   unless $package == 'UNSET' {
-    package { $package: ensure => "installed" }
+    package { $package: ensure => 'installed' }
   }
 
 }

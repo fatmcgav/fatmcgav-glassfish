@@ -15,10 +15,10 @@ define glassfish::create_domain (
   $create_service      = $glassfish::create_service) {
   # Create the domain
   domain { $domain_name:
+    ensure            => $ensure,
     user              => $domain_user,
     asadminuser       => $asadmin_user,
     passwordfile      => $asadmin_passfile,
-    ensure            => $ensure,
     portbase          => $portbase,
     startoncreate     => $start_domain,
     enablesecureadmin => $enable_secure_admin

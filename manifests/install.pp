@@ -6,11 +6,11 @@ class glassfish::install {
   # Create user/group if required
   if $glassfish::manage_accounts {
     # Create the required group.
-    group { $glassfish::group: ensure => "present" }
+    group { $glassfish::group: ensure => 'present' }
 
     # Create the required user.
     user { $glassfish::user:
-      ensure     => "present",
+      ensure     => 'present',
       managehome => true,
       comment    => 'Glassfish user account',
       gid        => $glassfish::group,
@@ -36,7 +36,7 @@ class glassfish::install {
     }
     'zip'   : {
       # Need to download glassfish from java.net
-      $glassfish_download_site = "http://download.java.net/glassfish/$glassfish::version/release"
+      $glassfish_download_site = "http://download.java.net/glassfish/${glassfish::version}/release"
       $glassfish_download_file = "glassfish-${glassfish::version}.zip"
       $glassfish_download_dest = "${glassfish::tmp_dir}/${glassfish_download_file}"
 
@@ -45,7 +45,7 @@ class glassfish::install {
 
       # Download file
       exec { "download_${glassfish_download_file}_zip":
-        command => "wget -q ${glassfish_download_site}/${glassfish_download_file} -O $glassfish_download_dest",
+        command => "wget -q ${glassfish_download_site}/${glassfish_download_file} -O ${glassfish_download_dest}",
         path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
         creates => $glassfish_download_dest,
         timeout => '300',
@@ -69,13 +69,14 @@ class glassfish::install {
         require => Exec['unzip-downloaded']
       }
 
-      # Make sure that user creation runs before ownership change, IF manage_accounts = true.
+      # Make sure that user creation runs before ownership change, IF
+      # manage_accounts = true.
       if $glassfish::manage_accounts {
         Group[$glassfish::group] -> Exec['change-ownership']
       }
 
       # Chmod glassfish folder.
-      exec { "change-mod":
+      exec { 'change-mode':
         command => "chmod -R g+rwX ${glassfish::tmp_dir}/glassfish3",
         path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
         creates => $glassfish::glassfish_dir,
@@ -88,7 +89,7 @@ class glassfish::install {
         path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
         cwd     => $glassfish::tmp_dir,
         creates => $glassfish::glassfish_dir,
-        require => Exec['change-mod']
+        require => Exec['change-mode']
       }
 
       # Remove default domain1.
@@ -100,7 +101,8 @@ class glassfish::install {
 
     }
     default : {
-      fail("Unrecognised Installation method ${glassfish::install_method}. Choose one of: 'yum','zip'.")
+      fail("Unrecognised Installation method ${glassfish::install_method}. Choose one of: 'yum','zip'."
+      )
     }
 
   }
