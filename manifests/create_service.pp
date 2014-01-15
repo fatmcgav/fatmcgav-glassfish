@@ -8,6 +8,7 @@ define glassfish::create_service ($domain = $name, $runuser = $glassfish::user, 
     fail("Domain name must be specified to install service.")
   }
 
+  # Create the init file
   file { "${domain}_servicefile":
     path    => "/etc/init.d/glassfish_${domain}",
     mode    => '0755',
@@ -22,14 +23,15 @@ define glassfish::create_service ($domain = $name, $runuser = $glassfish::user, 
   # Need to stop the domain if it was auto-started
   if $running {
     exec { "stop_${domain}":
-      command => "asadmin stop-domain ${domain}",
-      path    => "${glassfish::glassfish_asadmin_path}/bin",
-      user    => $glassfish::user
+      command => "${glassfish::glassfish_asadmin_path} stop-domain ${domain}",
+      user    => $glassfish::user,
+      before  => Service["glassfish_${domain}"]
     }
   }
 
+  # Make sure the service is running and enabled.
   service { "glassfish_${domain}":
-    ensure     => running,
+    ensure     => 'running',
     enable     => true,
     hasstatus  => true,
     hasrestart => true,
