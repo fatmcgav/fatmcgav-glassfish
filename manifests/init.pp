@@ -48,7 +48,7 @@ class glassfish (
   $user                    = $glassfish::params::glassfish_user,
   $version                 = $glassfish::params::glassfish_version) inherits glassfish::params {
   # Calculate some vars based on passed parameters
-  $glassfish_dir = "${parent_dir}/glassfish-${version}"
+  $glassfish_dir          = "${parent_dir}/glassfish-${version}"
   $glassfish_asadmin_path = "${glassfish_dir}/bin/asadmin"
 
   #
@@ -67,8 +67,7 @@ class glassfish (
   }
 
   # Call the install method
-  class { 'glassfish::install':
-  }
+  include glassfish::install
 
   # Make sure parent_dir runs before glassfish::install.
   File[$parent_dir] -> Class['glassfish::install']
@@ -96,7 +95,7 @@ class glassfish (
 
   # Need to manage path?
   if $add_path {
-    class { 'glassfish::path': }
+    class { 'glassfish::path': require => Class['glassfish::install'] }
   }
 
 }

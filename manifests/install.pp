@@ -5,18 +5,18 @@
 class glassfish::install {
   # Create user/group if required
   if $glassfish::manage_accounts {
+    # Create the required group.
+    group { $glassfish::group: ensure => "present" }
+
     # Create the required user.
     user { $glassfish::user:
       ensure     => "present",
-      managehome => true
+      managehome => true,
+      comment    => 'Glassfish user account',
+      gid        => $glassfish::group,
+      require    => Group[$glassfish::group]
     }
 
-    # Create the required group.
-    group { $glassfish::group:
-      ensure  => "present",
-      require => User[$glassfish::user],
-      members => User[$glassfish::user],
-    }
   }
 
   # Take action based on $install_method.
@@ -28,9 +28,9 @@ class glassfish::install {
       # Install the package.
       package { $package_name: ensure => present }
 
-      # Run User/Group create before Package install, IF manage_accounts = true.
+      # Run User/Group create before Package install, If manage_accounts = true.
       if $glassfish::manage_accounts {
-        Group[$glassfish::group] -> Package[$package_name]
+        User[$glassfish::user] -> Package[$package_name]
       }
 
     }
@@ -90,8 +90,8 @@ class glassfish::install {
         creates => $glassfish::glassfish_dir,
         require => Exec['change-mod']
       }
-      
-      # Remove default domain1. 
+
+      # Remove default domain1.
       file { 'remove-domain1':
         ensure => absent,
         path   => "${glassfish::glassfish_dir}/glassfish/domains/domain1",
@@ -104,4 +104,5 @@ class glassfish::install {
     }
 
   }
+
 }
