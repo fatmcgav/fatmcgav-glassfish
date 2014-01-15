@@ -53,8 +53,7 @@ class glassfish (
   $portbase                = $glassfish::params::glassfish_portbase,
   $tmp_dir                 = $glassfish::params::glassfish_tmp_dir,
   $user                    = $glassfish::params::glassfish_user,
-  $version                 = $glassfish::params::glassfish_version) inherits 
-glassfish::params {
+  $version                 = $glassfish::params::glassfish_version) inherits glassfish::params {
   # Calculate some vars based on passed parameters
   $glassfish_dir          = "${parent_dir}/glassfish-${version}"
   $glassfish_asadmin_path = "${glassfish_dir}/bin/asadmin"
@@ -95,7 +94,9 @@ glassfish::params {
     if $create_service {
       create_service { $domain_name:
         runuser => $user,
-        require => [Create_domain[$domain_name], Install_jars[$extrajars]]
+        require => [
+          Create_domain[$domain_name],
+          Install_jars[$extrajars]]
       }
     }
 
@@ -106,4 +107,4 @@ glassfish::params {
     class { 'glassfish::path': require => Class['glassfish::install'] }
   }
 
-}
+}
