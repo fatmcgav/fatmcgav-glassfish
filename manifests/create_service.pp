@@ -7,7 +7,7 @@ define glassfish::create_service (
   $runuser     = $glassfish::user,
   $running     = false) {
   # Check that we've got a domain name.
-  unless $domain_name {
+  if !$domain_name {
     fail('Domain name must be specified to install service.')
   }
 
