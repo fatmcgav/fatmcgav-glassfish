@@ -139,9 +139,7 @@ describe 'glassfish::create_service' do
       let(:params) { default_params }
         
       it do
-        expect {
-          contain_file('test_servicefile')
-        }.to raise_error(Puppet::Error, /OSFamily Suse not supported/)
+        expect { subject }.to raise_error(Puppet::Error, /OSFamily Suse not supported/)
       end
          
     end

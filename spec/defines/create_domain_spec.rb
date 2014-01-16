@@ -114,9 +114,7 @@ describe 'glassfish::create_domain' do
     end
     
     it do 
-      expect {
-        contain_domain('test')
-      }.to raise_error(Puppet::Error, /is not a boolean/)
+      expect { subject }.to raise_error(Puppet::Error, /is not a boolean/)
     end
   end
   
