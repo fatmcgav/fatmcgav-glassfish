@@ -15,4 +15,5 @@ group :rake do
   gem 'rspec-puppet', '>=1.0.1'
   gem 'puppetlabs_spec_helper'
   gem 'puppet-lint'
+  gem 'librarian-puppet'
 end
