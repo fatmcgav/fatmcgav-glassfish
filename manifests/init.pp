@@ -96,16 +96,18 @@ class glassfish (
     create_domain { $domain_name: require => Class['glassfish::install'] }
 
     # Install extrajars if required, only if creating a domain.
-    install_jars { $extrajars:
-      domain  => $domain_name,
-      require => Create_domain[$domain_name]
+    if !empty($extrajars) {
+      install_jars { $extrajars:
+        domain  => $domain_name,
+        require => Create_domain[$domain_name]
+      }
     }
 
     # Need to create a service?
     if $create_service {
       create_service { $domain_name:
         runuser => $user,
-        require => [Create_domain[$domain_name], Install_jars[$extrajars]]
+        require => Create_domain[$domain_name]
       }
     }
 
@@ -116,4 +118,4 @@ class glassfish (
     class { 'glassfish::path': require => Class['glassfish::install'] }
   }
 
-}
+}
