@@ -9,8 +9,8 @@
 #   [*extra_jars*]      - Should additional jars be installed by this module?
 #
 #   [*group*]           - Glassfish group name.
-#   [*install_method*]  - Glassfish installation method. Defaults to 'yum'.
-#   Other options: 'zip'.
+#   [*install_method*]  - Glassfish installation method. Defaults to 'zip'.
+#   Other options: 'yum'.
 #   [*java_ver*]        - Java version to install if managing Java.
 #   [*manage_accounts*] - Should this module manage user accounts and groups
 #   required for Glassfish? Defaults to true.

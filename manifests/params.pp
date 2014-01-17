@@ -4,7 +4,7 @@
 #
 class glassfish::params {
   # Installation method. Can be: 'yum','zip'.
-  $glassfish_install_method      = 'yum'
+  $glassfish_install_method      = 'zip'
 
   # Default glassfish temporary directory for downloading Zip.
   $glassfish_tmp_dir             = '/tmp'
