@@ -31,7 +31,7 @@ define glassfish::create_service (
   if $running {
     exec { "stop_${domain_name}":
       command => "${glassfish::glassfish_asadmin_path} stop-domain ${domain_name}",
-      user    => $glassfish::user,
+      user    => $runuser,
       before  => Service["glassfish_${domain_name}"]
     }
   }
