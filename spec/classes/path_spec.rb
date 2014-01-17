@@ -10,7 +10,9 @@ describe 'glassfish::path' do
     } }
 
     # Include required classes
-    let(:pre_condition) { 'include glassfish' }
+    let(:pre_condition) { 'class {"glassfish": 
+      domain_asadmin_passfile => "/tmp/asadmin.pass"}' 
+    }
     
     it do 
       should contain_file('/etc/profile.d/glassfish.sh').with({

@@ -11,7 +11,9 @@ describe 'glassfish::install' do
     
     describe 'with default param values' do
       # Include required classe with default param values
-      let(:pre_condition) { 'include glassfish' }
+      let(:pre_condition) { 'class {"glassfish": 
+        domain_asadmin_passfile => "/tmp/asadmin.pass"}'  
+      }
         
       #
       ## Test default behaviour
@@ -90,7 +92,11 @@ describe 'glassfish::install' do
     } }
     
     # Include required classe with default param values
-    let(:pre_condition) { 'class {"glassfish": user => "gftest", group => "gftest"}' }
+    let(:pre_condition) { 'class {"glassfish": 
+      domain_asadmin_passfile => "/tmp/asadmin.pass",
+      user => "gftest", 
+      group => "gftest"}' 
+    }
       
     # Should create the group and user
     describe 'it should manage user and group' do
@@ -114,7 +120,10 @@ describe 'glassfish::install' do
     } }
     
     # Include required classe with default param values
-    let(:pre_condition) { 'class {"glassfish": install_method => "yum"}' }
+    let(:pre_condition) { 'class {"glassfish": 
+      domain_asadmin_passfile => "/tmp/asadmin.pass",
+      install_method => "yum"}' 
+    }
       
     # Should attempt to install using yum package
     it do
@@ -129,7 +138,11 @@ describe 'glassfish::install' do
     } }
     
     # Include required classe with default param values
-    let(:pre_condition) { 'class {"glassfish": install_method => "yum", package_prefix => "gftest"}' }
+    let(:pre_condition) { 'class {"glassfish": 
+      domain_asadmin_passfile => "/tmp/asadmin.pass",
+      install_method => "yum", 
+      package_prefix => "gftest"}' 
+    }
       
     # Should attempt to install using yum package
     it do
@@ -144,7 +157,10 @@ describe 'glassfish::install' do
     } }
     
     # Include required classe with default param values
-    let(:pre_condition) { 'class {"glassfish": manage_accounts => false}' }
+    let(:pre_condition) { 'class {"glassfish": 
+      domain_asadmin_passfile => "/tmp/asadmin.pass",
+      manage_accounts => false}' 
+    }
       
     # Should attempt to install using yum package
     it do
@@ -160,7 +176,10 @@ describe 'glassfish::install' do
     } }
     
     # Include required classe with default param values
-    let(:pre_condition) { 'class {"glassfish": install_method => "bob"}' }
+    let(:pre_condition) { 'class {"glassfish": 
+      domain_asadmin_passfile => "/tmp/asadmin.pass",
+      install_method => "bob"}' 
+    }
     
     # It should fail
     it do
