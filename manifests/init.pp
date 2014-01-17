@@ -58,6 +58,22 @@ class glassfish (
   $glassfish_dir          = "${parent_dir}/glassfish-${version}"
   $glassfish_asadmin_path = "${glassfish_dir}/bin/asadmin"
 
+  # Validate passed paramater values
+  validate_bool($add_path)
+  validate_bool($create_domain)
+  validate_bool($create_service)
+  validate_bool($start_domain)
+  validate_bool($enable_secure_admin)
+  validate_string($domain_asadmin_user)
+  validate_absolute_path($domain_asadmin_passfile)
+  validate_string($domain_name)
+  validate_string($group)
+  validate_string($install_method)
+  validate_bool($manage_accounts)
+  validate_bool($manage_java)
+  validate_string($package_prefix)
+  validate_string($user)
+
   #
   # # Start to run through the install process
   #
@@ -94,9 +110,7 @@ class glassfish (
     if $create_service {
       create_service { $domain_name:
         runuser => $user,
-        require => [
-          Create_domain[$domain_name],
-          Install_jars[$extrajars]]
+        require => [Create_domain[$domain_name], Install_jars[$extrajars]]
       }
     }
 

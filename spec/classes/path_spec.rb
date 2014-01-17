@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-# Start to describe glassfish::create_domain class
+# Start to describe glassfish::path class
 describe 'glassfish::path' do
   
   context 'on a RedHat OSFamily' do

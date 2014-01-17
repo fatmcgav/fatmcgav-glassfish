@@ -44,7 +44,7 @@ class glassfish::install {
       file { $glassfish::tmp_dir: ensure => directory }
 
       # Download file
-      exec { "download_${glassfish_download_file}_zip":
+      exec { "download_${glassfish_download_file}":
         command => "wget -q ${glassfish_download_site}/${glassfish_download_file} -O ${glassfish_download_dest}",
         path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
         creates => $glassfish_download_dest,
@@ -58,7 +58,7 @@ class glassfish::install {
         path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
         cwd     => $glassfish::tmp_dir,
         creates => $glassfish::glassfish_dir,
-        require => Exec["download_${glassfish_download_file}_zip"]
+        require => Exec["download_${glassfish_download_file}"]
       }
 
       # Chown glassfish folder.
@@ -72,7 +72,7 @@ class glassfish::install {
       # Make sure that user creation runs before ownership change, IF
       # manage_accounts = true.
       if $glassfish::manage_accounts {
-        Group[$glassfish::group] -> Exec['change-ownership']
+        User[$glassfish::user] -> Exec['change-ownership']
       }
 
       # Chmod glassfish folder.
@@ -94,17 +94,17 @@ class glassfish::install {
 
       # Remove default domain1.
       file { 'remove-domain1':
-        ensure => absent,
-        path   => "${glassfish::glassfish_dir}/glassfish/domains/domain1",
-        force  => true
+        ensure  => absent,
+        path    => "${glassfish::glassfish_dir}/glassfish/domains/domain1",
+        force   => true,
+        require => Exec['move-glassfish3']
       }
 
     }
     default : {
-      fail("Unrecognised Installation method ${glassfish::install_method}. Choose one of: 'yum','zip'."
-      )
+      fail("Unrecognised Installation method ${glassfish::install_method}. Choose one of: 'yum','zip'.")
     }
 
   }
 
-}
+}
