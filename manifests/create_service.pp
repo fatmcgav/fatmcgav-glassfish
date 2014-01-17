@@ -12,10 +12,10 @@ define glassfish::create_service (
   }
 
   # What service_file should we be using, based on osfamily.
-  $service_file = $::osfamily ? {
-    'RedHat' => template('glassfish/glassfish-init-el.erb'),
-    'Debian' => template('glassfish/glassfish-init-debian.erb'),
-    default  => fail("OSFamily ${::osfamily} not supported.")
+  case $::osfamily {
+    'RedHat' : { $service_file = template('glassfish/glassfish-init-el.erb') }
+    'Debian' : { $service_file = template('glassfish/glassfish-init-debian.erb') }
+    default  : { fail("OSFamily ${::osfamily} not supported.") }
   }
 
   # Create the init file
