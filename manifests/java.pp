@@ -26,7 +26,7 @@ class glassfish::java {
   }
 
   # Install the required package, if set.
-  unless $package == 'UNSET' {
+  if !$package == 'UNSET' {
     package { $package: ensure => 'installed' }
   }
 
