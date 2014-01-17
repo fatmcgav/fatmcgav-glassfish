@@ -3,11 +3,10 @@
 # This module manages glassfish
 #
 # Parameters:
-#   [*create_domain*]   - Should a glassfish domain be created on
-# installation?
+#   [*create_domain*]   - Should a glassfish domain be created on installation?
+#   Defaults to false
 #   [*domain_name*]     - Glassfish domain name.
 #   [*extra_jars*]      - Should additional jars be installed by this module?
-#
 #   [*group*]           - Glassfish group name.
 #   [*install_method*]  - Glassfish installation method. Defaults to 'zip'.
 #   Other options: 'yum'.
@@ -15,7 +14,7 @@
 #   [*manage_accounts*] - Should this module manage user accounts and groups
 #   required for Glassfish? Defaults to true.
 #   [*manage_java*]     - Should Java installation be managed by this module?
-#   Defaults to false.
+#   Defaults to true.
 #   [*package_prefix*]  - Glassfish package name prefix. Defaults to
 #   'glassfish3'.
 #   [*parent_dir*]      - Glassfish parent directory. Defaults to '/usr/local'.
@@ -23,8 +22,7 @@
 #   when creating a domain on install.
 #   [*tmp_dir*]         - Glassfish temporary directory. Defaults to '/tmp'.
 #   Only used if installing using zip method.
-#   [*user*]            -
-#   Glassfish user name.
+#   [*user*]            - Glassfish user name.
 #   [*version*]         - Glassfish version, defaults to '3.1.2.2'.
 #
 # Actions:
@@ -83,10 +81,7 @@ class glassfish (
 
   # Do we need to manage Java?
   if $manage_java {
-    class { 'glassfish::java': }
-
-    # Set the dependencies
-    Class['glassfish::java'] -> Class['glassfish::install']
+    class { 'glassfish::java': before => Class['glassfish::install'] }
   }
 
   # Call the install method
@@ -121,4 +116,4 @@ class glassfish (
     class { 'glassfish::path': require => Class['glassfish::install'] }
   }
 
-}
+}
