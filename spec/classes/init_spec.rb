@@ -6,7 +6,7 @@ describe 'glassfish' do
   # Setup default params
   let :default_params do 
     {
-      :domain_asadmin_passfile    => '/tmp/asadmin.pass'
+      :domain_asadmin_passfile => '/tmp/asadmin.pass'
     }
   end
   
@@ -17,7 +17,7 @@ describe 'glassfish' do
     } }
     
     describe 'with default param values' do
-      # Include required classe with default param values
+      # Set relevant params
       let(:params) { default_params }
       
       #
@@ -43,7 +43,7 @@ describe 'glassfish' do
     end
     
     describe 'with manage_java => false' do
-      # Include required classe with manage_java set to false
+      # Set relevant params
       let(:params) do
         default_params.merge( {
           :manage_java => false
@@ -55,7 +55,7 @@ describe 'glassfish' do
     end
     
     describe 'with create_domain => true' do
-      # Include required classe with create_domain set to false
+      # Set relevant params
       let(:params) do
         default_params.merge( {
           :create_domain => true
@@ -75,7 +75,7 @@ describe 'glassfish' do
     end
     
     describe 'with create_domain => true and create_service => true' do
-      # Include required classe with create_domain set to false
+      # Set relevant params
       let(:params) do
         default_params.merge( {
           :create_domain  => true,
@@ -93,6 +93,34 @@ describe 'glassfish' do
         # Should include create_service resource
         should contain_glassfish__create_service('domain1').with_runuser('glassfish').that_requires('Create_domain[domain1]')
       end
+    end
+    
+    describe 'with add_path => false' do
+      # Set relevant params
+      let(:params) do
+        default_params.merge( {
+          :add_path => false
+        } )
+      end
+      
+      # Shouldn't contain glassfish::path class
+      it do
+        should_not contain_class('glassfish::path')
+      end 
+    end
+    
+    describe 'with invalid param' do
+      # Set relevant params
+      let(:params) do
+        default_params.merge( {
+          :create_domain => 'blah'
+        } )
+      end
+      
+      # Should  fail due to invalid boolean
+      it do
+        expect { subject }.to raise_error(Puppet::Error, /is not a boolean/)
+      end 
     end
   end
 end

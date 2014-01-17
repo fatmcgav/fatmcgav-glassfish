@@ -1,4 +1,4 @@
-# Class: glassfish::create_domain
+# Define: glassfish::create_domain
 #
 # Create a glassfish domain on installation.
 #
