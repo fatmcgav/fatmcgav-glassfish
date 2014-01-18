@@ -7,16 +7,16 @@ class glassfish::java {
   case $glassfish::java_ver {
     'java-7-oracle'  : {
       # require ::java7
-      $package = 'UNSET'
+      $java_package = undef 
     }
     'java-7-openjdk' : {
-      $package = $glassfish::params::java7_openjdk_package
+      $java_package = $glassfish::params::java7_openjdk_package
     }
     'java-6-oracle'  : {
-      $package = 'UNSET'
+      $java_package = undef 
     }
     'java-6-openjdk' : {
-      $package = $glassfish::params::java6_openjdk_package
+      $java_package = $glassfish::params::java6_openjdk_package
     }
 
     default          : {
@@ -26,8 +26,8 @@ class glassfish::java {
   }
 
   # Install the required package, if set.
-  if !$package == 'UNSET' {
-    package { $package: ensure => 'installed' }
+  if $java_package {
+    package { $java_package: ensure => 'installed' }
   }
 
 }

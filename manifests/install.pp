@@ -97,6 +97,7 @@ class glassfish::install {
         ensure  => absent,
         path    => "${glassfish::glassfish_dir}/glassfish/domains/domain1",
         force   => true,
+        backup  => false,
         require => Exec['move-glassfish3']
       }
 

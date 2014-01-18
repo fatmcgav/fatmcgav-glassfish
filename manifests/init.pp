@@ -63,7 +63,6 @@ class glassfish (
   validate_bool($start_domain)
   validate_bool($enable_secure_admin)
   validate_string($domain_asadmin_user)
-  validate_absolute_path($domain_asadmin_passfile)
   validate_string($domain_name)
   validate_string($group)
   validate_string($install_method)
@@ -92,6 +91,9 @@ class glassfish (
 
   # Do we need to create a domain on installation?
   if $create_domain {
+    # Need to make sure that the $domain_asadmin_passfile path is valid
+    validate_absolute_path($domain_asadmin_passfile)
+
     # Need to create the required domain
     create_domain { $domain_name: require => Class['glassfish::install'] }
 
@@ -99,14 +101,6 @@ class glassfish (
     if !empty($extrajars) {
       install_jars { $extrajars:
         domain  => $domain_name,
-        require => Create_domain[$domain_name]
-      }
-    }
-
-    # Need to create a service?
-    if $create_service {
-      create_service { $domain_name:
-        runuser => $user,
         require => Create_domain[$domain_name]
       }
     }
