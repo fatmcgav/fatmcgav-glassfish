@@ -74,27 +74,6 @@ describe 'glassfish' do
       end
     end
     
-    describe 'with create_domain => true and create_service => true' do
-      # Set relevant params
-      let(:params) do
-        default_params.merge( {
-          :create_domain  => true,
-          :create_service => true
-        } )
-      end
-      
-      it do
-        # Should include create_domain resource
-        should contain_glassfish__create_domain('domain1').that_requires('Class[glassfish::install]')
-         
-        # Should not include install_jars resource
-        should_not contain_install_jars('[]')
-        
-        # Should include create_service resource
-        should contain_glassfish__create_service('domain1').with_runuser('glassfish').that_requires('Create_domain[domain1]')
-      end
-    end
-    
     describe 'with add_path => false' do
       # Set relevant params
       let(:params) do

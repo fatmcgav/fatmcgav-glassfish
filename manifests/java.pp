@@ -7,13 +7,13 @@ class glassfish::java {
   case $glassfish::java_ver {
     'java-7-oracle'  : {
       # require ::java7
-      $java_package = undef 
+      $java_package = undef
     }
     'java-7-openjdk' : {
       $java_package = $glassfish::params::java7_openjdk_package
     }
     'java-6-oracle'  : {
-      $java_package = undef 
+      $java_package = undef
     }
     'java-6-openjdk' : {
       $java_package = $glassfish::params::java6_openjdk_package
