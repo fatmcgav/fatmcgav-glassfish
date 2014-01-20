@@ -1,0 +1,4 @@
+---
+fixtures:
+  symlinks:
+    glassfish: "#{source_dir}"
