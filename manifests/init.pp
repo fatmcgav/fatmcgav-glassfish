@@ -89,6 +89,16 @@ class glassfish (
   # Make sure parent_dir runs before glassfish::install.
   File[$parent_dir] -> Class['glassfish::install']
 
+  # Need to manage path?
+  if $add_path {
+    class { 'glassfish::path': require => Class['glassfish::install'] }
+    
+    # Setup path before creating the domain...
+    if $create_domain {
+      Class['glassfish::path'] -> Create_domain[$domain_name]
+    }
+  }
+
   # Do we need to create a domain on installation?
   if $create_domain {
     # Need to make sure that the $domain_asadmin_passfile path is valid
@@ -105,11 +115,6 @@ class glassfish (
       }
     }
 
-  }
-
-  # Need to manage path?
-  if $add_path {
-    class { 'glassfish::path': require => Class['glassfish::install'] }
   }
 
 }

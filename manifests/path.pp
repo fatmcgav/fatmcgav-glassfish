@@ -16,7 +16,15 @@ class glassfish::path {
       }
     }
     'Debian' : {
-      fail('Debian doesn\'t support profile.d, so can\'t add to path.')
+      # Add a file to the profile.d directory
+      file { '/etc/profile.d/glassfish.sh':
+        ensure  => present,
+        owner   => 'root',
+        group   => 'root',
+        mode    => '0644',
+        content => template('glassfish/glassfish-profile-deb.erb'),
+        require => Class['glassfish::install']
+      }
     }
     default  : {
       fail("OSFamily ${::osfamily} is not currently supported.")

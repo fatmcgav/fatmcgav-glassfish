@@ -16,16 +16,17 @@ class Puppet::Provider::Asadmin < Puppet::Provider
     # Transform args array into a exec args string.  
     exec_args = args.join " "
     command = "asadmin #{exec_args}"
-    Puppet.debug("Command = #{command}")
+    Puppet.debug("asadmin command = #{command}")
     
     # Compile the actual command as the specified user. 
     command = "su - #{@resource[:user]} -c \"#{command}\"" if @resource[:user] and
       not command.match(/create-service/)
     # Debug output of command if required. 
-    self.debug command
+    Puppet.debug("exec command = #{command}")
     
     # Execute the command, and check the result. 
-    result = `#{command}`
+    result = `#{command}`.split('\n')
+    Puppet.debug("result = #{result}")
     self.fail result unless $? == 0
     
     # Return the result
