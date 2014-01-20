@@ -10,10 +10,16 @@ end
 
 gem 'rake'
 
-group :rake do
+group :test do
   gem 'puppet', puppetversion
   gem 'rspec-puppet', '>=1.0.1'
   gem 'puppetlabs_spec_helper'
   gem 'puppet-lint'
+  gem 'puppet-syntax'
   gem 'librarian-puppet'
+end
+
+group :development do
+  gem 'rspec-system-puppet'
+  gem 'vagrant-wrapper'
 end

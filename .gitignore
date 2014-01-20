@@ -4,3 +4,6 @@
 /.librarian
 /.bundle
 /.tmp
+spec/fixtures
+pkg
+/.rspec_system
