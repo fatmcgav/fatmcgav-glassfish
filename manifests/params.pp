@@ -45,12 +45,16 @@ class glassfish::params {
   $glassfish_enable_secure_admin = true
 
   # Should the path be updated?
-  $glassfish_add_path            = true
+  case $::osfamily {
+    RedHat  : { $glassfish_add_path = true }
+    Debian  : { $glassfish_add_path = false }
+    default : { $glassfish_add_path = false }
+  }
 
   # Should this module manage Java installation?
-  $glassfish_manage_java         = true
+  $glassfish_manage_java = true
   # JDK version: java-7-oracle, java-7-openjdk, java-6-oracle, java-6-openjdk
-  $glassfish_java_ver            = 'java-7-openjdk'
+  $glassfish_java_ver    = 'java-7-openjdk'
 
   # Set package names based on Operating System...
   case $::osfamily {
