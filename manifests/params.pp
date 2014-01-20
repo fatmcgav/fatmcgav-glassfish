@@ -47,7 +47,7 @@ class glassfish::params {
   # Should the path be updated?
   case $::osfamily {
     RedHat  : { $glassfish_add_path = true }
-    Debian  : { $glassfish_add_path = false }
+    Debian  : { $glassfish_add_path = true }
     default : { $glassfish_add_path = false }
   }
 
