@@ -92,7 +92,7 @@ class glassfish (
   # Need to manage path?
   if $add_path {
     class { 'glassfish::path': require => Class['glassfish::install'] }
-    
+
     # Setup path before creating the domain...
     if $create_domain {
       Class['glassfish::path'] -> Create_domain[$domain_name]
