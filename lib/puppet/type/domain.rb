@@ -54,7 +54,7 @@ Puppet::Type.newtype(:domain) do
 
     validate do |value|
       unless File.exists? value
-        raise ArgumentError, "%s does not exists" % value
+        raise ArgumentError, "%s does not exist" % value
       end
     end
   end

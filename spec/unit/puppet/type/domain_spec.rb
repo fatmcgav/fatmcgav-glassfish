@@ -121,6 +121,20 @@ describe Puppet::Type.type(:domain) do
       end
     end
 
+    describe "for passwordfile" do
+      it "should support a valid file path" do
+        #File.stubs(:exists?).with('/tmp/asadmin.pass').returns(:true)
+        File.expects(:exists?).with('/tmp/asadmin.pass').returns(true).once
+        described_class.new(:domainname => 'domain', :passwordfile => '/tmp/asadmin.pass')[:passwordfile].should == '/tmp/asadmin.pass'
+      end
+
+      it "should fail an invalid file path" do
+        #File.stubs(:exists?).with('/tmp/nonexistent').returns(:false)
+        File.expects(:exists?).with('/tmp/nonexistent').returns(false).once
+        expect { described_class.new(:domainname => 'domain', :passwordfile => '/tmp/nonexistent') }.to raise_error(Puppet::Error, /does not exist/)
+      end
+    end
+
     describe "for enablesecureadmin" do
       it "should support true" do
         described_class.new(:domainname => 'domain', :enablesecureadmin => 'true')[:enablesecureadmin].should == :true
