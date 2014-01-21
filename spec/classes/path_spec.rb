@@ -10,9 +10,7 @@ describe 'glassfish::path' do
     } }
 
     # Include required classes
-    let(:pre_condition) { 'class {"glassfish": 
-      domain_asadmin_passfile => "/tmp/asadmin.pass"}' 
-    }
+    let(:pre_condition) { 'include glassfish' }
     
     it do 
       should contain_file('/etc/profile.d/glassfish.sh').with({
@@ -31,8 +29,17 @@ describe 'glassfish::path' do
       :osfamily => 'Debian'
     } }
     
+    # Include required classes
+    let(:pre_condition) { 'include glassfish' }
+
     it do 
-      expect { subject }.to raise_error(Puppet::Error, /Debian doesn't support profile.d/)
+      should contain_file('/etc/profile.d/glassfish.sh').with({
+        'ensure'  => 'present',
+        'owner'   => 'root',
+        'group'   => 'root',
+        'mode'    => '0644',
+        'content' =>  /glassfish/
+      }).that_requires('Class[glassfish::install]')
     end
   end
   
