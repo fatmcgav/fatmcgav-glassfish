@@ -3,24 +3,50 @@ Puppet::Type.newtype(:domain) do
 
   ensurable
 
-  newparam(:name) do
+  newparam(:domainname) do
     desc "The Glassfish domain name."
     isnamevar
+    validate do |value|
+      unless value =~ /^[\w-]+$/
+         raise ArgumentError, "%s is not a valid domain name." % value
+      end
+    end
   end
 
   newparam(:startoncreate) do
     desc "Start the domain immediately after it is created. Default: true"
     defaultto true
+    newvalues('true', 'false')
   end
 
   newparam(:portbase) do
-    desc "The Glassfish domain port base. Default: 4800"
-    defaultto "4800"
+    desc "The Glassfish domain port base. Default: 8000"
+    defaultto '8000'
+
+    validate do |value|
+      raise ArgumentError, "%s is not a valid portbase." % value unless value =~ /^\d{4,5}$/
+    end
+
+    munge do |value|
+      case value
+      when String
+        if value =~ /^[-0-9]+$/
+          value = Integer(value)
+        end
+      end
+
+      return value
+    end
   end
 
   newparam(:asadminuser) do
     desc "The internal Glassfish user asadmin uses. Default: admin"
-    defaultto "admin"
+    defaultto 'admin'
+    validate do |value|
+      unless value =~ /^[\w-]+$/
+         raise ArgumentError, "%s is not a valid asadmin user name." % value
+      end
+    end
   end
 
   newparam(:passwordfile) do
@@ -45,12 +71,13 @@ Puppet::Type.newtype(:domain) do
   
   newparam(:enablesecureadmin) do
     desc "Should secure admin be enabled. Default: true"
-    defaultto true
+    defaultto(:true)
+    newvalues(:true, :false)
     
-    validate do |value|
-      if value 
-        # Need to make sure that startoncreate is set to true, otherwise enable-secure-admin will fail. 
-      end
-    end
+#    validate do |value|
+#      if value 
+        #TODO: Need to make sure that startoncreate is set to true if enablesecureadmin is set to true, otherwise enable-secure-admin command  will fail. 
+#      end
+#    end
   end
 end
