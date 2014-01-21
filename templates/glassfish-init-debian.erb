@@ -10,7 +10,7 @@
 ### END INIT INFO
 
 USER=<%= @runuser %>
-GLASSFISHPATH=<%= scope.lookupvar('glassfish::params::glassfish_dir') %>/glassfish/bin
+GLASSFISHPATH=<%= scope.lookupvar('glassfish::glassfish_dir') %>/glassfish/bin
 __NAME="Oracle Glassfish Java EE 6 Application Server"
 
 test -x ${GLASSFISHPATH}/asadmin || exit 2
