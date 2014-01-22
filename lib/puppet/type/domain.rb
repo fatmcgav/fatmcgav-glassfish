@@ -13,12 +13,6 @@ Puppet::Type.newtype(:domain) do
     end
   end
 
-  newparam(:startoncreate) do
-    desc "Start the domain immediately after it is created. Default: true"
-    defaultto true
-    newvalues('true', 'false')
-  end
-
   newparam(:portbase) do
     desc "The Glassfish domain port base. Default: 8000"
     defaultto '8000'
@@ -69,15 +63,22 @@ Puppet::Type.newtype(:domain) do
     end
   end
   
+  newparam(:startoncreate) do
+    desc "Start the domain immediately after it is created. Default: true"
+    defaultto(:true)
+    newvalues(:true, :false)
+  end
+  
   newparam(:enablesecureadmin) do
     desc "Should secure admin be enabled. Default: true"
     defaultto(:true)
     newvalues(:true, :false)
-    
-#    validate do |value|
-#      if value 
-        #TODO: Need to make sure that startoncreate is set to true if enablesecureadmin is set to true, otherwise enable-secure-admin command  will fail. 
-#      end
-#    end
+  end
+  
+  # Validate multiple param values
+  validate do
+    if self[:enablesecureadmin] == :true and self[:startoncreate] == :false
+      raise Puppet::Error, "Enablesecureadmin cannot be true if startoncreate is false"
+    end
   end
 end

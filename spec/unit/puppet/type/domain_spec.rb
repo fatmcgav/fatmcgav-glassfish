@@ -59,24 +59,6 @@ describe Puppet::Type.type(:domain) do
       end
     end
 
-    describe "for startoncreate" do
-      it "should support true" do
-        described_class.new(:domainname => 'domain', :startoncreate => 'true')[:startoncreate].should == :true
-      end
-
-      it "should support false" do
-        described_class.new(:domainname => 'domain', :startoncreate => 'false')[:startoncreate].should == :false
-      end
-
-      it "should have a default value of true" do
-        described_class.new(:domainname => 'domain')[:startoncreate].should == :true
-      end
-
-      it "should not support other values" do
-        expect { described_class.new(:domainname => 'domain', :startoncreate => 'foo') }.to raise_error(Puppet::Error, /Invalid value "foo"/)
-      end
-    end
-
     describe "for portbase" do
       it "should support a numerical value" do
         described_class.new(:domainname => 'domain', :portbase => '8000', :ensure => :present)[:portbase].should == 8000
@@ -123,18 +105,34 @@ describe Puppet::Type.type(:domain) do
 
     describe "for passwordfile" do
       it "should support a valid file path" do
-        #File.stubs(:exists?).with('/tmp/asadmin.pass').returns(:true)
         File.expects(:exists?).with('/tmp/asadmin.pass').returns(true).once
         described_class.new(:domainname => 'domain', :passwordfile => '/tmp/asadmin.pass')[:passwordfile].should == '/tmp/asadmin.pass'
       end
 
       it "should fail an invalid file path" do
-        #File.stubs(:exists?).with('/tmp/nonexistent').returns(:false)
         File.expects(:exists?).with('/tmp/nonexistent').returns(false).once
         expect { described_class.new(:domainname => 'domain', :passwordfile => '/tmp/nonexistent') }.to raise_error(Puppet::Error, /does not exist/)
       end
     end
 
+    describe "for startoncreate" do
+      it "should support true" do
+        described_class.new(:domainname => 'domain', :startoncreate => 'true')[:startoncreate].should == :true
+      end
+
+      it "should support false" do
+        described_class.new(:domainname => 'domain', :startoncreate => 'false', :enablesecureadmin => 'false')[:startoncreate].should == :false
+      end
+
+      it "should have a default value of true" do
+        described_class.new(:domainname => 'domain')[:startoncreate].should == :true
+      end
+
+      it "should not support other values" do
+        expect { described_class.new(:domainname => 'domain', :startoncreate => 'foo') }.to raise_error(Puppet::Error, /Invalid value "foo"/)
+      end
+    end
+    
     describe "for enablesecureadmin" do
       it "should support true" do
         described_class.new(:domainname => 'domain', :enablesecureadmin => 'true')[:enablesecureadmin].should == :true
@@ -150,6 +148,21 @@ describe Puppet::Type.type(:domain) do
 
       it "should not support other values" do
         expect { described_class.new(:domainname => 'domain', :enablesecureadmin => 'foo') }.to raise_error(Puppet::Error, /Invalid value "foo"/)
+      end
+    end
+    
+    describe "validate" do
+      it "should not fail with startoncreate => true and enablesecureadmin => true" do
+        expect { described_class.new(:domainname => 'domain', :startoncreate => 'true', :enablesecureadmin => 'true') }.not_to raise_error
+      end
+      it "should not fail with startoncreate => true and enablesecureadmin => false" do
+        expect { described_class.new(:domainname => 'domain', :startoncreate => 'true', :enablesecureadmin => 'false') }.not_to raise_error
+      end
+      it "should not fail with startoncreate => false and enablesecureadmin => false" do
+        expect { described_class.new(:domainname => 'domain', :startoncreate => 'false', :enablesecureadmin => 'false') }.not_to raise_error
+      end
+      it "should fail with startoncreate => false and enablesecureadmin => true" do
+        expect { described_class.new(:domainname => 'domain', :startoncreate => 'false', :enablesecureadmin => 'true') }.to raise_error(Puppet::Error, /Enablesecureadmin cannot be true if startoncreate is false/)
       end
     end
   end
