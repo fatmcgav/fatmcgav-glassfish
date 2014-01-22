@@ -3,13 +3,6 @@ require 'spec_helper'
 # Start to describe glassfish::init class
 describe 'glassfish' do
   
-  # Setup default params
-  let :default_params do 
-    {
-      :domain_asadmin_passfile => '/tmp/asadmin.pass'
-    }
-  end
-  
   context 'on a RedHat OSFamily' do
     # Set the osfamily fact
     let(:facts) { {
@@ -17,9 +10,6 @@ describe 'glassfish' do
     } }
     
     describe 'with default param values' do
-      # Set relevant params
-      let(:params) { default_params }
-      
       #
       ## Test default behaviour
       #
@@ -35,7 +25,6 @@ describe 'glassfish' do
         
         # Create_domain defaults to false
         should_not contain_create_domain('domain1')
-        should_not contain_create_service('domain1')
         
         # Should include path class
         should contain_class('glassfish::path').that_requires('Class[glassfish::install]')
@@ -44,10 +33,9 @@ describe 'glassfish' do
     
     describe 'with manage_java => false' do
       # Set relevant params
-      let(:params) do
-        default_params.merge( {
+      let(:params) do {
           :manage_java => false
-        } )
+        }
       end
       
       # Shouldn't include glassfish::java class
@@ -56,10 +44,10 @@ describe 'glassfish' do
     
     describe 'with create_domain => true' do
       # Set relevant params
-      let(:params) do
-        default_params.merge( {
-          :create_domain => true
-        } )
+      let(:params) do  {
+          :create_domain           => true,
+          :domain_asadmin_passfile => '/tmp/asadmin.pass'
+        }
       end
       
       it do
@@ -76,10 +64,9 @@ describe 'glassfish' do
     
     describe 'with add_path => false' do
       # Set relevant params
-      let(:params) do
-        default_params.merge( {
+      let(:params) do {
           :add_path => false
-        } )
+        }
       end
       
       # Shouldn't contain glassfish::path class
@@ -90,10 +77,9 @@ describe 'glassfish' do
     
     describe 'with invalid param' do
       # Set relevant params
-      let(:params) do
-        default_params.merge( {
+      let(:params) do {
           :create_domain => 'blah'
-        } )
+        }
       end
       
       # Should  fail due to invalid boolean

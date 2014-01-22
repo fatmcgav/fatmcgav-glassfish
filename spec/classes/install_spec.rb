@@ -11,9 +11,7 @@ describe 'glassfish::install' do
     
     describe 'with default param values' do
       # Include required classe with default param values
-      let(:pre_condition) { 'class {"glassfish": 
-        domain_asadmin_passfile => "/tmp/asadmin.pass"}'  
-      }
+      let(:pre_condition) { 'include glassfish' }
         
       #
       ## Test default behaviour
@@ -93,7 +91,6 @@ describe 'glassfish::install' do
     
     # Include required classe with default param values
     let(:pre_condition) { 'class {"glassfish": 
-      domain_asadmin_passfile => "/tmp/asadmin.pass",
       user => "gftest", 
       group => "gftest"}' 
     }
@@ -121,7 +118,6 @@ describe 'glassfish::install' do
     
     # Include required classe with default param values
     let(:pre_condition) { 'class {"glassfish": 
-      domain_asadmin_passfile => "/tmp/asadmin.pass",
       install_method => "yum"}' 
     }
       
@@ -158,7 +154,6 @@ describe 'glassfish::install' do
     
     # Include required classe with default param values
     let(:pre_condition) { 'class {"glassfish": 
-      domain_asadmin_passfile => "/tmp/asadmin.pass",
       manage_accounts => false}' 
     }
       
@@ -177,7 +172,6 @@ describe 'glassfish::install' do
     
     # Include required classe with default param values
     let(:pre_condition) { 'class {"glassfish": 
-      domain_asadmin_passfile => "/tmp/asadmin.pass",
       install_method => "bob"}' 
     }
     
