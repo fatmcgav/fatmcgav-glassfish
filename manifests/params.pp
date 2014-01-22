@@ -60,17 +60,19 @@ class glassfish::params {
   case $::osfamily {
     RedHat  : {
       $java6_openjdk_package = 'java-1.6.0-openjdk-devel'
+      $java6_sun_package     = undef
       $java7_openjdk_package = 'java-1.7.0-openjdk-devel'
+      $java7_sun_package     = undef
     }
     Debian  : {
       $java6_openjdk_package = 'openjdk-6-jdk'
       $java6_sun_package     = 'sun-java6-jdk'
       $java7_openjdk_package = 'openjdk-7-jdk'
+      $java7_sun_package     = undef
     }
     default : {
       fail("${::osfamily} not supported by this module.")
     }
-
   }
 
 }
