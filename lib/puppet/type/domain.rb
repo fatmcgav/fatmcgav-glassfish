@@ -81,4 +81,9 @@ Puppet::Type.newtype(:domain) do
       raise Puppet::Error, "Enablesecureadmin cannot be true if startoncreate is false"
     end
   end
+  
+  # Autorequire the user running command
+  autorequire(:user) do
+    self[:user]    
+  end
 end

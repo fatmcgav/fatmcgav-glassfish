@@ -165,5 +165,51 @@ describe Puppet::Type.type(:domain) do
         expect { described_class.new(:domainname => 'domain', :startoncreate => 'false', :enablesecureadmin => 'true') }.to raise_error(Puppet::Error, /Enablesecureadmin cannot be true if startoncreate is false/)
       end
     end
+    
+    describe "autorequire" do
+      let :domain do
+        described_class.new(
+          :domainname   => 'test',
+          :user         => 'glassfish',
+          :passwordfile => '/tmp/asadmin.pass' 
+        )
+      end
+      
+      # Need to include glassfish to get user resource
+      let :userprovider do
+        Puppet::Type.type(:user).provide(:fake_user_provider) { mk_resource_methods }
+      end
+      
+      let :user do
+        Puppet::Type.type(:user).new(
+          :name   => 'glassfish',
+          :ensure => 'present'
+        )
+      end
+      
+      let :catalog do
+        Puppet::Resource::Catalog.new
+      end
+  
+      before :each do
+        Puppet::Type.type(:user).stubs(:defaultprovider).returns userprovider
+        File.expects(:exists?).with('/tmp/asadmin.pass').returns(true).once
+        Puppet.features.expects(:root?).returns(true).once
+      end
+      
+      it "should not autorequire a user when no matching user can be found" do
+        catalog.add_resource domain
+        domain.autorequire.should be_empty
+      end
+  
+      it "should autorequire a matching user" do
+        catalog.add_resource domain
+        catalog.add_resource user
+        reqs = domain.autorequire
+        reqs.size.should == 1
+        reqs[0].source.ref.should == user.ref
+        reqs[0].target.ref.should == domain.ref
+      end
+    end
   end
 end
