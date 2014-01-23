@@ -16,11 +16,11 @@ Puppet::Type.type(:domain).provide(:asadmin,
     asadmin_exec(args)
 
     # Start the domain upon creation if required
-    if @resource[:startoncreate] == true
+    if @resource[:startoncreate] == :true
       asadmin_exec(['start-domain', @resource[:name]])
 
       # Enable secure admin if required and domain started
-      if @resource[:enablesecureadmin] == true
+      if @resource[:enablesecureadmin] == :true
         asadmin_exec(['enable-secure-admin'])
       end
     end

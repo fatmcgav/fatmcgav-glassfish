@@ -175,7 +175,7 @@ describe Puppet::Type.type(:domain) do
         )
       end
       
-      # Need to include glassfish to get user resource
+      # Need to stub user type and provider.
       let :userprovider do
         Puppet::Type.type(:user).provide(:fake_user_provider) { mk_resource_methods }
       end
@@ -191,6 +191,7 @@ describe Puppet::Type.type(:domain) do
         Puppet::Resource::Catalog.new
       end
   
+      # Stub the user type, and expect File.exists? and Puppet.features.root?
       before :each do
         Puppet::Type.type(:user).stubs(:defaultprovider).returns userprovider
         File.expects(:exists?).with('/tmp/asadmin.pass').returns(true).once
