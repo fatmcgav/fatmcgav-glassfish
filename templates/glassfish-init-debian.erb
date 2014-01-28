@@ -1,17 +1,17 @@
 #! /bin/bash
 
 ### BEGIN INIT INFO
-# Provides:		glassfishv3
+# Provides:		glassfishv<%= scope.lookupvar('glassfish::glassfish_version') %>
 # Required-Start:	$network $local_fs $remote_fs
 # Required-Stop:
 # Default-Start:	2 3 4 5
 # Default-Stop:		0 1 6
-# Short-Description:	Oracle Glassfish Java EE 6 Application Server ver. <%= scope.lookupvar('version') %>
+# Short-Description:	Oracle Glassfish Java EE Application Server ver. <%= scope.lookupvar('glassfish::glassfish_version') %>
 ### END INIT INFO
 
 USER=<%= @runuser %>
 GLASSFISHPATH=<%= scope.lookupvar('glassfish::glassfish_dir') %>/glassfish/bin
-__NAME="Oracle Glassfish Java EE 6 Application Server"
+__NAME="Oracle Glassfish Java EE Application Server ver. <%= scope.lookupvar('glassfish::glassfish_version') %>"
 
 test -x ${GLASSFISHPATH}/asadmin || exit 2
 
