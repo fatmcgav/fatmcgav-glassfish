@@ -107,4 +107,7 @@ class glassfish::install {
       fail("Unrecognised Installation method ${glassfish::install_method}. Choose one of: 'yum','zip'.")
     }
   }
+
+  # Ensure that install runs before any Create_domain resources
+  Class['glassfish::install'] -> Create_domain <| |>
 }

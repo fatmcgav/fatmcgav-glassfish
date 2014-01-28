@@ -31,4 +31,7 @@ class glassfish::path {
     }
   }
 
+  # Ensure glassfish::path runs before any create_domain resources
+  Class['glassfish::path'] -> Create_domain <| |>
+
 }
