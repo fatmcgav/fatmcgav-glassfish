@@ -16,7 +16,6 @@ class glassfish::install {
       gid        => $glassfish::group,
       require    => Group[$glassfish::group]
     }
-
   }
 
   # Take action based on $install_method.
@@ -32,13 +31,16 @@ class glassfish::install {
       if $glassfish::manage_accounts {
         User[$glassfish::user] -> Package[$package_name]
       }
-
     }
     'zip'   : {
       # Need to download glassfish from java.net
       $glassfish_download_site = "http://download.java.net/glassfish/${glassfish::version}/release"
       $glassfish_download_file = "glassfish-${glassfish::version}.zip"
       $glassfish_download_dest = "${glassfish::tmp_dir}/${glassfish_download_file}"
+
+      # Work out major version for installation
+      $version_arr             = split($glassfish::version, '[.]')
+      $mjversion               = $version_arr[0]
 
       # Make sure that $tmp_dir exists.
       file { $glassfish::tmp_dir: ensure => directory }
@@ -58,12 +60,12 @@ class glassfish::install {
         path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
         cwd     => $glassfish::tmp_dir,
         creates => $glassfish::glassfish_dir,
-        require => Exec["download_${glassfish_download_file}"]
+        require => [Exec["download_${glassfish_download_file}"], Package['unzip']]
       }
 
       # Chown glassfish folder.
       exec { 'change-ownership':
-        command => "chown -R ${glassfish::user}:${glassfish::group} ${glassfish::tmp_dir}/glassfish3",
+        command => "chown -R ${glassfish::user}:${glassfish::group} ${glassfish::tmp_dir}/glassfish${mjversion}",
         path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
         creates => $glassfish::glassfish_dir,
         require => Exec['unzip-downloaded']
@@ -77,15 +79,15 @@ class glassfish::install {
 
       # Chmod glassfish folder.
       exec { 'change-mode':
-        command => "chmod -R g+rwX ${glassfish::tmp_dir}/glassfish3",
+        command => "chmod -R g+rwX ${glassfish::tmp_dir}/glassfish${mjversion}",
         path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
         creates => $glassfish::glassfish_dir,
         require => Exec['change-ownership']
       }
 
       # Move the glassfish3 folder.
-      exec { 'move-glassfish3':
-        command => "mv ${glassfish::tmp_dir}/glassfish3 ${glassfish::glassfish_dir}",
+      exec { "move-glassfish${mjversion}":
+        command => "mv ${glassfish::tmp_dir}/glassfish${mjversion} ${glassfish::glassfish_dir}",
         path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
         cwd     => $glassfish::tmp_dir,
         creates => $glassfish::glassfish_dir,
@@ -98,14 +100,11 @@ class glassfish::install {
         path    => "${glassfish::glassfish_dir}/glassfish/domains/domain1",
         force   => true,
         backup  => false,
-        require => Exec['move-glassfish3']
+        require => Exec["move-glassfish${mjversion}"]
       }
-
     }
     default : {
       fail("Unrecognised Installation method ${glassfish::install_method}. Choose one of: 'yum','zip'.")
     }
-
   }
-
 }

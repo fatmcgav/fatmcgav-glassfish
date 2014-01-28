@@ -83,6 +83,70 @@ describe 'glassfish::install' do
     end    
   end
   
+  context 'with glassfish_version => 4.0' do
+    # Set the osfamily fact
+    let(:facts) { {
+      :osfamily => 'RedHat'
+    } }
+    
+    # Include required classe with default param values
+    let(:pre_condition) { 'class {"glassfish": 
+      version => "4.0"}' 
+    }
+    
+    describe 'it should install glassfish 4.0 using a zip' do
+      it do
+        # Temp dir 
+        should contain_file('/tmp').with_ensure('directory')
+        
+        # Download exec
+        should contain_exec('download_glassfish-4.0.zip').with({
+          'command' => 'wget -q http://download.java.net/glassfish/4.0/release/glassfish-4.0.zip -O /tmp/glassfish-4.0.zip',
+          'path'    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+          'creates' => '/tmp/glassfish-4.0.zip',
+          'timeout' => '300'
+        }).that_requires('File[/tmp]')
+        
+        # Unzip exec
+        should contain_exec('unzip-downloaded').with({
+          'command' => 'unzip /tmp/glassfish-4.0.zip',
+          'path'    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+          'cwd'     => '/tmp',
+          'creates' => '/usr/local/glassfish-4.0',
+        }).that_requires('Exec[download_glassfish-4.0.zip]')
+        
+        # Chown exec
+        should contain_exec('change-ownership').with({
+          'command' => 'chown -R glassfish:glassfish /tmp/glassfish3',
+          'path'    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+          'creates' => '/usr/local/glassfish-4.0',
+        }).that_requires('Exec[unzip-downloaded]')
+        
+        # Chmod exec
+        should contain_exec('change-mode').with({
+          'command' => 'chmod -R g+rwX /tmp/glassfish3',
+          'path'    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+          'creates' => '/usr/local/glassfish-4.0',
+        }).that_requires('Exec[change-ownership]')
+        
+        # Move exec
+        should contain_exec('move-glassfish4').with({
+          'command' => 'mv /tmp/glassfish4 /usr/local/glassfish-4.0',
+          'path'    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+          'cwd'     => '/tmp',
+          'creates' => '/usr/local/glassfish-4.0',
+        }).that_requires('Exec[change-mode]')
+        
+        # Remove-domain1 exec
+        should contain_file('remove-domain1').with({
+          'ensure' => 'absent',
+          'path'   => '/usr/local/glassfish-4.0/glassfish/domains/domain1',
+          'force'  => true
+        }).that_requires('Exec[move-glassfish4]')
+      end
+    end
+  end
+  
   context 'with a custom username and password' do
     # Set the osfamily fact
     let(:facts) { {
