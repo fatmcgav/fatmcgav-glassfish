@@ -117,7 +117,7 @@ describe 'glassfish::install' do
         
         # Chown exec
         should contain_exec('change-ownership').with({
-          'command' => 'chown -R glassfish:glassfish /tmp/glassfish3',
+          'command' => 'chown -R glassfish:glassfish /tmp/glassfish4',
           'path'    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
           'creates' => '/usr/local/glassfish-4.0',
         }).that_requires('Exec[unzip-downloaded]')
