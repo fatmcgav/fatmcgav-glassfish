@@ -124,7 +124,7 @@ describe 'glassfish::install' do
         
         # Chmod exec
         should contain_exec('change-mode').with({
-          'command' => 'chmod -R g+rwX /tmp/glassfish3',
+          'command' => 'chmod -R g+rwX /tmp/glassfish4',
           'path'    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
           'creates' => '/usr/local/glassfish-4.0',
         }).that_requires('Exec[change-ownership]')
