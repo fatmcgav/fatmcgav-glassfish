@@ -5,15 +5,20 @@ Puppet::Type.newtype(:application) do
   newparam(:name) do
     desc "The application name."
     isnamevar
+    validate do |value|
+      unless value =~ /^[\w-]+$/
+         raise ArgumentError, "%s is not a valid application name." % value
+      end
+    end
   end
 
   newparam(:contextroot) do
     desc "The URL context root."
-    defaultto ""
+    #defaultto ""
   end
 
   newparam(:source) do
-    desc "The WAR file."
+    desc "The application file to deploy."
     validate do |value|
        unless File.exists? value
          raise ArgumentError, "%s does not exists" % value
@@ -23,12 +28,32 @@ Puppet::Type.newtype(:application) do
 
   newparam(:portbase) do
     desc "The Glassfish domain port base. Default: 4800"
-    defaultto "4800"
+    defaultto '8000'
+    
+    validate do |value|
+      raise ArgumentError, "%s is not a valid portbase." % value unless value =~ /^\d{4,5}$/
+    end
+
+    munge do |value|
+      case value
+      when String
+        if value =~ /^[-0-9]+$/
+          value = Integer(value)
+        end
+      end
+
+      return value
+    end
   end
 
   newparam(:asadminuser) do
     desc "The internal Glassfish user asadmin uses. Default: admin"
     defaultto "admin"
+    validate do |value|
+      unless value =~ /^[\w-]+$/
+         raise ArgumentError, "%s is not a valid asadmin user name." % value
+      end
+    end
   end
 
   newparam(:passwordfile) do
@@ -49,5 +74,20 @@ Puppet::Type.newtype(:application) do
         self.fail "Only root can execute commands as other users"
       end
     end
+  end
+  
+  # Validate mandatory params
+  validate do
+    raise ArgumentError, 'Source is required' unless self[:source]
+  end
+  
+  # Autorequire the user running command
+  autorequire(:user) do
+    self[:user]    
+  end
+  
+  # Autorequire the source file
+  autorequire(:file) do 
+    self[:source]
   end
 end
