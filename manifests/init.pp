@@ -51,7 +51,8 @@ class glassfish (
   $portbase                = $glassfish::params::glassfish_portbase,
   $tmp_dir                 = $glassfish::params::glassfish_tmp_dir,
   $user                    = $glassfish::params::glassfish_user,
-  $version                 = $glassfish::params::glassfish_version) inherits glassfish::params {
+  $version                 = $glassfish::params::glassfish_version,
+  $domain_template         = $glassfish::params::glassfish_domain_template) inherits glassfish::params {
   # Calculate some vars based on passed parameters
   $glassfish_dir          = "${parent_dir}/glassfish-${version}"
   $glassfish_asadmin_path = "${glassfish_dir}/bin/asadmin"

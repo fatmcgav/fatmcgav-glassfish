@@ -118,4 +118,33 @@ describe 'glassfish::create_domain' do
     end
   end
   
+  context 'with a domain template file specified' do
+    # Set the title
+    let(:title) { 'test' }
+      
+    # Set the params
+    let(:params) do 
+      default_params.merge({
+        :domain_template => '/tmp/template.xml'
+      })
+    end
+    
+    it do
+      should contain_domain('test').with({
+        'ensure'            => 'present',
+        'user'              => 'gfuser',
+        'asadminuser'       => 'admin',
+        'passwordfile'      => '/tmp/asadmin.pass',
+        'portbase'          => '8000',
+        'startoncreate'     => true,
+        'enablesecureadmin' => true,
+        'template'          => '/tmp/template.xml'
+      })
+    end
+    
+    it do
+      should contain_glassfish__create_service('test').with_running('true').that_requires('Domain[test]')
+    end
+  end
+  
 end

@@ -12,7 +12,8 @@ define glassfish::create_domain (
   $portbase            = $glassfish::portbase,
   $start_domain        = $glassfish::start_domain,
   $enable_secure_admin = $glassfish::enable_secure_admin,
-  $create_service      = $glassfish::create_service) {
+  $create_service      = $glassfish::create_service,
+  $domain_template     = $glassfish::domain_template) {
   # Validate params
   validate_absolute_path($asadmin_path)
   validate_string($asadmin_user)
@@ -22,6 +23,11 @@ define glassfish::create_domain (
   validate_bool($enable_secure_admin)
   validate_bool($create_service)
 
+  # Validate the domain_template if specified...
+  if $domain_template {
+    validate_absolute_path($domain_template)
+  }
+
   # Create the domain
   domain { $domain_name:
     ensure            => $ensure,
@@ -30,7 +36,8 @@ define glassfish::create_domain (
     passwordfile      => $asadmin_passfile,
     portbase          => $portbase,
     startoncreate     => $start_domain,
-    enablesecureadmin => $enable_secure_admin
+    enablesecureadmin => $enable_secure_admin,
+    template          => $domain_template
   }
 
   # Create a init.d service if required

@@ -15,7 +15,7 @@ describe Puppet::Type.type(:domain) do
   end
 
   describe "when validating attributes" do
-    [:domainname, :startoncreate, :portbase, :asadminuser, :passwordfile, :user, :enablesecureadmin].each do |param|
+    [:domainname, :startoncreate, :portbase, :asadminuser, :passwordfile, :user, :enablesecureadmin, :template].each do |param|
       it "should have a #{param} parameter" do
         described_class.attrtype(param).should == :param
       end
@@ -148,6 +148,18 @@ describe Puppet::Type.type(:domain) do
 
       it "should not support other values" do
         expect { described_class.new(:domainname => 'domain', :enablesecureadmin => 'foo') }.to raise_error(Puppet::Error, /Invalid value "foo"/)
+      end
+    end
+    
+    describe "for template" do
+      it "should support a valid file path" do
+        File.expects(:exists?).with('/tmp/template.xml').returns(true).once
+        described_class.new(:domainname => 'domain', :template => '/tmp/template.xml')[:template].should == '/tmp/template.xml'
+      end
+
+      it "should fail an invalid file path" do
+        File.expects(:exists?).with('/tmp/nonexistent').returns(false).once
+        expect { described_class.new(:domainname => 'domain', :template => '/tmp/nonexistent') }.to raise_error(Puppet::Error, /does not exist/)
       end
     end
     

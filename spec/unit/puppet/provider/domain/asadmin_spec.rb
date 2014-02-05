@@ -73,6 +73,24 @@ describe Puppet::Type.type(:domain).provider(:asadmin) do
         returns("Command create-domain executed successfully.")
       domain.provider.create
     end
+    
+    it "should be able to create a domain with a template file" do
+      # Expect another exists? call to check template file
+      File.expects(:exists?).with('/tmp/template.xml').returns(true).once
+      # Set template param value
+      domain['template'] = '/tmp/template.xml'
+      # Check that provider executes as expected... 
+      domain.provider.expects("`").
+        with("su - glassfish -c \"asadmin --port 8048 --user admin --passwordfile /tmp/asadmin.pass create-domain --portbase 8000 --savelogin --template /tmp/template.xml test\"").
+        returns("Command create-domain executed successfully.")
+      domain.provider.expects("`").
+        with("su - glassfish -c \"asadmin --port 8048 --user admin --passwordfile /tmp/asadmin.pass start-domain test\"").
+        returns("Command start-domain executed successfully.")
+      domain.provider.expects("`").
+        with("su - glassfish -c \"asadmin --port 8048 --user admin --passwordfile /tmp/asadmin.pass enable-secure-admin\"").
+        returns("Command enable-secure-admin executed successfully.")
+      domain.provider.create
+    end
   end
   
   describe "when destroying a resource" do

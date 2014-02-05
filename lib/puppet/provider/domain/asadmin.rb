@@ -7,9 +7,9 @@ Puppet::Type.type(:domain).provide(:asadmin,
     # Start a new args array
     args = Array.new
     args << "create-domain"
-    # args << "--profile" << @resource[:profile] # Deprecated in GF 3.1
     args << "--portbase" << @resource[:portbase]
-    args << "--savelogin" 
+    args << "--savelogin"
+    args << "--template" << @resource[:template] if @resource[:template]
     args << @resource[:name]
     
     # Run the create command

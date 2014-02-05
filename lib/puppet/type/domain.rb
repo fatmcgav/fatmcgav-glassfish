@@ -75,6 +75,15 @@ Puppet::Type.newtype(:domain) do
     newvalues(:true, :false)
   end
   
+  newparam(:template) do 
+    desc "Path to Glassfish template to use when creating the domain"
+    validate do |value|
+      unless File.exists? value
+        raise ArgumentError, "%s does not exist" % value
+      end
+    end
+  end
+  
   # Validate multiple param values
   validate do
     if self[:enablesecureadmin] == :true and self[:startoncreate] == :false

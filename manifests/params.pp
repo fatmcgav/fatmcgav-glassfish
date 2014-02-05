@@ -44,6 +44,9 @@ class glassfish::params {
   # Should secure-admin be enabled upon creation?
   $glassfish_enable_secure_admin = true
 
+  # Glassfish domain tempalte
+  $glassfish_domain_template     = undef
+
   # Should the path be updated?
   case $::osfamily {
     RedHat  : { $glassfish_add_path = true }
