@@ -143,7 +143,7 @@ describe Puppet::Type.type(:application) do
         expect { described_class.new(:name => 'application', :source => '/tmp/application.ear') }.not_to raise_error
       end
       it "should fail with a missing source" do
-        expect { described_class.new(:name => 'domain') }.to raise_error(ArgumentError, /Source is required/)
+        expect { described_class.new(:name => 'application') }.to raise_error(Puppet::Error, /Source is required./)
       end
     end
         

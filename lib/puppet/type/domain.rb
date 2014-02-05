@@ -87,7 +87,7 @@ Puppet::Type.newtype(:domain) do
   # Validate multiple param values
   validate do
     if self[:enablesecureadmin] == :true and self[:startoncreate] == :false
-      raise Puppet::Error, "Enablesecureadmin cannot be true if startoncreate is false"
+      raise ArgumentError, "Enablesecureadmin cannot be true if startoncreate is false"
     end
   end
   
