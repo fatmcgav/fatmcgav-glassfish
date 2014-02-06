@@ -4,7 +4,6 @@ describe Puppet::Type.type(:domain).provider(:asadmin) do
   
   before :each do
     Puppet::Type.type(:domain).stubs(:defaultprovider).returns described_class
-    File.expects(:exists?).with('/tmp/asadmin.pass').returns(true).once
     Puppet.features.expects(:root?).returns(true).once
   end
   

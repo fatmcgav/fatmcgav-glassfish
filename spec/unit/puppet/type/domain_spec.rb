@@ -105,13 +105,7 @@ describe Puppet::Type.type(:domain) do
 
     describe "for passwordfile" do
       it "should support a valid file path" do
-        File.expects(:exists?).with('/tmp/asadmin.pass').returns(true).once
         described_class.new(:domainname => 'domain', :passwordfile => '/tmp/asadmin.pass')[:passwordfile].should == '/tmp/asadmin.pass'
-      end
-
-      it "should fail an invalid file path" do
-        File.expects(:exists?).with('/tmp/nonexistent').returns(false).once
-        expect { described_class.new(:domainname => 'domain', :passwordfile => '/tmp/nonexistent') }.to raise_error(Puppet::Error, /does not exist/)
       end
     end
 
@@ -178,7 +172,7 @@ describe Puppet::Type.type(:domain) do
       end
     end
     
-    describe "autorequire" do
+    describe "user autorequire" do
       let :domain do
         described_class.new(
           :domainname   => 'test',
@@ -203,10 +197,9 @@ describe Puppet::Type.type(:domain) do
         Puppet::Resource::Catalog.new
       end
   
-      # Stub the user type, and expect File.exists? and Puppet.features.root?
+      # Stub the user type, and expect Puppet.features.root?
       before :each do
         Puppet::Type.type(:user).stubs(:defaultprovider).returns userprovider
-        File.expects(:exists?).with('/tmp/asadmin.pass').returns(true).once
         Puppet.features.expects(:root?).returns(true).once
       end
       
@@ -221,6 +214,52 @@ describe Puppet::Type.type(:domain) do
         reqs = domain.autorequire
         reqs.size.should == 1
         reqs[0].source.ref.should == user.ref
+        reqs[0].target.ref.should == domain.ref
+      end
+    end
+    
+    describe "file autorequire" do
+      let :domain do
+        described_class.new(
+          :domainname   => 'test',
+          :user         => 'glassfish',
+          :passwordfile => '/tmp/asadmin.pass' 
+        )
+      end
+      
+      # Need to stub file type and provider.
+      let :fileprovider do
+        Puppet::Type.type(:file).provide(:fake_file_provider) { mk_resource_methods }
+      end
+      
+      let :file do
+        Puppet::Type.type(:file).new(
+          :name   => '/tmp/asadmin.pass',
+          :ensure => 'present'
+        )
+      end
+      
+      let :catalog do
+        Puppet::Resource::Catalog.new
+      end
+    
+      # Stub the file type, and expect Puppet.features.root?
+      before :each do
+        Puppet::Type.type(:file).stubs(:defaultprovider).returns fileprovider
+        Puppet.features.expects(:root?).returns(true).once
+      end
+      
+      it "should not autorequire a file when no matching file can be found" do
+        catalog.add_resource domain
+        domain.autorequire.should be_empty
+      end
+    
+      it "should autorequire a matching file" do
+        catalog.add_resource domain
+        catalog.add_resource file
+        reqs = domain.autorequire
+        reqs.size.should == 1
+        reqs[0].source.ref.should == file.ref
         reqs[0].target.ref.should == domain.ref
       end
     end

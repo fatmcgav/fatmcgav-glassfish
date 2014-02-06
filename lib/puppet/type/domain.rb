@@ -6,6 +6,7 @@ Puppet::Type.newtype(:domain) do
   newparam(:domainname) do
     desc "The Glassfish domain name."
     isnamevar
+
     validate do |value|
       unless value =~ /^[\w-]+$/
          raise ArgumentError, "%s is not a valid domain name." % value
@@ -36,6 +37,7 @@ Puppet::Type.newtype(:domain) do
   newparam(:asadminuser) do
     desc "The internal Glassfish user asadmin uses. Default: admin"
     defaultto 'admin'
+
     validate do |value|
       unless value =~ /^[\w-]+$/
          raise ArgumentError, "%s is not a valid asadmin user name." % value
@@ -45,12 +47,6 @@ Puppet::Type.newtype(:domain) do
 
   newparam(:passwordfile) do
     desc "The file containing the password for the user."
-
-    validate do |value|
-      unless File.exists? value
-        raise ArgumentError, "%s does not exist" % value
-      end
-    end
   end
 
   newparam(:user) do
@@ -77,6 +73,7 @@ Puppet::Type.newtype(:domain) do
   
   newparam(:template) do 
     desc "Path to Glassfish template to use when creating the domain"
+
     validate do |value|
       unless File.exists? value
         raise ArgumentError, "%s does not exist" % value
@@ -94,5 +91,10 @@ Puppet::Type.newtype(:domain) do
   # Autorequire the user running command
   autorequire(:user) do
     self[:user]    
+  end
+  
+  # Autorequire the password file
+  autorequire(:file) do
+    self[:passwordfile]    
   end
 end
