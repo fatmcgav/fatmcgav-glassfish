@@ -2,6 +2,7 @@ Puppet Glassfish module
 ============================
 
 [![Build Status](https://secure.travis-ci.org/fatmcgav/puppet-glassfish.png)](http://travis-ci.org/fatmcgav/puppet-glassfish)
+[![Coverage Status](https://coveralls.io/repos/fatmcgav/puppet-glassfish/badge.png?branch=master)](https://coveralls.io/r/fatmcgav/puppet-glassfish?branch=master)
 
 This plugin for Puppet adds resource types and providers for managing Glassfish
 domains, system-properties, jdbc-connection-pools, jdbc-resources, auth-realms
