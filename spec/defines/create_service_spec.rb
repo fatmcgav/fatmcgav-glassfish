@@ -31,7 +31,7 @@ describe 'glassfish::create_service' do
           'path'    => '/etc/init.d/glassfish_test',
           'mode'    => '0755',
           'content' => /chkconfig:[\s\S]+="gfuser"/
-        })
+        }).that_notifies('Service[glassfish_test]')
       end
       
       # Shouldn't contain a stop_domain exec with default params
@@ -48,7 +48,7 @@ describe 'glassfish::create_service' do
           should contain_exec('stop_test').with({
             'command' => /stop-domain test$/,
             'user'    => 'gfuser'
-          }).that_comes_before('Service[glassfish_test]')
+          })
         end
         
       end
@@ -60,7 +60,7 @@ describe 'glassfish::create_service' do
           'enable'     => true,
           'hasstatus'  => true,
           'hasrestart' => true
-        }).that_requires('File[test_servicefile]')
+        })
       end
       
     end
@@ -88,7 +88,7 @@ describe 'glassfish::create_service' do
           'path'   => '/etc/init.d/glassfish_test',
           'mode'   => '0755',
           'content' => /Provides:[\s\S]+=gfuser/
-        })
+        }).that_notifies('Service[glassfish_test]')
       end
       
       # Shouldn't contain a stop_domain exec with default params
@@ -105,7 +105,7 @@ describe 'glassfish::create_service' do
           should contain_exec('stop_test').with({
             'command' => /stop-domain test$/,
             'user'    => 'gfuser'
-          }).that_comes_before('Service[glassfish_test]')
+          })
         end
         
       end
@@ -117,7 +117,7 @@ describe 'glassfish::create_service' do
           'enable'     => true,
           'hasstatus'  => true,
           'hasrestart' => true
-        }).that_requires('File[test_servicefile]')
+        })
       end
       
     end
