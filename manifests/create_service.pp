@@ -2,10 +2,7 @@
 #
 # Manages Linux service installation if required
 #
-define glassfish::create_service (
-  $domain_name = $name,
-  $runuser     = $glassfish::user,
-  $running     = false) {
+define glassfish::create_service ($domain_name = $name, $runuser = $glassfish::user, $running = false) {
   # Check that we've got a domain name.
   if !$domain_name {
     fail('Domain name must be specified to install service.')
@@ -31,8 +28,8 @@ define glassfish::create_service (
   if $running {
     exec { "stop_${domain_name}":
       command => "${glassfish::glassfish_asadmin_path} stop-domain ${domain_name}",
-      user    => $runuser,
-      before  => Service["glassfish_${domain_name}"]
+      unless  => "/sbin/service glassfish_${domain_name} status && /usr/bin/pgrep -f domains/${domain_name}",
+      user    => $runuser
     }
   }
 
@@ -41,8 +38,7 @@ define glassfish::create_service (
     ensure     => 'running',
     enable     => true,
     hasstatus  => true,
-    hasrestart => true,
-    require    => File["${domain_name}_servicefile"]
+    hasrestart => true
   }
 
 }
