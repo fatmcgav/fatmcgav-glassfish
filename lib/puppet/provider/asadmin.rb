@@ -24,14 +24,14 @@ class Puppet::Provider::Asadmin < Puppet::Provider
     # Debug output of command if required. 
     Puppet.debug("exec command = #{command}")
     
-    # Execute the command, and check the result. 
-    result = `#{command}`
+    # Execute the command. 
+    output = `#{command}`
     # Check return code and fail if required
-    self.fail result unless $? == 0
+    self.fail output unless $? == 0
     
     # Split into array, for later processing...
-    result.split('\n')
-    Puppet.debug("result = #{result}")
+    result = output.split(/\n/)
+    Puppet.debug("result = \n#{result.inspect}")
 
     # Return the result
     result
