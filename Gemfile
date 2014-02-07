@@ -17,6 +17,7 @@ group :test do
   gem 'puppet-lint'
   gem 'puppet-syntax'
   gem 'librarian-puppet'
+  gem 'coveralls', :require => false
 end
 
 group :development do
