@@ -93,4 +93,14 @@ Puppet::Type.newtype(:application) do
   autorequire(:file) do 
     self[:source]
   end
+  
+  # Autorequire the domain resource
+  autorequire(:domain) do
+    self.catalog.resources.select { |res|
+      next unless res.type == :domain
+      res if res[:portbase] == self[:portbase]
+    }.collect { |res|
+      res[:name]
+    }
+  end
 end
