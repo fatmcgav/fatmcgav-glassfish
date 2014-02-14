@@ -105,35 +105,35 @@ describe Puppet::Type.type(:application) do
 
     describe "for asadminuser" do
       it "should support an alpha name" do
-        described_class.new(:name => 'domain', :asadminuser => 'user', :ensure => :present, :source => '/tmp/application.ear')[:asadminuser].should == 'user'
+        described_class.new(:name => 'application', :asadminuser => 'user', :ensure => :present, :source => '/tmp/application.ear')[:asadminuser].should == 'user'
       end
 
       it "should support underscores" do
-        described_class.new(:name => 'domain', :asadminuser => 'admin_user', :ensure => :present, :source => '/tmp/application.ear')[:asadminuser].should == 'admin_user'
+        described_class.new(:name => 'application', :asadminuser => 'admin_user', :ensure => :present, :source => '/tmp/application.ear')[:asadminuser].should == 'admin_user'
       end
    
       it "should support hyphens" do
-        described_class.new(:name => 'domain', :asadminuser => 'admin-user', :ensure => :present, :source => '/tmp/application.ear')[:asadminuser].should == 'admin-user'
+        described_class.new(:name => 'application', :asadminuser => 'admin-user', :ensure => :present, :source => '/tmp/application.ear')[:asadminuser].should == 'admin-user'
       end
 
       it "should have a default value of admin" do
-        described_class.new(:name => 'domain', :ensure => :present, :source => '/tmp/application.ear')[:asadminuser].should == 'admin'
+        described_class.new(:name => 'application', :ensure => :present, :source => '/tmp/application.ear')[:asadminuser].should == 'admin'
       end
 
       it "should not support spaces" do
-        expect { described_class.new(:name => 'domain', :asadminuser => 'admin user') }.to raise_error(Puppet::Error, /admin user is not a valid asadmin user name/)
+        expect { described_class.new(:name => 'application', :asadminuser => 'admin user') }.to raise_error(Puppet::Error, /admin user is not a valid asadmin user name/)
       end
     end
 
     describe "for passwordfile" do
       it "should support a valid file path" do
         File.expects(:exists?).with('/tmp/asadmin.pass').returns(true).once
-        described_class.new(:name => 'domain', :passwordfile => '/tmp/asadmin.pass', :source => '/tmp/application.ear')[:passwordfile].should == '/tmp/asadmin.pass'
+        described_class.new(:name => 'application', :passwordfile => '/tmp/asadmin.pass', :source => '/tmp/application.ear')[:passwordfile].should == '/tmp/asadmin.pass'
       end
 
       it "should fail an invalid file path" do
         File.expects(:exists?).with('/tmp/nonexistent').returns(false).once
-        expect { described_class.new(:name => 'domain', :passwordfile => '/tmp/nonexistent') }.to raise_error(Puppet::Error, /does not exist/)
+        expect { described_class.new(:name => 'application', :passwordfile => '/tmp/nonexistent') }.to raise_error(Puppet::Error, /does not exist/)
       end
     end
 
@@ -146,7 +146,9 @@ describe Puppet::Type.type(:application) do
         expect { described_class.new(:name => 'application') }.to raise_error(Puppet::Error, /Source is required./)
       end
     end
-        
+  end  
+    
+  describe "when autorequiring" do    
     describe "user autorequire" do
       let :application do
         described_class.new(

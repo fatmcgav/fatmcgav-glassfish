@@ -3,14 +3,20 @@ Puppet::Type.newtype(:jvmoption) do
 
   ensurable
 
-  newparam(:name) do
+  newparam(:option) do
     desc "The jvm-option."
     isnamevar
+    
+    validate do |value|
+      unless value =~ /^[^\W]?[\w\-\.=]+$/
+         raise ArgumentError, "%s is not a valid JVM option." % value
+      end
+    end
   end
 
   newparam(:portbase) do
     desc "The Glassfish domain port base. Default: 8000"
-    defaultto '8000'   
+    defaultto '8000'
 
     validate do |value|
       raise ArgumentError, "%s is not a valid portbase." % value unless value =~ /^\d{4,5}$/
@@ -31,6 +37,12 @@ Puppet::Type.newtype(:jvmoption) do
   newparam(:asadminuser) do
     desc "The internal Glassfish user asadmin uses. Default: admin"
     defaultto "admin"
+    
+    validate do |value|
+      unless value =~ /^[\w-]+$/
+         raise ArgumentError, "%s is not a valid asadmin user name." % value
+      end
+    end
   end
 
   newparam(:passwordfile) do
@@ -53,7 +65,12 @@ Puppet::Type.newtype(:jvmoption) do
     end
   end
   
-  # Autorequire the domain resource
+  # Autorequire the user running command
+  autorequire(:user) do
+    self[:user]    
+  end
+  
+  # Autorequire the domain resource, based on portbase
   autorequire(:domain) do
     self.catalog.resources.select { |res|
       next unless res.type == :domain

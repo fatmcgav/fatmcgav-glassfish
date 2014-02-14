@@ -94,7 +94,7 @@ Puppet::Type.newtype(:application) do
     self[:source]
   end
   
-  # Autorequire the domain resource
+  # Autorequire the domain resource, based on portbase
   autorequire(:domain) do
     self.catalog.resources.select { |res|
       next unless res.type == :domain
