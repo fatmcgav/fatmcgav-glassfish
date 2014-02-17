@@ -140,21 +140,21 @@ describe Puppet::Type.type(:application) do
     describe "for user" do
       it "should support an alpha name" do
         Puppet.features.expects(:root?).returns(true).once
-        described_class.new(:name => 'application', :user => 'glassfish', :ensure => :present)[:user].should == 'glassfish'
+        described_class.new(:name => 'application', :user => 'glassfish', :ensure => :present, :source => '/tmp/application.ear')[:user].should == 'glassfish'
       end
 
       it "should support underscores" do
         Puppet.features.expects(:root?).returns(true).once
-        described_class.new(:name => 'application', :user => 'glassfish_user', :ensure => :present)[:user].should == 'glassfish_user'
+        described_class.new(:name => 'application', :user => 'glassfish_user', :ensure => :present, :source => '/tmp/application.ear')[:user].should == 'glassfish_user'
       end
    
       it "should support hyphens" do
         Puppet.features.expects(:root?).returns(true).once
-        described_class.new(:name => 'application', :user => 'glassfish-user', :ensure => :present)[:user].should == 'glassfish-user'
+        described_class.new(:name => 'application', :user => 'glassfish-user', :ensure => :present, :source => '/tmp/application.ear')[:user].should == 'glassfish-user'
       end
 
       it "should not have a default value of admin" do
-        described_class.new(:name => 'application', :ensure => :present)[:user].should == nil
+        described_class.new(:name => 'application', :ensure => :present, :source => '/tmp/application.ear')[:user].should == nil
       end
 
       it "should not support spaces" do
