@@ -108,6 +108,37 @@ describe Puppet::Type.type(:jvmoption) do
       end
     end
     
+    describe "for user" do
+      it "should support an alpha name" do
+        Puppet.features.expects(:root?).returns(true).once
+        described_class.new(:option => '-Xmx512m', :user => 'glassfish', :ensure => :present)[:user].should == 'glassfish'
+      end
+
+      it "should support underscores" do
+        Puppet.features.expects(:root?).returns(true).once
+        described_class.new(:option => '-Xmx512m', :user => 'glassfish_user', :ensure => :present)[:user].should == 'glassfish_user'
+      end
+   
+      it "should support hyphens" do
+        Puppet.features.expects(:root?).returns(true).once
+        described_class.new(:option => '-Xmx512m', :user => 'glassfish-user', :ensure => :present)[:user].should == 'glassfish-user'
+      end
+
+      it "should not have a default value of admin" do
+        described_class.new(:option => '-Xmx512m', :ensure => :present)[:user].should == nil
+      end
+
+      it "should not support spaces" do
+        Puppet.features.expects(:root?).returns(true).once
+        expect { described_class.new(:option => '-Xmx512m', :user => 'glassfish user') }.to raise_error(Puppet::Error, /glassfish user is not a valid user name/)
+      end
+      
+      it "should fail if not running as root" do
+        Puppet.features.expects(:root?).returns(false).once
+        expect { described_class.new(:option => '-Xmx512m', :user => 'glassfish') }.to raise_error(Puppet::Error, /Only root can execute commands as other users/)
+      end
+    end
+    
     describe "for passwordfile" do
       it "should support a valid file path" do
         File.expects(:exists?).with('/tmp/asadmin.pass').returns(true).once
@@ -215,6 +246,5 @@ describe Puppet::Type.type(:jvmoption) do
         reqs[0].target.ref.should == jvmoption.ref
       end
     end
-    
   end
 end
