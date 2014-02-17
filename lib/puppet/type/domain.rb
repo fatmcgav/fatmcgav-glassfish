@@ -52,9 +52,12 @@ Puppet::Type.newtype(:domain) do
   newparam(:user) do
     desc "The user to run the command as."
 
-    validate do |user|
+    validate do |value|
       unless Puppet.features.root?
         self.fail "Only root can execute commands as other users"
+      end
+      unless value =~ /^[\w-]+$/
+         raise ArgumentError, "%s is not a valid user name." % value
       end
     end
   end
