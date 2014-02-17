@@ -137,6 +137,37 @@ describe Puppet::Type.type(:application) do
       end
     end
 
+    describe "for user" do
+      it "should support an alpha name" do
+        Puppet.features.expects(:root?).returns(true).once
+        described_class.new(:name => 'application', :user => 'glassfish', :ensure => :present)[:user].should == 'glassfish'
+      end
+
+      it "should support underscores" do
+        Puppet.features.expects(:root?).returns(true).once
+        described_class.new(:name => 'application', :user => 'glassfish_user', :ensure => :present)[:user].should == 'glassfish_user'
+      end
+   
+      it "should support hyphens" do
+        Puppet.features.expects(:root?).returns(true).once
+        described_class.new(:name => 'application', :user => 'glassfish-user', :ensure => :present)[:user].should == 'glassfish-user'
+      end
+
+      it "should not have a default value of admin" do
+        described_class.new(:name => 'application', :ensure => :present)[:user].should == nil
+      end
+
+      it "should not support spaces" do
+        Puppet.features.expects(:root?).returns(true).once
+        expect { described_class.new(:name => 'application', :user => 'glassfish user') }.to raise_error(Puppet::Error, /glassfish user is not a valid user name/)
+      end
+      
+      it "should fail if not running as root" do
+        Puppet.features.expects(:root?).returns(false).once
+        expect { described_class.new(:name => 'application', :user => 'glassfish') }.to raise_error(Puppet::Error, /Only root can execute commands as other users/)
+      end
+    end
+    
     describe "validate" do
       it "should not fail with a valid source" do
         File.expects(:exists?).with('/tmp/application.ear').returns(true).once
@@ -239,6 +270,58 @@ describe Puppet::Type.type(:application) do
         reqs = application.autorequire
         reqs.size.should == 1
         reqs[0].source.ref.should == file.ref
+        reqs[0].target.ref.should == application.ref
+      end
+    end
+    
+    describe "domain autorequire" do
+      let :application do
+        described_class.new(
+          :name         => 'test',
+          :source       => '/tmp/application.ear',
+          :user         => 'glassfish'
+        )
+      end
+      
+      # Need to stub user type and provider.
+      let :domainprovider do
+        Puppet::Type.type(:domain).provide(:fake_domain_provider) { mk_resource_methods }
+      end
+      
+      let :domain do
+        Puppet::Type.type(:domain).new(
+          :domainname   => 'test',
+          :ensure       => 'present',
+          :passwordfile => '/tmp/password.file',
+          :user         => 'glassfish'
+        )
+      end
+      
+      let :catalog do
+        Puppet::Resource::Catalog.new
+      end
+    
+      # Stub the domain type, and expect File.exists? and Puppet.features.root?
+      before :each do
+        Puppet::Type.type(:domain).stubs(:defaultprovider).returns domainprovider
+        File.expects(:exists?).with('/tmp/application.ear').returns(true).once
+        Puppet.features.expects(:root?).returns(true).once
+      end
+      
+      it "should not autorequire a domain when no matching domain can be found" do
+        catalog.add_resource application
+        application.autorequire.should be_empty
+      end
+    
+      it "should autorequire a matching domain" do
+        # Create catalogue
+        catalog.add_resource application
+        # Additional expect for domain resource. 
+        Puppet.features.expects(:root?).returns(true).once
+        catalog.add_resource domain
+        reqs = application.autorequire
+        reqs.size.should == 1
+        reqs[0].source.ref.should == domain.ref
         reqs[0].target.ref.should == application.ref
       end
     end
