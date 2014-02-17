@@ -204,7 +204,7 @@ describe Puppet::Type.type(:domain) do
     end
   end
   
-  desribe "when autorequiring" do
+  describe "when autorequiring" do
     describe "user autorequire" do
       let :domain do
         described_class.new(
