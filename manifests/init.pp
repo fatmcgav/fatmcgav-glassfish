@@ -52,9 +52,15 @@ class glassfish (
   $tmp_dir                 = $glassfish::params::glassfish_tmp_dir,
   $user                    = $glassfish::params::glassfish_user,
   $version                 = $glassfish::params::glassfish_version,
-  $domain_template         = $glassfish::params::glassfish_domain_template) inherits glassfish::params {
+  $domain_template         = $glassfish::params::glassfish_domain_template,
+  $install_dir             = $glassfish::params::glassfish_install_dir,
+) inherits glassfish::params {
   # Calculate some vars based on passed parameters
-  $glassfish_dir          = "${parent_dir}/glassfish-${version}"
+  if ($install_dir == undef ) {
+    $glassfish_dir = "${parent_dir}/glassfish-${version}"
+  } else {
+    $glassfish_dir = "${parent_dir}/${install_dir}"
+  }
   $glassfish_asadmin_path = "${glassfish_dir}/bin/asadmin"
 
   # Validate passed paramater values

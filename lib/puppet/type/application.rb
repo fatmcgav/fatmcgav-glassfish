@@ -21,16 +21,16 @@ Puppet::Type.newtype(:application) do
   newparam(:source) do
     desc "The application file to deploy."
 
-    validate do |value|
-       unless File.exists? value
-         raise ArgumentError, "%s does not exists" % value
-       end
-     end
+#    validate do |value|
+#       unless File.exists? value
+#         raise ArgumentError, "%s does not exists" % value
+#       end
+#     end
   end
 
   newparam(:portbase) do
     desc "The Glassfish domain port base. Default: 4800"
-    defaultto '8000'   
+    defaultto '4800'   
 
     validate do |value|
       raise ArgumentError, "%s is not a valid portbase." % value unless value =~ /^\d{4,5}$/
