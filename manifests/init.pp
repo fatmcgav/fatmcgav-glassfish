@@ -148,8 +148,8 @@ class glassfish (
       ensure  => present,
       path    => $asadmin_passfile,
       content => template('glassfish/passwordfile'),
-      owner   => $glassfish_user,
-      group   => $glassfish_group,
+      owner   => $user,
+      group   => $group,
       mode    => '0644'
     }
 
