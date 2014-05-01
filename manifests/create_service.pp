@@ -89,7 +89,7 @@ define glassfish::create_service (
       }
     }
     'Debian' : {
-      $service_file = template('glassfish/glassfish-init-debian.erb')
+      $service_file = template('glassfish/glassfish-init-domain-debian.erb')
     }
     default  : {
       fail("OSFamily ${::osfamily} not supported.")
