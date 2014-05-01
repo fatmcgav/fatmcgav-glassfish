@@ -1,58 +1,114 @@
-# Class: glassfish
+# == Class: glassfish
 #
 # This module manages glassfish
 #
-# Parameters:
-#   [*create_domain*]   - Should a glassfish domain be created on installation?
-#   Defaults to false
-#   [*domain_name*]     - Glassfish domain name.
-#   [*extra_jars*]      - Should additional jars be installed by this module?
-#   [*group*]           - Glassfish group name.
-#   [*install_method*]  - Glassfish installation method. Defaults to 'zip'.
-#   Other options: 'yum'.
-#   [*java_ver*]        - Java version to install if managing Java.
-#   [*manage_accounts*] - Should this module manage user accounts and groups
-#   required for Glassfish? Defaults to true.
-#   [*manage_java*]     - Should Java installation be managed by this module?
-#   Defaults to true.
-#   [*package_prefix*]  - Glassfish package name prefix. Defaults to
-#   'glassfish3'.
-#   [*parent_dir*]      - Glassfish parent directory. Defaults to '/usr/local'.
-#   #   [*portbase*]        - Glassfish portbase. Used
-#   when creating a domain on install.
-#   [*tmp_dir*]         - Glassfish temporary directory. Defaults to '/tmp'.
-#   Only used if installing using zip method.
-#   [*user*]            - Glassfish user name.
-#   [*version*]         - Glassfish version, defaults to '3.1.2.2'.
+# === Parameters
 #
-# Actions:
+#  [*add_path*] - Should glassfish bin be added to path?
+#  Defaults to true
 #
-# Requires:
+#  [*asadmin_user*] - Asadmin username.
+#  Defaults to 'admin'
 #
-# Sample Usage:
+#  [*asadmin_passfile*] - Asadmin password file.
+#  Defaults to '/home/glassfish/asadmin.pass'
+#
+#  [*asadmin_password*] - Asadmin password.
+#  Defaults to 'adminadmin'
+#
+#  [*create_domain*] - Should a glassfish domain be created on installation?
+#  Defaults to false
+#
+#  [*create_service*] - Should a glassfish service be created on installation?
+#  Defaults to false
+#
+#  [*create_passfile*] - Should a glassfish password file be created?
+#  Defaults to true
+#
+#  [*domain_name*] - Glassfish domain name.
+#
+#  [*domain_template*] - Glassfish domain template to use.
+#
+#  [*enable_secure_admin*] - Should secure admin be enabled?
+#  Defaults to true
+#
+#  [*extra_jars*] - Should additional jars be installed by this module?
+#
+#  [*gms_enabled*] - Should Group Messaging Service be enabled for cluster.
+#
+#  [*gms_multicast_port*] - GMS Multicast port.
+#
+#  [*gms_multicast_address*] - GMS Multicast address.
+#
+#  [*group*] - Glassfish group name.
+#
+#  [*install_method*]  - Glassfish installation method.
+#  Can be: 'zip', 'yum'. Defaults to 'zip'.
+#
+#  [*java_ver*]        - Java version to install if managing Java.
+#
+#  [*manage_accounts*] - Should this module manage user accounts and groups
+#  required for Glassfish? Defaults to true.
+#
+#  [*manage_java*]     - Should Java installation be managed by this module?
+#  Defaults to true.
+#
+#  [*package_prefix*]  - Glassfish package name prefix. Defaults to
+#  'glassfish3'.
+#
+#  [*parent_dir*]      - Glassfish parent directory. Defaults to '/usr/local'.
+#
+#  [*portbase*]        - Glassfish portbase. Used
+#  when creating a domain on install.
+#
+#  [*start_domain*] - Should the glassfish domain be started on creation?
+#  Defaults to true
+#
+#  [*tmp_dir*]         - Glassfish temporary directory. Defaults to '/tmp'.
+#  Only used if installing using zip method.
+#
+#  [*user*]            - Glassfish user name.
+#
+#  [*version*]         - Glassfish version, defaults to '3.1.2.2'.
+#
+# === Examples
+#
+#
+# === Authors
+#
+# Gavin Williams <fatmcgav@gmail.com>
+#
+# === Copyright
+#
+# Copyright 2014 Gavin Williams, unless otherwise noted.
 #
 class glassfish (
-  $add_path                = $glassfish::params::glassfish_add_path,
-  $create_domain           = $glassfish::params::glassfish_create_domain,
-  $create_service          = $glassfish::params::glassfish_create_service,
-  $start_domain            = $glassfish::params::glassfish_start_domain,
-  $enable_secure_admin     = $glassfish::params::glassfish_enable_secure_admin,
-  $domain_asadmin_user     = $glassfish::params::glassfish_asadmin_user,
-  $domain_asadmin_passfile = $glassfish::params::glassfish_asadmin_passfile,
-  $domain_name             = $glassfish::params::glassfish_domain,
-  $extrajars               = [],
-  $group                   = $glassfish::params::glassfish_group,
-  $install_method          = $glassfish::params::glassfish_install_method,
-  $java_ver                = $glassfish::params::glassfish_java_ver,
-  $manage_accounts         = $glassfish::params::glassfish_manage_accounts,
-  $manage_java             = $glassfish::params::glassfish_manage_java,
-  $package_prefix          = $glassfish::params::glassfish_package_prefix,
-  $parent_dir              = $glassfish::params::glassfish_parent_dir,
-  $portbase                = $glassfish::params::glassfish_portbase,
-  $tmp_dir                 = $glassfish::params::glassfish_tmp_dir,
-  $user                    = $glassfish::params::glassfish_user,
-  $version                 = $glassfish::params::glassfish_version,
-  $domain_template         = $glassfish::params::glassfish_domain_template) inherits glassfish::params {
+  $add_path              = $glassfish::params::glassfish_add_path,
+  $asadmin_user          = $glassfish::params::glassfish_asadmin_user,
+  $asadmin_passfile      = $glassfish::params::glassfish_asadmin_passfile,
+  $asadmin_password      = $glassfish::params::glassfish_asadmin_password,
+  $create_domain         = $glassfish::params::glassfish_create_domain,
+  $create_service        = $glassfish::params::glassfish_create_service,
+  $create_passfile       = $glassfish::params::glassfish_create_passfile,
+  $domain_name           = $glassfish::params::glassfish_domain,
+  $domain_template       = $glassfish::params::glassfish_domain_template,
+  $enable_secure_admin   = $glassfish::params::glassfish_enable_secure_admin,
+  $extrajars             = [],
+  $gms_enabled           = $glassfish::params::glassfish_gms_enabled,
+  $gms_multicast_port    = $glassfish::params::glassfish_multicast_port,
+  $gms_multicast_address = $glassfish::params::glassfish_multicast_address,
+  $group                 = $glassfish::params::glassfish_group,
+  $install_method        = $glassfish::params::glassfish_install_method,
+  $java_ver              = $glassfish::params::glassfish_java_ver,
+  $manage_accounts       = $glassfish::params::glassfish_manage_accounts,
+  $manage_java           = $glassfish::params::glassfish_manage_java,
+  $package_prefix        = $glassfish::params::glassfish_package_prefix,
+  $parent_dir            = $glassfish::params::glassfish_parent_dir,
+  $portbase              = $glassfish::params::glassfish_portbase,
+  $start_domain          = $glassfish::params::glassfish_start_domain,
+  $tmp_dir               = $glassfish::params::glassfish_tmp_dir,
+  $user                  = $glassfish::params::glassfish_user,
+  $version               = $glassfish::params::glassfish_version,) inherits glassfish::params {
   # Calculate some vars based on passed parameters
   $glassfish_dir          = "${parent_dir}/glassfish-${version}"
   $glassfish_asadmin_path = "${glassfish_dir}/bin/asadmin"
@@ -61,9 +117,10 @@ class glassfish (
   validate_bool($add_path)
   validate_bool($create_domain)
   validate_bool($create_service)
+  validate_bool($create_passfile)
   validate_bool($start_domain)
   validate_bool($enable_secure_admin)
-  validate_string($domain_asadmin_user)
+  validate_string($asadmin_user)
   validate_string($domain_name)
   validate_string($group)
   validate_string($install_method)
@@ -82,6 +139,23 @@ class glassfish (
   # Do we need to manage Java?
   if $manage_java {
     class { 'glassfish::java': before => Class['glassfish::install'] }
+  }
+
+  # Should we create a passfile?
+  if $create_passfile {
+    # Create the required passfile
+    file { 'asadmin_passfile':
+      ensure  => present,
+      path    => $asadmin_passfile,
+      content => template('glassfish/passwordfile'),
+      owner   => $glassfish_user,
+      group   => $glassfish_group,
+      mode    => '0644'
+    }
+
+    # Run this before any resources that require it
+    File['asadmin_passfile'] -> Create_domain <| |>
+    File['asadmin_passfile'] -> Create_node <| |>
   }
 
   # Call the install method
@@ -103,7 +177,7 @@ class glassfish (
   # Do we need to create a domain on installation?
   if $create_domain {
     # Need to make sure that the $domain_asadmin_passfile path is valid
-    validate_absolute_path($domain_asadmin_passfile)
+    validate_absolute_path($asadmin_passfile)
 
     # Need to create the required domain
     create_domain { $domain_name: require => Class['glassfish::install'] }
@@ -114,6 +188,7 @@ class glassfish (
         domain  => $domain_name,
         require => Create_domain[$domain_name]
       }
+
     }
 
   }

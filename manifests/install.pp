@@ -1,6 +1,23 @@
-# Class: glassfish::install
+# == Class: glassfish::install
 #
-# Manages Glassfish installation from either Yum or Zip.
+# This class manages glassfish installation.
+# Can only be called from glassfish::init class.
+#
+# === Parameters
+#
+#  None
+#
+# === Examples
+#
+# Not applicable
+#
+# === Authors
+#
+# Gavin Williams <fatmcgav@gmail.com>
+#
+# === Copyright
+#
+# Copyright 2014 Gavin Williams, unless otherwise noted.
 #
 class glassfish::install {
   # Create user/group if required
@@ -18,6 +35,11 @@ class glassfish::install {
     }
   }
 
+  # Anchor the install class
+  anchor { 'glassfish::install::start': }
+
+  anchor { 'glassfish::install::end': }
+
   # Take action based on $install_method.
   case $glassfish::install_method {
     'yum'   : {
@@ -25,7 +47,11 @@ class glassfish::install {
       $package_name = "${glassfish::package_prefix}-${glassfish::version}"
 
       # Install the package.
-      package { $package_name: ensure => present }
+      package { $package_name:
+        ensure  => present,
+        require => Anchor['glassfish::install::start'],
+        before  => Anchor['glassfish::install::end']
+      }
 
       # Run User/Group create before Package install, If manage_accounts = true.
       if $glassfish::manage_accounts {
@@ -43,7 +69,10 @@ class glassfish::install {
       $mjversion               = $version_arr[0]
 
       # Make sure that $tmp_dir exists.
-      file { $glassfish::tmp_dir: ensure => directory }
+      file { $glassfish::tmp_dir:
+        ensure  => directory,
+        require => Anchor['glassfish::install::start'],
+      }
 
       # Download file
       exec { "download_${glassfish_download_file}":
@@ -60,7 +89,7 @@ class glassfish::install {
         path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
         cwd     => $glassfish::tmp_dir,
         creates => $glassfish::glassfish_dir,
-        require => [Exec["download_${glassfish_download_file}"], Package['unzip']]
+        require => Exec["download_${glassfish_download_file}"]
       }
 
       # Chown glassfish folder.
@@ -100,7 +129,8 @@ class glassfish::install {
         path    => "${glassfish::glassfish_dir}/glassfish/domains/domain1",
         force   => true,
         backup  => false,
-        require => Exec["move-glassfish${mjversion}"]
+        require => Exec["move-glassfish${mjversion}"],
+        before  => Anchor['glassfish::install::end']
       }
     }
     default : {
@@ -108,6 +138,7 @@ class glassfish::install {
     }
   }
 
-  # Ensure that install runs before any Create_domain resources
+  # Ensure that install runs before any Create_domain & Create_node resources
   Class['glassfish::install'] -> Create_domain <| |>
+  Class['glassfish::install'] -> Create_node <| |>
 }

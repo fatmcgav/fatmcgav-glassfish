@@ -1,9 +1,22 @@
 class Puppet::Provider::Asadmin < Puppet::Provider
   
   def asadmin_exec(passed_args)
-    port = @resource[:portbase].to_i + 48
+    
+    # Use dashost if present
+    if defined?@resource[:dashost] && !@resource[:dashost].nil?
+      host = @resource[:dashost]
+    end
+    
+    # Use dasport first, and then fallback to portbase
+    if defined?@resource[:dasport] && !@resource[:dasport].nil? 
+      port = @resource[:dasport]
+    else
+      port = @resource[:portbase].to_i + 48
+    end
+
     # Compile an array of command args
     args = Array.new
+    args << '--host' << host if host && !host.nil?
     args << '--port' << port.to_s
     args << '--user' << @resource[:asadminuser]
     # Only add passwordfile if specified

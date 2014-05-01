@@ -1,19 +1,62 @@
-# Define: glassfish::create_domain
+# == Define: glassfish::create_domain
 #
 # Create a glassfish domain on installation.
 #
+# === Parameters
+#
+# [*asadmin_path*] - Path to asadmin binary.
+#  Defaults to $glassfish::glassfish_asadmin_path
+#
+# [*asadmin_user*] - Asadmin username.
+#  Defaults to $glassfish::asadmin_user
+#
+# [*asadmin_passfile*] - Asadmin password file.
+#  Defaults to $glassfish::asadmin_passfile
+#
+# [*create_service*] - Should a service init file be created?
+#  Defaults to $glassfish::start_domain
+#
+# [*domain_template*] - Domain template to use.
+#  Defaults to $glassfish::domain_template
+#
+# [*domain_name*] - Name of domain to create.
+#  Defaults to the resource name if not specified
+#
+# [*domain_user*] - User account under which to run domain.
+#  Defaults to $glassfish::user
+#
+# [*enable_secure_admin*] - Enable secure admin on domain.
+#  Defaults to the $glassfish::enable_secure_admin
+#
+# [*portbase*] - Portbase to use for domain.
+#  Defaults to $glassfish::portbase
+#
+# [*start_domain*] - Should the domain be started upon creation?
+#  Defaults to $glassfish::start_domain
+#
+# === Examples
+#
+#
+# === Authors
+#
+# Gavin Williams <fatmcgav@gmail.com>
+#
+# === Copyright
+#
+# Copyright 2014 Gavin Williams, unless otherwise noted.
+#
 define glassfish::create_domain (
   $asadmin_path        = $glassfish::glassfish_asadmin_path,
-  $asadmin_user        = $glassfish::domain_asadmin_user,
-  $asadmin_passfile    = $glassfish::domain_asadmin_passfile,
+  $asadmin_user        = $glassfish::asadmin_user,
+  $asadmin_passfile    = $glassfish::asadmin_passfile,
+  $create_service      = $glassfish::create_service,
   $domain_name         = $name,
+  $domain_template     = $glassfish::domain_template,
   $domain_user         = $glassfish::user,
+  $enable_secure_admin = $glassfish::enable_secure_admin,
   $ensure              = present,
   $portbase            = $glassfish::portbase,
-  $start_domain        = $glassfish::start_domain,
-  $enable_secure_admin = $glassfish::enable_secure_admin,
-  $create_service      = $glassfish::create_service,
-  $domain_template     = $glassfish::domain_template) {
+  $start_domain        = $glassfish::start_domain) {
   # Validate params
   validate_absolute_path($asadmin_path)
   validate_string($asadmin_user)
@@ -43,9 +86,14 @@ define glassfish::create_domain (
   # Create a init.d service if required
   if $create_service {
     glassfish::create_service { $domain_name:
-      running => $start_domain,
-      require => Domain[$domain_name]
+      running     => $start_domain,
+      mode        => 'domain',
+      domain_name => $domain_name,
+      require     => Domain[$domain_name]
     }
   }
+
+  # Run domain before cluster
+  Create_domain <| |> -> Create_cluster <| |>
 
 }

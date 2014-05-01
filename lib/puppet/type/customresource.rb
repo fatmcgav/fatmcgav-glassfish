@@ -8,7 +8,7 @@ Puppet::Type.newtype(:customresource) do
   end
   
   newparam(:restype) do
-    desc "The type of custom resource to be created. Specify a fully qualified type definition, for example javax.naming.spi.ObjectFactory. The resource type definition follows the format, xxx.xxx."
+    desc "The type of custom resource to be created. Specify a fully qualified type definition, for example javax.naming.spi.ObjectFactory. The resource type definition follows the format, xxx.xxx.xxx"
     validate do |restype|
       if /^(?:[a-zA-Z_$][a-zA-Z\d_$]*\.)*[A-Z$][a-zA-Z\d_$]{1,}$/.match(restype).nil?
         raise ArgumentError, "%s is not valid Java fully qualified type name" % restype
@@ -26,17 +26,38 @@ Puppet::Type.newtype(:customresource) do
   end
   
   newparam(:properties) do
-    desc "Optional attribute name/value pairs for configuring the resource. As String or Hash. Ex. \"user=myuser:password=mypass\""
+    desc "Optional attribute name/value pairs for configuring the resource. As String or Hash. Eg: \"user=myuser:password=mypass\""
   end
 
   newparam(:portbase) do
     desc "The Glassfish domain port base. Default: 4800"
-    defaultto "4800"
+    defaultto '4800'
+
+    validate do |value|
+      raise ArgumentError, "%s is not a valid portbase." % value unless value =~ /^\d{4,5}$/
+    end
+
+    munge do |value|
+      case value
+      when String
+        if value =~ /^[-0-9]+$/
+          value = Integer(value)
+        end
+      end
+
+      return value
+    end
   end
 
   newparam(:asadminuser) do
     desc "The internal Glassfish user asadmin uses. Default: admin"
     defaultto "admin"
+
+    validate do |value|
+      unless value =~ /^[\w-]+$/
+         raise ArgumentError, "%s is not a valid asadmin user name." % value
+      end
+    end
   end
 
   newparam(:passwordfile) do
@@ -56,6 +77,24 @@ Puppet::Type.newtype(:customresource) do
       unless Puppet.features.root?
         self.fail "Only root can execute commands as other users"
       end
+      unless user =~ /^[\w-]+$/
+         raise ArgumentError, "%s is not a valid user name." % user
+      end
     end
+  end
+  
+  # Autorequire the user running command
+  autorequire(:user) do
+    self[:user]    
+  end
+  
+  # Autorequire the domain resource, based on portbase
+  autorequire(:domain) do
+    self.catalog.resources.select { |res|
+      next unless res.type == :domain
+      res if res[:portbase] == self[:portbase]
+    }.collect { |res|
+      res[:name]
+    }
   end
 end 
