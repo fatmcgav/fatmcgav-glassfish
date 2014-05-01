@@ -109,7 +109,8 @@ define glassfish::create_service (
   if $running {
     exec { "stop_${domain_name}":
       command => "${glassfish::glassfish_asadmin_path} stop-domain ${domain_name}",
-      unless  => "/sbin/service glassfish_${domain_name} status && /usr/bin/pgrep -f domains/${domain_name}",
+      unless  => "service glassfish_${domain_name} status && pgrep -f domains/${domain_name}",
+      path    => ['/sbin', '/usr/sbin', '/bin', '/usr/bin'],
       user    => $runuser
     }
   }
