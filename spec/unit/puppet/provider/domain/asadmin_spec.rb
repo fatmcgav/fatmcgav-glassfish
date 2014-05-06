@@ -11,6 +11,7 @@ describe Puppet::Type.type(:domain).provider(:asadmin) do
     Puppet::Type.type(:domain).new(
       :domainname   => 'test',
       :ensure       => :present,
+      :portbase     => '8000',
       :user         => 'glassfish',
       :passwordfile => '/tmp/asadmin.pass' ,
       :provider     => provider
