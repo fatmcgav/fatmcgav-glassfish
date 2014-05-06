@@ -28,7 +28,7 @@ start() {
 
 stop() {
     echo -n "Stopping glassfish cluster $CLUSTER: "
-    $GLASSFISH_BIN/asadmin stop-cluster --port $DAS_PORT $CLUSTER
+    su - $USER -c '$GLASSFISH_BIN/asadmin stop-cluster --port $DAS_PORT $CLUSTER'
     RETVAL=$?
     [ $RETVAL -eq 0 ] && rm -f /var/lock/subsys/glassfish_$CLUSTER && success || failure
     echo
