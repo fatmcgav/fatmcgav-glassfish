@@ -77,7 +77,4 @@ define glassfish::create_node (
     dasport      => $das_port
   }
 
-  # Ensure node runs before instance
-  Create_node <| |> -> Create_instance <| |>
-
 }

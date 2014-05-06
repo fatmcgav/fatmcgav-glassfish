@@ -84,12 +84,8 @@ define glassfish::create_cluster (
       mode         => 'cluster',
       cluster_name => $cluster_name,
       das_port     => $das_port,
-      status_cmd   => "${glassfish::glassfish_asadmin_path} --port ${das_port} --passwordfile ${asadmin_passfile} list-clusters |grep '${cluster_name} running'",
-      require      => Cluster[$cluster_name]
+      status_cmd   => "${glassfish::glassfish_asadmin_path} --port ${das_port} --passwordfile ${asadmin_passfile} list-clusters |grep '${cluster_name} running'"
     }
   }
-
-  # Run cluster before node
-  Create_cluster <| |> -> Create_node <| |>
 
 }

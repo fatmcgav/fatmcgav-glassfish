@@ -93,7 +93,8 @@ define glassfish::create_domain (
     }
   }
 
-  # Run domain before cluster
+  # Run Create_domain resources before Create_cluster and Create_node resources
   Create_domain <| |> -> Create_cluster <| |>
+  Create_domain <| |> -> Create_node <| |>
 
 }
