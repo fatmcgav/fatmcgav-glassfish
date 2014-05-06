@@ -69,8 +69,8 @@ describe Puppet::Type.type(:jvmoption) do
         described_class.new(:option => '-Xmx512m', :portbase => '8000', :ensure => :present)[:portbase].should == 8000
       end
 
-      it "should have a default value of 8000" do
-        described_class.new(:option => '-Xmx512m', :ensure => :present)[:portbase].should == 8000
+      it "should have a default value of 4800" do
+        described_class.new(:option => '-Xmx512m', :ensure => :present)[:portbase].should == 4800
       end
 
       it "should not support shorter than 4 digits" do

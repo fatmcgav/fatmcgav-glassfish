@@ -199,7 +199,6 @@ describe 'glassfish::install' do
     
     # Include required classe with default param values
     let(:pre_condition) { 'class {"glassfish": 
-      domain_asadmin_passfile => "/tmp/asadmin.pass",
       install_method => "yum", 
       package_prefix => "gftest"}' 
     }

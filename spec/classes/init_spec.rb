@@ -45,8 +45,7 @@ describe 'glassfish' do
     describe 'with create_domain => true' do
       # Set relevant params
       let(:params) do  {
-          :create_domain           => true,
-          :domain_asadmin_passfile => '/tmp/asadmin.pass'
+          :create_domain => true
         }
       end
       
