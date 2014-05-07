@@ -3,12 +3,12 @@ class Puppet::Provider::Asadmin < Puppet::Provider
   def asadmin_exec(passed_args)
     
     # Use dashost if present
-    if defined?@resource[:dashost] && !@resource[:dashost].nil?
+    if @resource.parameters.include?(:dashost)
       host = @resource[:dashost]
     end
     
     # Use dasport first, and then fallback to portbase
-    if defined?@resource[:dasport] && !@resource[:dasport].nil? 
+    if @resource.parameters.include?(:dasport)
       port = @resource[:dasport]
     else
       port = @resource[:portbase].to_i + 48
