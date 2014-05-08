@@ -7,6 +7,7 @@ Puppet::Type.type(:jdbcresource).provide(:asadmin, :parent =>
     args = Array.new
     args << "create-jdbc-resource"
     args << "--connectionpoolid" << @resource[:connectionpool]
+    args << "--target" << @resource[:target] if @resource[:target]
     args << @resource[:name]
     asadmin_exec(args)
   end

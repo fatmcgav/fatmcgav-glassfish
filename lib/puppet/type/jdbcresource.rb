@@ -11,6 +11,13 @@ Puppet::Type.newtype(:jdbcresource) do
     desc "The JDBC connection pool name"
   end
 
+  newparam(:target) do
+    desc "This option helps specify the target to which  you  are
+    deploying. Valid values are: server, domain, cluster name, instance name. 
+    Defaults to: server"
+    defaulto "server"
+  end
+  
   newparam(:portbase) do
     desc "The Glassfish domain port base. Default: 4800"
     defaultto "4800"
@@ -39,5 +46,30 @@ Puppet::Type.newtype(:jdbcresource) do
         self.fail "Only root can execute commands as other users"
       end
     end
+  end
+  
+  # Autorequire the user running command
+  autorequire(:user) do
+    self[:user]    
+  end
+  
+  # Autorequire the password file
+  autorequire(:file) do
+    self[:passwordfile]    
+  end
+  
+  # Autorequire the relevant domain
+  autorequire(:domain) do
+    self.catalog.resources.select { |res|
+      next unless res.type == :domain
+      res if res[:portbase] == self[:portbase]
+    }.collect { |res|
+      res[:name]
+    }
+  end
+  
+  # Autorequire the relevant jdbcconnectionpool
+  autorequire(:jdbcconnectionpool) do
+    self[:connectionpool]    
   end
 end
