@@ -15,7 +15,7 @@ Puppet::Type.newtype(:jdbcresource) do
     desc "This option helps specify the target to which  you  are
     deploying. Valid values are: server, domain, cluster name, instance name. 
     Defaults to: server"
-    defaulto "server"
+    defaultto "server"
   end
   
   newparam(:portbase) do
