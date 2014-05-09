@@ -13,7 +13,80 @@ Puppet::Type.newtype(:cluster_node) do
       end
     end
   end
+  
+  newparam(:host) do
+    desc "The name of the host that the node represents. The name
+    of  the  host  must  be  specified. Otherwise, an error
+    occurs."
+  end
+  
+  newparam(:sshport) do
+    desc "The port to use for  SSH  connections  to  this  node's
+    host.  The  default  is 22. If the --nodehost option is
+    set  to  localhost-domain,  the  --sshport  option   is
+    ignored."
+    defaultto '22'
+    
+    validate do |value|
+      raise ArgumentError, "%s is not a valid SSH port." % value unless value =~ /^\d*$/
+    end
+    
+    munge do |value|
+      case value
+      when String
+        if value =~ /^[-0-9]+$/
+          value = Integer(value)
+        end
+      end
 
+      return value
+    end
+  end
+  
+  newparam(:sshuser) do 
+    desc "The user on this node's host that is to run the process
+    for  connecting to the host through SSH. The default is
+    the user that is running the  DAS  process.  To  ensure
+    that the DAS can read this user's SSH private key file,
+    specify the user that is running the  DAS  process.  If
+    the  --nodehost  option is set to localhost-domain, the
+    --sshuser option is ignored."
+
+    validate do |value|
+      unless Puppet.features.root?
+        self.fail "Only root can execute commands as other users"
+      end
+      unless value =~ /^[\w-]+$/
+         raise ArgumentError, "%s is not a valid ssh user name." % value
+      end
+    end
+  end
+  
+  newparam(:sshkeyfile) do 
+    desc "The absolute path to the SSH private key file for  user
+    that  the --sshuser option specifies. This file is used
+    for authentication to the sshd  daemon  on  the  node's
+    host.
+    
+    The path to the key file must be reachable by  the  DAS
+    and the key file must be readable by the DAS.
+
+    The default is the a key file in the user's .ssh direc-
+    tory.  If  multiple key files are found, the subcommand
+    uses the following order of preference:
+    1.  id_rsa
+    2.  id_dsa
+    3.  identity"
+  end
+  
+  newparam(:install) do 
+    desc "Specifies whether  the  subcommand  shall  install  the
+    GlassFish  Server  software  on  the host that the node
+    represents. Default: false"
+    defaultto(:false)
+    newvalues(:true, :false)
+  end
+  
   newparam(:asadminuser) do
     desc "The internal Glassfish user asadmin uses. Default: admin"
     defaultto 'admin'
@@ -64,63 +137,6 @@ Puppet::Type.newtype(:cluster_node) do
          raise ArgumentError, "%s is not a valid user name." % value
       end
     end
-  end
-  
-  newparam(:host) do
-    desc "The name of the host that the node represents. The name
-    of  the  host  must  be  specified. Otherwise, an error
-    occurs."
-  end
-  
-  newparam(:sshport) do
-    desc "The port to use for  SSH  connections  to  this  node's
-    host.  The  default  is 22. If the --nodehost option is
-    set  to  localhost-domain,  the  --sshport  option   is
-    ignored."
-  end
-  
-  newparam(:sshuser) do 
-    desc "The user on this node's host that is to run the process
-    for  connecting to the host through SSH. The default is
-    the user that is running the  DAS  process.  To  ensure
-    that the DAS can read this user's SSH private key file,
-    specify the user that is running the  DAS  process.  If
-    the  --nodehost  option is set to localhost-domain, the
-    --sshuser option is ignored."
-
-    validate do |value|
-      unless Puppet.features.root?
-        self.fail "Only root can execute commands as other users"
-      end
-      unless value =~ /^[\w-]+$/
-         raise ArgumentError, "%s is not a valid ssh user name." % value
-      end
-    end
-  end
-  
-  newparam(:sshkeyfile) do 
-    desc "The absolute path to the SSH private key file for  user
-    that  the --sshuser option specifies. This file is used
-    for authentication to the sshd  daemon  on  the  node's
-    host.
-    
-    The path to the key file must be reachable by  the  DAS
-    and the key file must be readable by the DAS.
-
-    The default is the a key file in the user's .ssh direc-
-    tory.  If  multiple key files are found, the subcommand
-    uses the following order of preference:
-    1.  id_rsa
-    2.  id_dsa
-    3.  identity"
-  end
-  
-  newparam(:install) do 
-    desc "Specifies whether  the  subcommand  shall  install  the
-    GlassFish  Server  software  on  the host that the node
-    represents. Default: false"
-    defaultto(:false)
-    newvalues(:true, :false)
   end
   
   # Autorequire the user running command
