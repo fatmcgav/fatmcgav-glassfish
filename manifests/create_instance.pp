@@ -70,7 +70,7 @@ define glassfish::create_instance (
     passwordfile => $asadmin_passfile,
     dashost      => $das_host,
     dasport      => $das_port,
-    node_name    => $node_name,
+    nodename     => $node_name,
     cluster      => $cluster,
     portbase     => $instance_portbase
   }
