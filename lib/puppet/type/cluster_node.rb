@@ -77,6 +77,12 @@ Puppet::Type.newtype(:cluster_node) do
     1.  id_rsa
     2.  id_dsa
     3.  identity"
+    
+    validate do |value|
+      unless File.exists? value
+        raise ArgumentError, "%s does not exists" % value
+      end
+    end
   end
   
   newparam(:install) do 
@@ -87,21 +93,6 @@ Puppet::Type.newtype(:cluster_node) do
     newvalues(:true, :false)
   end
   
-  newparam(:asadminuser) do
-    desc "The internal Glassfish user asadmin uses. Default: admin"
-    defaultto 'admin'
-
-    validate do |value|
-      unless value =~ /^[\w-]+$/
-         raise ArgumentError, "%s is not a valid asadmin user name." % value
-      end
-    end
-  end
-
-  newparam(:passwordfile) do
-    desc "The file containing the password for the user."
-  end
-
   newparam(:dashost) do
     desc "The Glassfish DAS hostname. "
   end
@@ -126,6 +117,27 @@ Puppet::Type.newtype(:cluster_node) do
     end
   end
   
+  newparam(:asadminuser) do
+    desc "The internal Glassfish user asadmin uses. Default: admin"
+    defaultto 'admin'
+
+    validate do |value|
+      unless value =~ /^[\w-]+$/
+         raise ArgumentError, "%s is not a valid asadmin user name." % value
+      end
+    end
+  end
+
+  newparam(:passwordfile) do
+    desc "The file containing the password for the user."
+    
+    validate do |value|
+      unless File.exists? value
+        raise ArgumentError, "%s does not exists" % value
+      end
+    end
+  end
+  
   newparam(:user) do
     desc "The user to run the command as."
 
@@ -137,6 +149,11 @@ Puppet::Type.newtype(:cluster_node) do
          raise ArgumentError, "%s is not a valid user name." % value
       end
     end
+  end
+  
+  # Validate mandatory params
+  validate do
+    raise Puppet::Error, 'Host is required.' unless self[:host]
   end
   
   # Autorequire the user running command
