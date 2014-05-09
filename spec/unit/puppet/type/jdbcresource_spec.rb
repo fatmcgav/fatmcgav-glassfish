@@ -22,12 +22,7 @@ describe Puppet::Type.type(:jdbcresource) do
     end
   end
   
-  describe "when validating values" do
-    # Stub the file.exists? for source file
-    before :each do
-      File.stubs(:exists?).with('/tmp/application.ear').returns(true)
-    end
-    
+  describe "when validating values" do  
     describe "for name" do
       it "should support an alphanumerical name" do
         described_class.new(:name => 'test', :ensure => :present, :connectionpool => 'test')[:name].should == 'test'
@@ -276,11 +271,12 @@ describe Puppet::Type.type(:jdbcresource) do
       
       let :jdbcconpool do
         Puppet::Type.type(:jdbcconnectionpool).new(
-          :name                => 'test',
-          :datasourceclassname => 'com.mysql.jdbc.jdbc2.optional.MysqlConnectionPoolDataSource',
-          :ensure              => 'present',
-          :portbase            => '8000',
-          :user                => 'glassfish'
+          :name         => 'test',
+          :dsclassname  => 'com.mysql.jdbc.jdbc2.optional.MysqlConnectionPoolDataSource',
+          :resourcetype => 'javax.sql.ConnectionPoolDataSource',
+          :ensure       => 'present',
+          :portbase     => '8000',
+          :user         => 'glassfish'
         )
       end
       
