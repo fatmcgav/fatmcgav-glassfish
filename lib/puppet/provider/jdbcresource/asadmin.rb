@@ -20,7 +20,7 @@ Puppet::Type.type(:jdbcresource).provide(:asadmin, :parent =>
 
   def exists?
     asadmin_exec(["list-jdbc-resources"]).each do |line|
-      return true if @resource[:name] == line.chomp
+      return true if @resource[:name] == line.strip!
     end
     return false
   end
