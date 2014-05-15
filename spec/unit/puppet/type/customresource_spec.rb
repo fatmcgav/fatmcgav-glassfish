@@ -25,7 +25,7 @@ describe Puppet::Type.type(:customresource) do
   describe "when validating values" do
     describe "for name" do
       it "should support an alphanumerical name" do
-        described_class.new(:name => 'test', :ensure => :present)[:name].should == '-Xmx512m'
+        described_class.new(:name => 'test', :ensure => :present)[:name].should == 'test'
       end
 
       it "should support underscores" do
@@ -37,7 +37,7 @@ describe Puppet::Type.type(:customresource) do
       end
 
       it "should not support spaces" do
-        expect { described_class.new(:name => 'test resource', :ensure => :present) }.to raise_error(Puppet::Error, /test option is not a valid custom resource name./)
+        expect { described_class.new(:name => 'test resource', :ensure => :present) }.to raise_error(Puppet::Error, /test resource is not a valid custom resource name./)
       end
     end
 
@@ -63,66 +63,66 @@ describe Puppet::Type.type(:customresource) do
     
     describe "for portbase" do
       it "should support a numerical value" do
-        described_class.new(:name => 'test', :portbase => '8000', :ensure => 'present', :value => 'value')[:portbase].should == 8000
+        described_class.new(:name => 'test', :portbase => '8000', :ensure => 'present')[:portbase].should == 8000
       end
 
       it "should have a default value of 4800" do
-        described_class.new(:name => 'test', :ensure => 'present', :value => 'value')[:portbase].should == 4800
+        described_class.new(:name => 'test', :ensure => 'present')[:portbase].should == 4800
       end
 
       it "should not support shorter than 4 digits" do
-        expect { described_class.new(:name => 'test', :portbase => '123', :ensure => 'present', :value => 'value') }.to raise_error(Puppet::Error, /123 is not a valid portbase./)
+        expect { described_class.new(:name => 'test', :portbase => '123', :ensure => 'present') }.to raise_error(Puppet::Error, /123 is not a valid portbase./)
       end
 
       it "should not support longer than 5 digits" do
-        expect { described_class.new(:name => 'test', :portbase => '123456', :ensure => 'present', :value => 'value') }.to raise_error(Puppet::Error, /123456 is not a valid portbase./)
+        expect { described_class.new(:name => 'test', :portbase => '123456', :ensure => 'present') }.to raise_error(Puppet::Error, /123456 is not a valid portbase./)
       end
 
       it "should not support a non-numeric value" do
-        expect { described_class.new(:name => 'test', :portbase => 'a', :ensure => 'present', :value => 'value') }.to raise_error(Puppet::Error, /a is not a valid portbase./)
+        expect { described_class.new(:name => 'test', :portbase => 'a', :ensure => 'present') }.to raise_error(Puppet::Error, /a is not a valid portbase./)
       end
     end
 
     describe "for asadminuser" do
       it "should support an alpha name" do
-        described_class.new(:name => 'test', :asadminuser => 'user', :ensure => 'present', :value => 'value')[:asadminuser].should == 'user'
+        described_class.new(:name => 'test', :asadminuser => 'user', :ensure => 'present')[:asadminuser].should == 'user'
       end
 
       it "should support underscores" do
-        described_class.new(:name => 'test', :asadminuser => 'admin_user', :ensure => 'present', :value => 'value')[:asadminuser].should == 'admin_user'
+        described_class.new(:name => 'test', :asadminuser => 'admin_user', :ensure => 'present')[:asadminuser].should == 'admin_user'
       end
    
       it "should support hyphens" do
-        described_class.new(:name => 'test', :asadminuser => 'admin-user', :ensure => 'present', :value => 'value')[:asadminuser].should == 'admin-user'
+        described_class.new(:name => 'test', :asadminuser => 'admin-user', :ensure => 'present')[:asadminuser].should == 'admin-user'
       end
 
       it "should have a default value of admin" do
-        described_class.new(:name => 'test', :ensure => 'present', :value => 'value')[:asadminuser].should == 'admin'
+        described_class.new(:name => 'test', :ensure => 'present')[:asadminuser].should == 'admin'
       end
 
       it "should not support spaces" do
-        expect { described_class.new(:name => 'test', :asadminuser => 'admin user', :value => 'value') }.to raise_error(Puppet::Error, /admin user is not a valid asadmin user name/)
+        expect { described_class.new(:name => 'test', :asadminuser => 'admin user') }.to raise_error(Puppet::Error, /admin user is not a valid asadmin user name/)
       end
     end
     
     describe "for user" do
       it "should support an alpha name" do
         Puppet.features.expects(:root?).returns(true).once
-        described_class.new(:name => 'test', :user => 'glassfish', :ensure => 'present', :value => 'value')[:user].should == 'glassfish'
+        described_class.new(:name => 'test', :user => 'glassfish', :ensure => 'present')[:user].should == 'glassfish'
       end
 
       it "should support underscores" do
         Puppet.features.expects(:root?).returns(true).once
-        described_class.new(:name => 'test', :user => 'glassfish_user', :ensure => 'present', :value => 'value')[:user].should == 'glassfish_user'
+        described_class.new(:name => 'test', :user => 'glassfish_user', :ensure => 'present')[:user].should == 'glassfish_user'
       end
    
       it "should support hyphens" do
         Puppet.features.expects(:root?).returns(true).once
-        described_class.new(:name => 'test', :user => 'glassfish-user', :ensure => 'present', :value => 'value')[:user].should == 'glassfish-user'
+        described_class.new(:name => 'test', :user => 'glassfish-user', :ensure => 'present')[:user].should == 'glassfish-user'
       end
 
       it "should not have a default value of admin" do
-        described_class.new(:name => 'test', :ensure => 'present', :value => 'value')[:user].should == nil
+        described_class.new(:name => 'test', :ensure => 'present')[:user].should == nil
       end
 
       it "should not support spaces" do
@@ -139,12 +139,12 @@ describe Puppet::Type.type(:customresource) do
     describe "for passwordfile" do
       it "should support a valid file path" do
         File.expects(:exists?).with('/tmp/asadmin.pass').returns(true).once
-        described_class.new(:name => 'test', :passwordfile => '/tmp/asadmin.pass', :value => 'value')[:passwordfile].should == '/tmp/asadmin.pass'
+        described_class.new(:name => 'test', :passwordfile => '/tmp/asadmin.pass')[:passwordfile].should == '/tmp/asadmin.pass'
       end
 
       it "should fail an invalid file path" do
         File.expects(:exists?).with('/tmp/nonexistent').returns(false).once
-        expect { described_class.new(:name => 'test', :passwordfile => '/tmp/nonexistent', :value => 'value') }.to raise_error(Puppet::Error, /does not exist/)
+        expect { described_class.new(:name => 'test', :passwordfile => '/tmp/nonexistent') }.to raise_error(Puppet::Error, /does not exist/)
       end
     end
   end
