@@ -5,6 +5,12 @@ Puppet::Type.newtype(:customresource) do
   newparam(:name) do
     desc "The custom resource name."
     isnamevar
+    
+    validate do |value|
+      unless value =~ /^[^\W]?[\w\-\.=]+$/
+         raise ArgumentError, "%s is not a valid custom resource name." % value
+      end
+    end
   end
   
   newparam(:restype) do

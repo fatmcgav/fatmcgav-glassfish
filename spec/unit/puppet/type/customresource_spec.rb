@@ -25,37 +25,37 @@ describe Puppet::Type.type(:customresource) do
   describe "when validating values" do
     describe "for name" do
       it "should support an alphanumerical name" do
-        described_class.new(:option => '-Xmx512m', :ensure => :present)[:option].should == '-Xmx512m'
+        described_class.new(:name => 'test', :ensure => :present)[:name].should == '-Xmx512m'
       end
 
       it "should support underscores" do
-        described_class.new(:option => '-DANTLR_USE_DIRECT_CLASS_LOADING=true', :ensure => :present)[:option].should == '-DANTLR_USE_DIRECT_CLASS_LOADING=true'
+        described_class.new(:name => 'test_name', :ensure => :present)[:name].should == 'test_name'
       end
    
       it "should support hyphens" do
-        described_class.new(:option => '-Dgosh.args=--nointeractive', :ensure => :present)[:option].should == '-Dgosh.args=--nointeractive'
+        described_class.new(:name => 'test-name', :ensure => :present)[:name].should == 'test-name'
       end
 
       it "should not support spaces" do
-        expect { described_class.new(:option => '-X Option', :ensure => :present) }.to raise_error(Puppet::Error, /-X Option is not a valid JVM option/)
+        expect { described_class.new(:name => 'test resource', :ensure => :present) }.to raise_error(Puppet::Error, /test option is not a valid custom resource name./)
       end
     end
 
     describe "for ensure" do
       it "should support present" do
-        described_class.new(:option => '-Xmx512m', :ensure => 'present')[:ensure].should == :present
+        described_class.new(:name => 'test', :ensure => 'present')[:ensure].should == :present
       end
 
       it "should support absent" do
-        described_class.new(:option => '-Xmx512m', :ensure => 'absent')[:ensure].should == :absent
+        described_class.new(:name => 'test', :ensure => 'absent')[:ensure].should == :absent
       end
 
       it "should not support other values" do
-        expect { described_class.new(:option => '-Xmx512m', :ensure => 'foo') }.to raise_error(Puppet::Error, /Invalid value "foo"/)
+        expect { described_class.new(:name => 'test', :ensure => 'foo') }.to raise_error(Puppet::Error, /Invalid value "foo"/)
       end
 
       it "should not have a default value" do
-        described_class.new(:option => '-Xmx512m')[:ensure].should == nil
+        described_class.new(:name => 'test')[:ensure].should == nil
       end
     end
     
