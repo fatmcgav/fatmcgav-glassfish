@@ -9,18 +9,20 @@ Puppet::Type.newtype(:customresource) do
   
   newparam(:restype) do
     desc "The type of custom resource to be created. Specify a fully qualified type definition, for example javax.naming.spi.ObjectFactory. The resource type definition follows the format, xxx.xxx.xxx"
-    validate do |restype|
-      if /^(?:[a-zA-Z_$][a-zA-Z\d_$]*\.)*[A-Z$][a-zA-Z\d_$]{1,}$/.match(restype).nil?
-        raise ArgumentError, "%s is not valid Java fully qualified type name" % restype
+    
+    validate do |value|
+      if /^(?:[a-zA-Z_$][a-zA-Z\d_$]*\.)*[A-Z$][a-zA-Z\d_$]{1,}$/.match(value).nil?
+        raise ArgumentError, "%s is not valid Java fully qualified type name" % value
       end
     end
   end
   
   newparam(:factoryclass) do
     desc "Factory class name for the custom resource. This class implements the javax.naming.spi.ObjectFactory interface."
-    validate do |factoryclass|
-      if /^(?:[a-zA-Z_$][a-zA-Z\d_$]*\.)*[A-Z$][a-zA-Z\d_$]{1,}$/.match(factoryclass).nil?
-        raise ArgumentError, "%s is not valid Java fully qualified type name" % factoryclass
+    
+    validate do |value|
+      if /^(?:[a-zA-Z_$][a-zA-Z\d_$]*\.)*[A-Z$][a-zA-Z\d_$]{1,}$/.match(value).nil?
+        raise ArgumentError, "%s is not valid Java fully qualified type name" % value
       end
     end
   end
