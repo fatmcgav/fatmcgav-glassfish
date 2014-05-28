@@ -53,10 +53,72 @@ Further features that are likely to be added include:
 This module requires the Puppetlabs-Stdlib module >= 3.2.0. 
 
 ##Usage
+Glassfish can be installed and configured with a default configuration with:  
+```puppet
+include glassfish
+```
+This will install Java 7 OpenJDK, create a Glassfish group and user account, 
+download and install Glassfish J2EE v3.1.2.2 using a Zip file. No domains are created by default.
+
+To install Glassfish using a package manager, such as yum or apt, you could do: 
+```puppet
+class { 'glassfish':
+  install_method => 'package', 
+  package_prefix => 'glassfish'
+}
+```
+_package_prefix_ can be used to change the package naming structure. 
+The required version is appended to the end to form the package name, e.g.: `glassfish3-3.1.2.2`
+
+To create and configure a domain upon installation, you could do: 
+```puppet
+class { 'glassfish': 
+  create_domain => true, 
+  domain_name   => 'gf_domain', 
+  portbase      => '8000'
+}
+```
+This will install Glassfish and create a domain called 'gf_domain' using portbase 8000, 
+with a default username/password of '_admin/adminadmin_'.
+
+If you are using other means to manage user accounts on this host, 
+then you can stop this module managing user accounts by doing: 
+```puppet
+class { 'glassfish':
+  manage_accounts => false 
+}
+```
+
+This module also provides several defined types which can be used to simplify other tasks, 
+such as creating a domain using `glassfish::create_domain` to create a new domain, 
+or `glassfish::create_cluster` to create a new cluster.  
+
+It is also possible to use the types directly.   
+E.g.
+```puppet
+  jdbcconnectionpool { 'ConPool':
+    ensure       => present,
+    resourcetype => 'javax.sql.ConnectionPoolDataSource',
+    dsclassname  => 'oracle.jdbc.pool.OracleConnectionPoolDataSource',
+    properties   => 'user=con_user:password=con_password:url=jdbc\:oracle\:thin\:@localhost\:1521\:XE',
+    portbase     => '8000',
+    asadminuser  => 'admin',
+    user         => 'glassfish'
+  }
+
+  jdbcresource { 'jdbc/ConPool':
+    ensure         => present,
+    connectionpool => 'ConPool',
+    portbase       => '8000',
+    target         => 'aCluster',
+    asadminuser    => 'admin',
+    user           => 'glassfish'
+  }
+```
 
 ##Limitations
-This module has been primarily developed on CentOS v6. 
-It has also been tested on Debian and Ubuntu, so should support most common Linux distributions. 
+This module has primarily been developed and tested on CentOS 6. 
+It has also been lightly tested on Debian and Ubuntu, so should support most common Linux distributions. 
 
 ##Development
 If you have any features that you feel are missing or find any bugs for this module, 
