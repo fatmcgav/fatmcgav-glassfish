@@ -71,14 +71,14 @@ class Puppet::Provider::Asadmin < Puppet::Provider
   
   protected
   
-  def hasProperties? props
+  def hasProperties?(props)
     unless props.nil?
       return (not props.to_s.empty?)
     end
     return false
   end
   
-  def prepareProperties properties
+  def prepareProperties(properties)
     if properties.is_a? String
       return properties
     end
