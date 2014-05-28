@@ -182,7 +182,7 @@ describe 'glassfish::install' do
     
     # Include required classe with default param values
     let(:pre_condition) { 'class {"glassfish": 
-      install_method => "yum"}' 
+      install_method => "package"}' 
     }
       
     # Should attempt to install using yum package
@@ -199,7 +199,7 @@ describe 'glassfish::install' do
     
     # Include required classe with default param values
     let(:pre_condition) { 'class {"glassfish": 
-      install_method => "yum", 
+      install_method => "package", 
       package_prefix => "gftest"}' 
     }
       

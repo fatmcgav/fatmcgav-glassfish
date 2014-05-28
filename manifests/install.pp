@@ -134,7 +134,7 @@ class glassfish::install {
       }
     }
     default   : {
-      fail("Unrecognised Installation method ${glassfish::install_method}. Choose one of: 'yum','zip'.")
+      fail("Unrecognised Installation method ${glassfish::install_method}. Choose one of: 'package','zip'.")
     }
   }
 
