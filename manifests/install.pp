@@ -42,7 +42,7 @@ class glassfish::install {
 
   # Take action based on $install_method.
   case $glassfish::install_method {
-    'yum'   : {
+    'package' : {
       # Build package from $package_prefix and $version
       $package_name = "${glassfish::package_prefix}-${glassfish::version}"
 
@@ -58,7 +58,7 @@ class glassfish::install {
         User[$glassfish::user] -> Package[$package_name]
       }
     }
-    'zip'   : {
+    'zip'     : {
       # Need to download glassfish from java.net
       $glassfish_download_site = "http://download.java.net/glassfish/${glassfish::version}/release"
       $glassfish_download_file = "glassfish-${glassfish::version}.zip"
@@ -133,7 +133,7 @@ class glassfish::install {
         before  => Anchor['glassfish::install::end']
       }
     }
-    default : {
+    default   : {
       fail("Unrecognised Installation method ${glassfish::install_method}. Choose one of: 'yum','zip'.")
     }
   }

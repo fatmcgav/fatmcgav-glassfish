@@ -19,7 +19,7 @@
 # Copyright 2014 Gavin Williams, unless otherwise noted.
 #
 class glassfish::params {
-  # Installation method. Can be: 'yum','zip'.
+  # Installation method. Can be: 'package','zip'.
   $glassfish_install_method      = 'zip'
 
   # Default glassfish temporary directory for downloading Zip.
@@ -53,10 +53,10 @@ class glassfish::params {
   # Should a glassfish domain be created on installation?
   $glassfish_create_domain       = false
   # Should a glassfish service be created on installation?
-  $glassfish_create_service      = false
+  $glassfish_create_service      = true
   # Default Glassfish domain, portbase and profile
   $glassfish_domain              = 'domain1'
-  $glassfish_portbase            = '8000'
+  $glassfish_portbase            = '4800'
 
   # Should the glassfish domain be started upon creation?
   $glassfish_start_domain        = true

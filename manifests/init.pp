@@ -20,12 +20,12 @@
 #  Defaults to false
 #
 #  [*create_service*] - Should a glassfish service be created on installation?
-#  Defaults to false
+#  Defaults to true
 #
 #  [*create_passfile*] - Should a glassfish password file be created?
 #  Defaults to true
 #
-#  [*domain_name*] - Glassfish domain name.
+#  [*domain_name*] - Glassfish domain name. Defaults to 'domain1'.
 #
 #  [*domain_template*] - Glassfish domain template to use.
 #
@@ -43,7 +43,7 @@
 #  [*group*] - Glassfish group name.
 #
 #  [*install_method*]  - Glassfish installation method.
-#  Can be: 'zip', 'yum'. Defaults to 'zip'.
+#  Can be: 'zip', 'package'. Defaults to 'zip'.
 #
 #  [*java_ver*]        - Java version to install if managing Java.
 #
@@ -58,8 +58,8 @@
 #
 #  [*parent_dir*]      - Glassfish parent directory. Defaults to '/usr/local'.
 #
-#  [*portbase*]        - Glassfish portbase. Used
-#  when creating a domain on install.
+#  [*portbase*]        - Glassfish portbase. Used when creating a domain on install.
+#  Defaults to '4800'
 #
 #  [*start_domain*] - Should the glassfish domain be started on creation?
 #  Defaults to true

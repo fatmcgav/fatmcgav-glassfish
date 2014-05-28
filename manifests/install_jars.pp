@@ -22,10 +22,15 @@
 #
 # Copyright 2014 Gavin Williams, unless otherwise noted.
 #
-define glassfish::install_jars ($domain, $download = false, $source = '') {
+define glassfish::install_jars ($install_location = 'domain', $domain, $download = false, $source = '') {
   $jaraddress = $name
   $jar        = basename($jaraddress)
-  $jardest    = "${glassfish::glassfish_dir}/glassfish/domains/${domain}/lib/ext/${jar}"
+
+  case $install_location {
+    'domain'       : { $jardest = "${glassfish::glassfish_dir}/glassfish/domains/${domain}/lib/ext/${jar}" }
+    'installation' : { $jardest = "${glassfish::glassfish_dir}/glassfish/lib/ext" }
+    default        : { fail("Install location ${install_location} is not supported.") }
+  }
 
   if $download {
     exec { "download ${name}":
@@ -39,12 +44,13 @@ define glassfish::install_jars ($domain, $download = false, $source = '') {
   } else {
     file { $jardest:
       ensure => present,
-      mode   => 0755,
+      mode   => '0755',
       source => $source,
       notify => Service["glassfish_${domain}"]
     # TODO fix service naming
     #      notify  => Service["glassfish"]
     }
+
   }
 
 }

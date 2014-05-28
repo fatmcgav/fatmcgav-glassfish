@@ -23,11 +23,6 @@ describe Puppet::Type.type(:jvmoption) do
   end
   
   describe "when validating values" do
-    # Stub the file.exists? for source file
-    before :each do
-      #File.stubs(:exists?).with('/tmp/application.ear').returns(true)
-    end
-  
     describe "for name" do
       it "should support an alphanumerical name" do
         described_class.new(:option => '-Xmx512m', :ensure => :present)[:option].should == '-Xmx512m'
