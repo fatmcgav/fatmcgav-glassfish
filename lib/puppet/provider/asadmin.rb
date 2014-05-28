@@ -94,7 +94,7 @@ class Puppet::Provider::Asadmin < Puppet::Provider
       rvalue = value.to_s.gsub(/([=:])/, '\\\\\\1')
       list << "#{rkey}=#{rvalue}"
     end
-    return list.join(':')
+    return list.sort!.join(':')
   end   
     
 end
