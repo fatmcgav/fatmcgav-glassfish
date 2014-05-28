@@ -240,7 +240,7 @@ describe 'glassfish::install' do
     
     # It should fail
     it do
-      expect { subject }.to raise_error(Puppet::Error, /Unrecognised Installation method bob. Choose one of: 'yum','zip'./)
+      expect { subject }.to raise_error(Puppet::Error, /Unrecognised Installation method bob. Choose one of: 'package','zip'./)
     end 
   end
   
