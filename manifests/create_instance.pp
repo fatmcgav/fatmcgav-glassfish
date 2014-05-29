@@ -29,7 +29,7 @@
 #  Defaults to undef
 #
 # [*node_name*] - Name of node to associate instance with.
-#  Defaults to undef
+#  Defaults to $::hostname
 #
 # [*node_user*] - Username node is running under.
 #  Defaults to $glassfish::user
@@ -55,7 +55,7 @@ define glassfish::create_instance (
   $ensure            = present,
   $instance_name     = $name,
   $instance_portbase = undef,
-  $node_name         = undef,
+  $node_name         = $::hostname,
   $node_user         = $glassfish::user) {
   # Validate params
   validate_string($asadmin_user)
