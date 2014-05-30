@@ -3,7 +3,7 @@ Puppet::Type.type(:customresource).provide(:asadmin, :parent => Puppet::Provider
   desc "Glassfish custom resources support."
 
   def create
-    args = []
+    args = Array.new
     args << "create-custom-resource"
     args << "--restype" << @resource[:restype]
     args << "--factoryclass" << @resource[:factoryclass]
@@ -16,7 +16,7 @@ Puppet::Type.type(:customresource).provide(:asadmin, :parent => Puppet::Provider
   end
 
   def destroy
-    args = []
+    args = Array.new
     args << "delete-custom-resource" << @resource[:name]
     asadmin_exec(args)
   end

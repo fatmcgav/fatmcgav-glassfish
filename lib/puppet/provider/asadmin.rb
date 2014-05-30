@@ -1,9 +1,22 @@
 class Puppet::Provider::Asadmin < Puppet::Provider
   
   def asadmin_exec(passed_args)
-    port = @resource[:portbase].to_i + 48
+    
+    # Use dashost if present
+    if @resource.parameters.include?(:dashost)
+      host = @resource[:dashost]
+    end
+    
+    # Use dasport first, and then fallback to portbase
+    if @resource.parameters.include?(:dasport)
+      port = @resource[:dasport]
+    else
+      port = @resource[:portbase].to_i + 48
+    end
+
     # Compile an array of command args
     args = Array.new
+    args << '--host' << host if host && !host.nil?
     args << '--port' << port.to_s
     args << '--user' << @resource[:asadminuser]
     # Only add passwordfile if specified
@@ -58,14 +71,14 @@ class Puppet::Provider::Asadmin < Puppet::Provider
   
   protected
   
-  def hasProperties? props
+  def hasProperties?(props)
     unless props.nil?
       return (not props.to_s.empty?)
     end
     return false
   end
   
-  def prepareProperties properties
+  def prepareProperties(properties)
     if properties.is_a? String
       return properties
     end
@@ -81,7 +94,7 @@ class Puppet::Provider::Asadmin < Puppet::Provider
       rvalue = value.to_s.gsub(/([=:])/, '\\\\\\1')
       list << "#{rkey}=#{rvalue}"
     end
-    return list.join(':')
+    return list.sort!.join(':')
   end   
     
 end

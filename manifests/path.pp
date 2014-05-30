@@ -1,6 +1,22 @@
-# Class: glassfish::path
+# == Class: glassfish::path
 #
-# Manages adding Glassfish to the path.
+# Add glassfish to profile
+#
+# === Parameters
+#
+# None
+#
+# === Examples
+#
+# Not applicable
+#
+# === Authors
+#
+# Gavin Williams <fatmcgav@gmail.com>
+#
+# === Copyright
+#
+# Copyright 2014 Gavin Williams, unless otherwise noted.
 #
 class glassfish::path {
   case $::osfamily {
@@ -31,7 +47,9 @@ class glassfish::path {
     }
   }
 
-  # Ensure glassfish::path runs before any create_domain resources
+  # Ensure glassfish::path runs before any resources that require asadmin
   Class['glassfish::path'] -> Create_domain <| |>
+  Class['glassfish::path'] -> Create_cluster <| |>
+  Class['glassfish::path'] -> Create_node <| |>
 
 }

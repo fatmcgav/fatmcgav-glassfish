@@ -182,7 +182,7 @@ describe 'glassfish::install' do
     
     # Include required classe with default param values
     let(:pre_condition) { 'class {"glassfish": 
-      install_method => "yum"}' 
+      install_method => "package"}' 
     }
       
     # Should attempt to install using yum package
@@ -199,8 +199,7 @@ describe 'glassfish::install' do
     
     # Include required classe with default param values
     let(:pre_condition) { 'class {"glassfish": 
-      domain_asadmin_passfile => "/tmp/asadmin.pass",
-      install_method => "yum", 
+      install_method => "package", 
       package_prefix => "gftest"}' 
     }
       
@@ -241,7 +240,7 @@ describe 'glassfish::install' do
     
     # It should fail
     it do
-      expect { subject }.to raise_error(Puppet::Error, /Unrecognised Installation method bob. Choose one of: 'yum','zip'./)
+      expect { subject }.to raise_error(Puppet::Error, /Unrecognised Installation method bob. Choose one of: 'package','zip'./)
     end 
   end
   

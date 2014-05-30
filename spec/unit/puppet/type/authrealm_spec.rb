@@ -96,8 +96,8 @@ describe Puppet::Type.type(:authrealm) do
         described_class.new(:name => 'realm', :portbase => '8000', :ensure => :present, :classname => 'com.sun.enterprise.security.auth.realm.file.FileRealm')[:portbase].should == 8000
       end
 
-      it "should have a default value of 8000" do
-        described_class.new(:name => 'realm', :ensure => :present, :classname => 'com.sun.enterprise.security.auth.realm.file.FileRealm')[:portbase].should == 8000
+      it "should have a default value of 4800" do
+        described_class.new(:name => 'realm', :ensure => :present, :classname => 'com.sun.enterprise.security.auth.realm.file.FileRealm')[:portbase].should == 4800
       end
 
       it "should not support shorter than 4 digits" do

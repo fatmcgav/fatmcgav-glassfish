@@ -6,7 +6,8 @@ describe 'glassfish::create_service' do
   # Set-up default params values
   let :default_params do 
     {
-      :runuser => 'gfuser'
+      :domain_name => 'test',
+      :runuser     => 'gfuser'
     }
   end
   
