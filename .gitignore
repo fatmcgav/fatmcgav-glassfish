@@ -8,3 +8,4 @@ spec/fixtures
 pkg
 /.rspec_system
 /Gemfile.lock
+/Puppetfile.lock
