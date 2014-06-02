@@ -98,6 +98,7 @@ class glassfish (
   $gms_multicast_port    = $glassfish::params::glassfish_multicast_port,
   $gms_multicast_address = $glassfish::params::glassfish_multicast_address,
   $group                 = $glassfish::params::glassfish_group,
+  $install_dir           = $glassfish::params::glassfish_install_dir,
   $install_method        = $glassfish::params::glassfish_install_method,
   $java_ver              = $glassfish::params::glassfish_java_ver,
   $manage_accounts       = $glassfish::params::glassfish_manage_accounts,
@@ -105,12 +106,22 @@ class glassfish (
   $package_prefix        = $glassfish::params::glassfish_package_prefix,
   $parent_dir            = $glassfish::params::glassfish_parent_dir,
   $portbase              = $glassfish::params::glassfish_portbase,
+  $service_name          = $glassfish::params::glassfish_service_name,
   $start_domain          = $glassfish::params::glassfish_start_domain,
   $tmp_dir               = $glassfish::params::glassfish_tmp_dir,
   $user                  = $glassfish::params::glassfish_user,
-  $version               = $glassfish::params::glassfish_version,) inherits glassfish::params {
-  # Calculate some vars based on passed parameters
-  $glassfish_dir          = "${parent_dir}/glassfish-${version}"
+  $version               = $glassfish::params::glassfish_version) inherits glassfish::params {
+  #
+  # # Calculate some vars based on passed parameters
+  #
+  # Installation location
+  if ($install_dir == undef) {
+    $glassfish_dir = "${parent_dir}/glassfish-${version}"
+  } else {
+    $glassfish_dir = "${parent_dir}/${install_dir}"
+  }
+
+  # Asadmin path
   $glassfish_asadmin_path = "${glassfish_dir}/bin/asadmin"
 
   # Validate passed paramater values

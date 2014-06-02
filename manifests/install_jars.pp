@@ -39,14 +39,14 @@ define glassfish::install_jars ($install_location = 'domain', $domain, $download
       creates => $jardest,
       cwd     => $glassfish::glassfish_dir,
       require => File[$glassfish::glassfish_dir],
-      notify  => Service["glassfish_${domain}"]
+      notify  => Service[$glassfish::service_name]
     }
   } else {
     file { $jardest:
       ensure => present,
       mode   => '0755',
       source => $source,
-      notify => Service["glassfish_${domain}"]
+      notify => Service[$glassfish::service_name]
     # TODO fix service naming
     #      notify  => Service["glassfish"]
     }

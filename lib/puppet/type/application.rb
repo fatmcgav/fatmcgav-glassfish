@@ -21,11 +21,11 @@ Puppet::Type.newtype(:application) do
   newparam(:source) do
     desc "The application file to deploy."
 
-    validate do |value|
-       unless File.exists? value
-         raise ArgumentError, "%s does not exists" % value
-       end
-     end
+#    validate do |value|
+#       unless File.exists? value
+#         raise ArgumentError, "%s does not exists" % value
+#       end
+#     end
   end
 
   newparam(:portbase) do
