@@ -4,42 +4,32 @@
 #
 # === Parameters
 #
-# [*domain_name*]
-#  Name of Glassfish domain.
+# [*domain_name*] - Name of Glassfish domain.
 #  Defaults to undef
 #
-# [*cluster_name*]
-#  Name of Glassfish cluster.
+# [*cluster_name*] - Name of Glassfish cluster.
 #  Defaults to undef
 #
-# [*instance_name*]
-#  Name of Glassfish instance.
+# [*instance_name*] - Name of Glassfish instance.
 #  Defaults to undef
 #
-# [*node_name*]
-#  Name of Glassfish node.
+# [*node_name*] - Name of Glassfish node.
 #  Defaults to undef
 #
-# [*runuser*]
-#  User to run process as.
+# [*runuser*] - User to run process as.
 #  Defaults to $glassfish::user
 #
-# [*running*]
-#  Is the domain already running?
+# [*running*] - Is the domain already running?
 #  Defaults to false
 #
-# [*mode*]
-#  Glassfish service mode required.
+# [*mode*] - Glassfish service mode required.
 #  Can be: domain, cluster or instance.
 #
-# [*das_port*]
-#  Glassfish Domain Adminsitration Service port to connect to
+# [*das_port*] - Glassfish Domain Adminsitration Service port to connect to
 #
-# [*status_cmd*]
-#  Custom status command to use when checking service state.
+# [*status_cmd*] - Custom status command to use when checking service state.
 #
-# [*service_name*]
-#  Service name to create service as.
+# [*service_name*] - Service name to create service as.
 #
 # === Examples
 #

@@ -31,6 +31,9 @@
 # [*portbase*] - Portbase to use for domain.
 #  Defaults to $glassfish::portbase
 #
+# [*service_name*] - Specify a custom service name.
+#  Defaults to `glassfish_${domain_name}`
+#
 # [*start_domain*] - Should the domain be started upon creation?
 #  Defaults to $glassfish::start_domain
 #
