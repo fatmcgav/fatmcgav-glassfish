@@ -56,7 +56,15 @@ define glassfish::create_domain (
   $enable_secure_admin = $glassfish::enable_secure_admin,
   $ensure              = present,
   $portbase            = $glassfish::portbase,
+  $service_name        = $glassfish::service_name,
   $start_domain        = $glassfish::start_domain) {
+  # Service name
+  if ($service_name == undef) {
+    $svc_name = "glassfish_${domain_name}"
+  } else {
+    $svc_name = $service_name
+  }
+
   # Validate params
   validate_absolute_path($asadmin_path)
   validate_string($asadmin_user)
@@ -86,10 +94,11 @@ define glassfish::create_domain (
   # Create a init.d service if required
   if $create_service {
     glassfish::create_service { $domain_name:
-      running     => $start_domain,
-      mode        => 'domain',
-      domain_name => $domain_name,
-      require     => Domain[$domain_name]
+      running      => $start_domain,
+      mode         => 'domain',
+      domain_name  => $domain_name,
+      service_name => $svc_name,
+      require      => Domain[$domain_name]
     }
   }
 

@@ -57,10 +57,10 @@ class glassfish::params {
   # Should a glassfish service be created on installation?
   $glassfish_create_service      = true
   # Default Glassfish domain, portbase and profile
-  $glassfish_domain              = 'domain1'
+  $glassfish_domain              = undef
   $glassfish_portbase            = '4800'
   # Default Glassfish service name
-  $glassfish_service_name        = "glassfish_${title}"
+  $glassfish_service_name        = undef
 
   # Should the glassfish domain be started upon creation?
   $glassfish_start_domain        = true

@@ -32,8 +32,6 @@
 #  [*enable_secure_admin*] - Should secure admin be enabled?
 #  Defaults to true
 #
-#  [*extra_jars*] - Should additional jars be installed by this module?
-#
 #  [*gms_enabled*] - Should Group Messaging Service be enabled for cluster.
 #
 #  [*gms_multicast_port*] - GMS Multicast port.
@@ -93,7 +91,6 @@ class glassfish (
   $domain_name           = $glassfish::params::glassfish_domain,
   $domain_template       = $glassfish::params::glassfish_domain_template,
   $enable_secure_admin   = $glassfish::params::glassfish_enable_secure_admin,
-  $extrajars             = [],
   $gms_enabled           = $glassfish::params::glassfish_gms_enabled,
   $gms_multicast_port    = $glassfish::params::glassfish_multicast_port,
   $gms_multicast_address = $glassfish::params::glassfish_multicast_address,
@@ -187,20 +184,19 @@ class glassfish (
 
   # Do we need to create a domain on installation?
   if $create_domain {
-    # Need to make sure that the $domain_asadmin_passfile path is valid
+    # Validate params required for domain creation
+    validate_string($domain_name)
     validate_absolute_path($asadmin_passfile)
+
+    # Service name
+    if ($service_name == undef) {
+      $svc_name = "glassfish_${domain_name}"
+    } else {
+      $svc_name = $service_name
+    }
 
     # Need to create the required domain
     create_domain { $domain_name: require => Class['glassfish::install'] }
-
-    # Install extrajars if required, only if creating a domain.
-    if !empty($extrajars) {
-      install_jars { $extrajars:
-        domain  => $domain_name,
-        require => Create_domain[$domain_name]
-      }
-
-    }
 
   }
 
