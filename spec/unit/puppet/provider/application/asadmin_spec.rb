@@ -4,7 +4,6 @@ describe Puppet::Type.type(:application).provider(:asadmin) do
   
   before :each do
     Puppet::Type.type(:application).stubs(:defaultprovider).returns described_class
-    File.expects(:exists?).with('/tmp/test.war').returns(:true).once
     Puppet.features.expects(:root?).returns(true).once
   end
   
