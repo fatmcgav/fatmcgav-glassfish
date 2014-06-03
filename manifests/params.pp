@@ -1,9 +1,25 @@
-# Class: glassfish::params
+# == Class: glassfish::params
 #
-# Defines Glassfish params
+# This class manages glassfish module params.
+#
+# === Parameters
+#
+#  None
+#
+# === Examples
+#
+# Not applicable
+#
+# === Authors
+#
+# Gavin Williams <fatmcgav@gmail.com>
+#
+# === Copyright
+#
+# Copyright 2014 Gavin Williams, unless otherwise noted.
 #
 class glassfish::params {
-  # Installation method. Can be: 'yum','zip'.
+  # Installation method. Can be: 'package','zip'.
   $glassfish_install_method      = 'zip'
 
   $glassfish_install_dir         = undef
@@ -30,15 +46,19 @@ class glassfish::params {
   # Default Glassfish asadmin username
   $glassfish_asadmin_user        = 'admin'
   # Default Glassfish asadmin password file
-  $glassfish_asadmin_passfile    = ''
+  $glassfish_asadmin_passfile    = '/home/glassfish/asadmin.pass'
+  # Default Glassfish asadmin password
+  $glassfish_asadmin_password    = 'adminadmin'
+  # Should a passfile be created?
+  $glassfish_create_passfile     = true
 
   # Should a glassfish domain be created on installation?
   $glassfish_create_domain       = false
   # Should a glassfish service be created on installation?
-  $glassfish_create_service      = false
+  $glassfish_create_service      = true
   # Default Glassfish domain, portbase and profile
   $glassfish_domain              = 'domain1'
-  $glassfish_portbase            = '8000'
+  $glassfish_portbase            = '4800'
 
   # Should the glassfish domain be started upon creation?
   $glassfish_start_domain        = true
@@ -79,5 +99,13 @@ class glassfish::params {
       fail("${::osfamily} not supported by this module.")
     }
   }
+
+  # Clustering config params
+  # Enable GMS?
+  $glassfish_gms_enabled       = true
+
+  # Multicase params
+  $glassfish_multicast_port    = undef
+  $glassfish_multicast_address = undef
 
 }

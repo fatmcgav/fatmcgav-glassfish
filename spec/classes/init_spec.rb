@@ -45,8 +45,7 @@ describe 'glassfish' do
     describe 'with create_domain => true' do
       # Set relevant params
       let(:params) do  {
-          :create_domain           => true,
-          :domain_asadmin_passfile => '/tmp/asadmin.pass'
+          :create_domain => true
         }
       end
       
@@ -57,8 +56,8 @@ describe 'glassfish' do
         # Should not include install_jars resource
         should_not contain_install_jars('[]')
         
-        # Shouldn't include create_service resource
-        should_not contain_glassfish__create_service('domain1')
+        # Should include create_service resource
+        should contain_glassfish__create_service('domain1')
       end
     end
     

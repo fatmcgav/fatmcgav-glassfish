@@ -16,7 +16,7 @@ DOMAIN="<%= @domain_name %>"
 USER="<%= @runuser %>"
 
 start() {
-   echo -n $"Starting glassfish domain $DOMAIN: "
+   echo -n "Starting glassfish domain $DOMAIN: "
    daemon --user $USER --pidfile /var/run/glassfish_$DOMAIN.pid "$GLASSFISH_BIN/asadmin start-domain $DOMAIN"
    RETVAL=$?
    if [ $RETVAL -eq 0 ]; then
@@ -28,7 +28,7 @@ start() {
 }
 
 stop() {
-    echo -n $"Stopping glassfish domain $DOMAIN: "
+    echo -n "Stopping glassfish domain $DOMAIN: "
     $GLASSFISH_BIN/asadmin stop-domain $DOMAIN
     RETVAL=$?
     [ $RETVAL -eq 0 ] && rm -f /var/lock/subsys/glassfish_$DOMAIN && rm -f /var/run/glassfish_$DOMAIN && success || failure
@@ -51,7 +51,7 @@ case "$1" in
         RETVAL=$?
         ;;
     *)
-        echo $"Usage: $0 {start|stop|restart|status}"
+        echo "Usage: $0 {start|stop|restart|status}"
         exit 1
 esac
 

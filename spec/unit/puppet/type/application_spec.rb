@@ -86,8 +86,8 @@ describe Puppet::Type.type(:application) do
         described_class.new(:name => 'application', :portbase => '8000', :ensure => :present, :source => '/tmp/application.ear')[:portbase].should == 8000
       end
 
-      it "should have a default value of 8000" do
-        described_class.new(:name => 'application', :ensure => :present, :source => '/tmp/application.ear')[:portbase].should == 8000
+      it "should have a default value of 4800" do
+        described_class.new(:name => 'application', :ensure => :present, :source => '/tmp/application.ear')[:portbase].should == 4800
       end
 
       it "should not support shorter than 4 digits" do

@@ -6,7 +6,7 @@ Puppet::Type.type(:jdbcconnectionpool).provide(:asadmin, :parent =>
   def create
     args = Array.new
     args << "create-jdbc-connection-pool"
-    args << "--datasourceclassname" << @resource[:datasourceclassname]
+    args << "--datasourceclassname" << @resource[:dsclassname]
     args << "--restype" << @resource[:resourcetype]
     if hasProperties? @resource[:properties]
       args << "--property"
@@ -24,7 +24,7 @@ Puppet::Type.type(:jdbcconnectionpool).provide(:asadmin, :parent =>
 
   def exists?
     asadmin_exec(["list-jdbc-connection-pools"]).each do |line|
-      return true if @resource[:name] == line.chomp
+      return true if @resource[:name] == line.strip!
     end
     return false
   end

@@ -15,7 +15,7 @@ Puppet::Type.type(:application).provide(:asadmin, :parent =>
   end
 
   def destroy
-    args = []
+    args = Array.new
     args << "undeploy" << @resource[:name]
     asadmin_exec(args)
   end
