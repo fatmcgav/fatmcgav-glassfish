@@ -21,11 +21,11 @@ Puppet::Type.newtype(:application) do
   newparam(:source) do
     desc "The application file to deploy."
 
-#    validate do |value|
-#       unless File.exists? value
-#         raise ArgumentError, "%s does not exists" % value
-#       end
-#     end
+    validate do |value|
+       unless File.exists? value
+         raise ArgumentError, "%s does not exists" % value
+       end
+     end
   end
 
   newparam(:portbase) do
@@ -80,6 +80,14 @@ Puppet::Type.newtype(:application) do
          raise ArgumentError, "%s is not a valid user name." % value
       end
     end
+  end
+  
+  newparam(:autodeploy, :boolean => true) do
+    # Consider having this as domain param instead of app one
+    desc "If true, application will be deployed via symlink instead asadmin."
+
+
+    defaultto :false
   end
   
   # Validate mandatory params
