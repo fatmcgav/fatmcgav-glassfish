@@ -82,6 +82,14 @@ Puppet::Type.newtype(:application) do
     end
   end
   
+  newparam(:autodeploy, :boolean => true) do
+    # Consider having this as domain param instead of app one
+    desc "If true, application will be deployed via symlink instead asadmin."
+
+
+    defaultto :false
+  end
+  
   # Validate mandatory params
   validate do
     raise Puppet::Error, 'Source is required.' unless self[:source]

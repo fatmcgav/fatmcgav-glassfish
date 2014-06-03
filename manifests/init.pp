@@ -42,6 +42,8 @@
 #
 #  [*group*] - Glassfish group name.
 #
+#  [*install_dir*] - Name of directory into which is Glassfish installed
+#
 #  [*install_method*]  - Glassfish installation method.
 #  Can be: 'zip', 'package'. Defaults to 'zip'.
 #
@@ -98,6 +100,7 @@ class glassfish (
   $gms_multicast_port    = $glassfish::params::glassfish_multicast_port,
   $gms_multicast_address = $glassfish::params::glassfish_multicast_address,
   $group                 = $glassfish::params::glassfish_group,
+  $install_dir             = $glassfish::params::glassfish_install_dir,
   $install_method        = $glassfish::params::glassfish_install_method,
   $java_ver              = $glassfish::params::glassfish_java_ver,
   $manage_accounts       = $glassfish::params::glassfish_manage_accounts,
@@ -109,8 +112,13 @@ class glassfish (
   $tmp_dir               = $glassfish::params::glassfish_tmp_dir,
   $user                  = $glassfish::params::glassfish_user,
   $version               = $glassfish::params::glassfish_version,) inherits glassfish::params {
+
   # Calculate some vars based on passed parameters
-  $glassfish_dir          = "${parent_dir}/glassfish-${version}"
+  if ($install_dir == undef ) {
+    $glassfish_dir = "${parent_dir}/glassfish-${version}"
+  } else {
+    $glassfish_dir = "${parent_dir}/${install_dir}"
+  }
   $glassfish_asadmin_path = "${glassfish_dir}/bin/asadmin"
 
   # Validate passed paramater values

@@ -4,12 +4,14 @@ Puppet::Type.type(:application).provide(:asadmin, :parent =>
   desc "Glassfish application deployment support."
 
   def create
-    args = Array.new
-    args << "deploy" << "--precompilejsp=true"
-    args << "--contextroot" << @resource[:contextroot] if @resource[:contextroot]
-    args << "--name" << @resource[:name]
-    args << @resource[:source]
-    asadmin_exec(args)
+    if @resource[:autodeploy] == :false then
+      args = Array.new
+      args << "deploy" << "--precompilejsp=true"
+      args << "--contextroot" << @resource[:contextroot] if @resource[:contextroot]
+      args << "--name" << @resource[:name]
+      args << @resource[:source]
+      asadmin_exec(args)
+    end
   end
 
   def destroy

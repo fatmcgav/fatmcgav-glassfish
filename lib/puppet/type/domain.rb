@@ -15,7 +15,7 @@ Puppet::Type.newtype(:domain) do
   end
 
   newparam(:portbase) do
-    desc "The Glassfish domain port base. Default: 8000"
+    desc "The Glassfish domain port base. Default: 4800"
     defaultto '4800'
 
     validate do |value|
