@@ -8,7 +8,7 @@ Puppet::Type.newtype(:jmsresource) do
     isnamevar
     
     validate do |value|
-      unless value =~ /^[^\W]?[\w\-\.=]+$/
+      unless value =~ /^\w+[\w=\-\/.]*$/
          raise ArgumentError, "%s is not a valid JMS resource name." % value
       end
     end
