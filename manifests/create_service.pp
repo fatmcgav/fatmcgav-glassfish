@@ -4,33 +4,32 @@
 #
 # === Parameters
 #
-# [*domain_name*]
-#  Name of Glassfish domain.
+# [*domain_name*] - Name of Glassfish domain.
 #  Defaults to undef
 #
-# [*cluster_name*]
-#  Name of Glassfish cluster.
+# [*cluster_name*] - Name of Glassfish cluster.
 #  Defaults to undef
 #
-# [*instance_name*]
-#  Name of Glassfish instance.
+# [*instance_name*] - Name of Glassfish instance.
 #  Defaults to undef
 #
-# [*node_name*]
-#  Name of Glassfish node.
+# [*node_name*] - Name of Glassfish node.
 #  Defaults to undef
 #
-# [*runuser*]
-#  User to run process as.
+# [*runuser*] - User to run process as.
 #  Defaults to $glassfish::user
 #
-# [*running*]
-#  Is the domain already running?
+# [*running*] - Is the domain already running?
 #  Defaults to false
 #
-# [*mode*]
-#  Glassfish service mode required.
+# [*mode*] - Glassfish service mode required.
 #  Can be: domain, cluster or instance.
+#
+# [*das_port*] - Glassfish Domain Adminsitration Service port to connect to
+#
+# [*status_cmd*] - Custom status command to use when checking service state.
+#
+# [*service_name*] - Service name to create service as.
 #
 # === Examples
 #
@@ -52,7 +51,8 @@ define glassfish::create_service (
   $running       = false,
   $mode          = 'domain',
   $das_port      = undef,
-  $status_cmd    = undef) {
+  $status_cmd    = undef,
+  $service_name  = undef) {
   # Check that we've got a domain name if domain mode.
   if $mode == 'domain' and !$domain_name {
     fail('Domain name must be specified to install service for domain mode.')
@@ -78,6 +78,13 @@ define glassfish::create_service (
     fail('Node name must be specified to install service for instance mode.')
   }
 
+  # Work out the correct service_name
+  if ($service_name == undef) {
+    $svc_name = "glassfish_${title}"
+  } else {
+    $svc_name = $service_name
+  }
+
   # What service_file should we be using, based on osfamily.
   case $::osfamily {
     'RedHat' : {
@@ -99,20 +106,20 @@ define glassfish::create_service (
   # Create the init file
   file { "${title}_servicefile":
     ensure  => present,
-    path    => "/etc/init.d/glassfish_${title}",
+    path    => "/etc/init.d/${svc_name}",
     mode    => '0755',
     content => $service_file,
-    notify  => Service["glassfish_${title}"]
+    notify  => Service[$svc_name]
   }
 
   # Need to stop the domain if it was auto-started
   if $running {
     exec { "stop_${domain_name}":
       command => "${glassfish::glassfish_asadmin_path} stop-domain ${domain_name}",
-      unless  => "service glassfish_${domain_name} status && pgrep -f domains/${domain_name}",
+      unless  => "service ${svc_name} status && pgrep -f domains/${domain_name}",
       path    => ['/sbin', '/usr/sbin', '/bin', '/usr/bin'],
       user    => $runuser,
-      before  => Service["glassfish_${title}"]
+      before  => Service[$svc_name]
     }
   }
 
@@ -124,7 +131,7 @@ define glassfish::create_service (
   }
 
   # Make sure the service is running and enabled.
-  service { "glassfish_${title}":
+  service { $svc_name:
     ensure     => 'running',
     enable     => true,
     hasstatus  => $has_status,

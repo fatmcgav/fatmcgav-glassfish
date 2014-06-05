@@ -34,6 +34,9 @@
 # [*node_user*] - Username node is running under.
 #  Defaults to $glassfish::user
 #
+# [*service_name*] - Specify a custom service name.
+#  Defaults to `glassfish_${instance_name}`
+#
 # === Examples
 #
 #
@@ -56,11 +59,19 @@ define glassfish::create_instance (
   $instance_name     = $name,
   $instance_portbase = undef,
   $node_name         = $::hostname,
-  $node_user         = $glassfish::user) {
+  $node_user         = $glassfish::user,
+  $service_name      = $glassfish::service_name) {
   # Validate params
   validate_string($asadmin_user)
   validate_absolute_path($asadmin_passfile)
   validate_string($instance_name)
+
+  # Service name
+  if ($service_name == undef) {
+    $svc_name = "glassfish_${instance_name}"
+  } else {
+    $svc_name = $service_name
+  }
 
   # Create the cluster
   cluster_instance { $instance_name:
@@ -81,6 +92,7 @@ define glassfish::create_instance (
       mode          => 'instance',
       instance_name => $instance_name,
       node_name     => $node_name,
+      service_name  => $svc_name,
       require       => Cluster_Instance[$instance_name]
     }
   }

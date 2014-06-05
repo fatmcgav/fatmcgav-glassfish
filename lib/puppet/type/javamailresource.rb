@@ -1,35 +1,28 @@
-Puppet::Type.newtype(:authrealm) do
-  @doc = "Manage authentication realms of Glassfish domains"
+Puppet::Type.newtype(:javamailresource) do
+  @doc = "Manage javamail resources of Glassfish domains"
   ensurable
-
+  
   newparam(:name) do
-    desc "The realm name."
+    desc "The resource name."
     isnamevar
     
-    validate do |name|
-      unless name =~ /^[\w-]+$/
-         raise ArgumentError, "%s is not a valid realm name." % name
+    validate do |value|
+      unless value =~ /^[^\W]?[\w\-\.\/]+$/
+         raise ArgumentError, "%s is not a valid JavaMail resource name." % value
       end
     end
   end
 
-  newparam(:classname) do
-    desc "The Java class name. Eg: com.sun.identity.agents.appserver.v81.AmASRealm"
-    validate do |classname|
-      if /^(?:[a-zA-Z_$][a-zA-Z\d_$]*\.)*[A-Z$][a-zA-Z\d_$]{1,}$/.match(classname).nil?
-        raise ArgumentError, "%s is not a valid Java fully qualified type name" % classname
-      end
-    end
+  newparam(:mailhost) do
+    desc "The mail server address."
   end
 
-  newparam(:properties) do
-    desc "The properties. Eg: jaas-context=agentRealm"
+  newparam(:fromaddress) do
+    desc "The mail from address."
   end
 
-  newparam(:isdefault) do
-    desc "Sets realm to default if true."
-    defaultto(:false)
-    newvalues(:true, :false)
+  newparam(:mailuser) do
+    desc "The mail user name."
   end
 
   newparam(:portbase) do
@@ -55,7 +48,7 @@ Puppet::Type.newtype(:authrealm) do
   newparam(:asadminuser) do
     desc "The internal Glassfish user asadmin uses. Default: admin"
     defaultto "admin"
-
+    
     validate do |value|
       unless value =~ /^[\w-]+$/
          raise ArgumentError, "%s is not a valid asadmin user name." % value
@@ -75,7 +68,7 @@ Puppet::Type.newtype(:authrealm) do
 
   newparam(:user) do
     desc "The user to run the command as."
-
+    
     validate do |user|
       unless Puppet.features.root?
         self.fail "Only root can execute commands as other users"
@@ -84,11 +77,6 @@ Puppet::Type.newtype(:authrealm) do
          raise ArgumentError, "%s is not a valid user name." % user
       end
     end
-  end
-  
-  # Validate mandatory params
-  validate do
-    raise Puppet::Error, 'Classname is required.' unless self[:classname]
   end
   
   # Autorequire the user running command
@@ -105,4 +93,4 @@ Puppet::Type.newtype(:authrealm) do
       res[:name]
     }
   end
-end
+end 

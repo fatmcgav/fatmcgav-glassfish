@@ -1,4 +1,4 @@
 # File managed by Puppet
 if [ -d <%= scope.lookupvar('glassfish::glassfish_dir') %>/glassfish/bin ]; then
-  PATH=$PATH:<%= scope.lookupvar('glassfish::glassfish_dir') %>/glassfish/bin
+	PATH=$PATH:<%= scope.lookupvar('glassfish::glassfish_dir') %>/glassfish/bin
 fi

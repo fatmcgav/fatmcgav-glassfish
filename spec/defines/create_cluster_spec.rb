@@ -38,42 +38,6 @@ describe 'glassfish::create_cluster' do
         'gmsenabled'   => true
       })
     end
-    
-    it do
-      should contain_glassfish__create_service('test').with({
-        'mode'         => 'cluster', 
-        'cluster_name' => 'test',
-        'das_port'     => '8048',
-        'status_cmd'   => '/usr/local/glassfish-3.1.2.2/bin/asadmin --port 8048 --passwordfile /tmp/asadmin.pass list-clusters |grep \'test running\''  
-      }).that_requires('Cluster[test]')
-    end
-  end
-  
-  context 'with create_service => false' do 
-    # Set the title
-    let(:title) { 'test' }
-      
-    # Set the params
-    let(:params) do 
-      default_params.merge({
-        :create_service => false
-      })
-    end
-    
-    it do
-      should contain_cluster('test').with({
-        'ensure'       => 'present',
-        'user'         => 'gfuser',
-        'asadminuser'  => 'admin',
-        'passwordfile' => '/tmp/asadmin.pass',
-        'dasport'      => '8048',
-        'gmsenabled'   => true
-      })
-    end
-    
-    it do
-      should_not contain_glassfish__create_service('test')
-    end
   end
   
   context 'with an invalid boolean' do
@@ -115,15 +79,6 @@ describe 'glassfish::create_cluster' do
         'multicastport'    => '30000',
         'multicastaddress' => '228.9.00.00'
       })
-    end
-    
-    it do
-      should contain_glassfish__create_service('test').with({
-        'mode'         => 'cluster', 
-        'cluster_name' => 'test',
-        'das_port'     => '8048',
-        'status_cmd'   => '/usr/local/glassfish-3.1.2.2/bin/asadmin --port 8048 --passwordfile /tmp/asadmin.pass list-clusters |grep \'test running\''  
-      }).that_requires('Cluster[test]')
     end
   end
   

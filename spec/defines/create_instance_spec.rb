@@ -44,7 +44,8 @@ describe 'glassfish::create_instance' do
       should contain_glassfish__create_service('test').with({
         'mode'          => 'instance', 
         'instance_name' => 'test',
-        'node_name'     => 'testhost',  
+        'node_name'     => 'testhost',
+        'service_name'  => 'glassfish_test'
       }).that_requires('Cluster_Instance[test]')
     end
   end
@@ -107,7 +108,41 @@ describe 'glassfish::create_instance' do
       should contain_glassfish__create_service('test').with({
         'mode'          => 'instance', 
         'instance_name' => 'test',
+        'node_name'     => 'testhost'
+      }).that_requires('Cluster_Instance[test]')
+    end
+  end
+  
+  context 'with a service_name specificed' do 
+    # Set the title
+    let(:title) { 'test' }
+
+    # Set the params
+    let(:params) do 
+      default_params.merge({
+        :service_name => 'glassfish_instance'
+      })
+    end
+    
+    it do
+      should contain_cluster_instance('test').with({
+        'ensure'       => 'present',
+        'user'         => 'glassfish',
+        'asadminuser'  => 'admin',
+        'passwordfile' => '/home/glassfish/asadmin.pass',
+        'dasport'      => '4848',
+        'nodename'     => 'testhost',
+        'cluster'      => 'test',
+        'portbase'     => '28000'
+      })
+    end
+    
+    it do
+      should contain_glassfish__create_service('test').with({
+        'mode'          => 'instance', 
+        'instance_name' => 'test',
         'node_name'     => 'testhost',  
+        'service_name'  => 'glassfish_instance'
       }).that_requires('Cluster_Instance[test]')
     end
   end
