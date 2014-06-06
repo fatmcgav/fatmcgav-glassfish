@@ -36,6 +36,10 @@ describe Puppet::Type.type(:jmsresource) do
         described_class.new(:name => 'jms-resource', :ensure => :present, :restype => 'javax.jms.Topic')[:name].should == 'jms-resource'
       end
 
+      it "should support recommended naming scheme with jms/ prefix" do
+        described_class.new(:name => 'jms/resource', :ensure => :present, :restype => 'javax.jms.Topic')[:name].should == 'jms/resource'
+      end
+
       it "should not support spaces" do
         expect { described_class.new(:name => 'jms resource', :ensure => :present, :restype => 'javax.jms.Topic') }.to raise_error(Puppet::Error, /jms resource is not a valid JMS resource name./)
       end
