@@ -19,9 +19,9 @@ test -x ${GLASSFISHPATH}/asadmin || exit 2
 
 function procStart() {
 	# Make sure only root can run our script
-	if [[ $EUID -ne 0 ]]; then
-	   echo "This script must be run as root" 1>&2
-	   exit 1
+		if [[ $EUID -ne 0 ]]; then
+			echo "This script must be run as root" 1>&2
+		exit 1
 	fi
 	log_daemon_msg "Starting $__NAME"
 	_isOk=0
@@ -35,8 +35,8 @@ function procStart() {
 function procStop() {
 	# Make sure only root can run our script
 	if [[ $EUID -ne 0 ]]; then
-	   echo "This script must be run as root" 1>&2
-	   exit 1
+		echo "This script must be run as root" 1>&2
+		exit 1
 	fi
 	log_daemon_msg "Stoping $__NAME"
 	_isOk=0

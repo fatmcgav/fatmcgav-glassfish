@@ -45,7 +45,8 @@ describe 'glassfish' do
     describe 'with create_domain => true' do
       # Set relevant params
       let(:params) do  {
-          :create_domain => true
+          :create_domain => true,
+          :domain_name   => 'domain1'
         }
       end
       

@@ -7,7 +7,7 @@ Puppet::Type.type(:cluster_instance).provide(:asadmin,
     # Start a new args array
     args = Array.new
     args << "create-instance"
-    args << "--node" << @resource[:node_name]
+    args << "--node" << @resource[:nodename]
     args << "--cluster" << @resource[:cluster]
     args << "--portbase" << @resource[:portbase] if @resource[:portbase]
     args << @resource[:name]

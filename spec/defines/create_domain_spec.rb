@@ -8,6 +8,9 @@ describe 'glassfish::create_domain' do
     :osfamily => 'RedHat'
   } }
   
+  # Include Glassfish class 
+  let (:pre_condition) { "include glassfish" }
+  
   # Set-up default params values
   let :default_params do 
     {
@@ -15,10 +18,7 @@ describe 'glassfish::create_domain' do
       :asadmin_user        => 'admin',
       :asadmin_passfile    => '/tmp/asadmin.pass',
       :domain_user         => 'gfuser',
-      :portbase            => '8000',
-      :start_domain        => true,
-      :enable_secure_admin => true,
-      :create_service      => true
+      :portbase            => '8000'
     }
   end
   
@@ -37,12 +37,18 @@ describe 'glassfish::create_domain' do
         'passwordfile'      => '/tmp/asadmin.pass',
         'portbase'          => '8000',
         'startoncreate'     => true,
-        'enablesecureadmin' => true
+        'enablesecureadmin' => true,
+        'template'          => nil
       })
     end
     
     it do
-      should contain_glassfish__create_service('test').with_running('true').that_requires('Domain[test]')
+      should contain_glassfish__create_service('test').with({
+        'running'      => 'true',
+        'mode'         => 'domain', 
+        'domain_name'  => 'test', 
+        'service_name' => 'glassfish_test'
+      }).that_requires('Domain[test]')
     end
   end
   
@@ -65,7 +71,8 @@ describe 'glassfish::create_domain' do
         'passwordfile'      => '/tmp/asadmin.pass',
         'portbase'          => '8000',
         'startoncreate'     => true,
-        'enablesecureadmin' => true
+        'enablesecureadmin' => true,
+        'template'          => nil
       })
     end
     
@@ -98,7 +105,12 @@ describe 'glassfish::create_domain' do
     end
     
     it do
-      should contain_glassfish__create_service('test').with_running('false').that_requires('Domain[test]')
+      should contain_glassfish__create_service('test').with({
+        'running'      => 'false',
+        'mode'         => 'domain', 
+        'domain_name'  => 'test', 
+        'service_name' => 'glassfish_test'
+      }).that_requires('Domain[test]')
     end
   end
   
@@ -143,7 +155,46 @@ describe 'glassfish::create_domain' do
     end
     
     it do
-      should contain_glassfish__create_service('test').with_running('true').that_requires('Domain[test]')
+      should contain_glassfish__create_service('test').with({
+        'running'      => 'true',
+        'mode'         => 'domain', 
+        'domain_name'  => 'test', 
+        'service_name' => 'glassfish_test'
+      }).that_requires('Domain[test]')
+    end
+  end
+  
+  context 'with a service_name specified' do
+    # Set the title
+    let(:title) { 'test' }
+      
+    # Set the params
+    let(:params) do 
+      default_params.merge({
+        :service_name => 'glassfish'
+      })
+    end
+    
+    it do
+      should contain_domain('test').with({
+        'ensure'            => 'present',
+        'user'              => 'gfuser',
+        'asadminuser'       => 'admin',
+        'passwordfile'      => '/tmp/asadmin.pass',
+        'portbase'          => '8000',
+        'startoncreate'     => true,
+        'enablesecureadmin' => true,
+        'template'          => nil
+      })
+    end
+    
+    it do
+      should contain_glassfish__create_service('test').with({
+        'running'      => 'true',
+        'mode'         => 'domain', 
+        'domain_name'  => 'test', 
+        'service_name' => 'glassfish'
+      }).that_requires('Domain[test]')
     end
   end
   

@@ -4,10 +4,18 @@
 #
 # === Parameters
 #
-# [*domain*] - Name of domain to install jar into.
+# [*domain_name*] - Name of domain to install jar into.
+#  Required if `install_location' = domain`.
 #
 # [*download*] - Should the jar be downloaded?
 #  Defaults to false.
+#
+# [*install_location*] - Where to install the jar.
+#  Defaults to 'installation'. Can also be 'domain'.
+#
+# [*service_name*] - Service name of domain to notify
+#  Required if `install_location' = 'domain` and a non-standard
+#  service name is being used.
 #
 # [*source*] - Source to copy jar file from.
 #
@@ -22,35 +30,83 @@
 #
 # Copyright 2014 Gavin Williams, unless otherwise noted.
 #
-define glassfish::install_jars ($install_location = 'domain', $domain, $download = false, $source = '') {
+define glassfish::install_jars (
+  $domain_name      = undef,
+  $download         = false,
+  $install_location = 'installation',
+  $service_name     = undef,
+  $source           = '') {
+  # Set some required vars
   $jaraddress = $name
   $jar        = basename($jaraddress)
 
+  # Check domain name if install_location = 'domain'
+  if ($install_location == 'domain') {
+    validate_string($domain_name)
+
+    # Set $service.
+    if ($service_name == undef) {
+      # Check if top-level svc_name is set
+      if ($glassfish::svc_name == undef) {
+        # Assume that the service name is of default format - glassfish_${domain_name}
+        $service = "Service[glassfish_${domain_name}]"
+      } else {
+        # Use top-level $svc_name value
+        $service = "Service[$glassfish::svc_name]"
+      }
+    } else {
+      # Use $service_name value that was provided
+      $service = "Service[$service_name]"
+    }
+  }
+
+  # Where do we need to install the jar?
   case $install_location {
-    'domain'       : { $jardest = "${glassfish::glassfish_dir}/glassfish/domains/${domain}/lib/ext/${jar}" }
-    'installation' : { $jardest = "${glassfish::glassfish_dir}/glassfish/lib/ext" }
+    'domain'       : { $jardest = "${glassfish::glassfish_dir}/glassfish/domains/${domain_name}/lib/ext/${jar}" }
+    'installation' : { $jardest = "${glassfish::glassfish_dir}/glassfish/lib/ext/${jar}" }
     default        : { fail("Install location ${install_location} is not supported.") }
   }
 
+  # Create the lib/ext folder if required
+  if ($install_location == 'installation') {
+    file { "${glassfish::glassfish_dir}/glassfish/lib/ext":
+      ensure => directory,
+      owner  => $glassfish::user,
+      group  => $glassfish::group,
+      before => File[$jardest]
+    }
+  }
+
+  # Download or copy the file?
   if $download {
     exec { "download ${name}":
       command => "wget -O ${jardest} ${jaraddress}",
       path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
       creates => $jardest,
-      cwd     => $glassfish::glassfish_dir,
-      require => File[$glassfish::glassfish_dir],
-      notify  => Service["glassfish_${domain}"]
+      user    => $glassfish::user,
+      notify  => $install_location ? {
+        'domain' => $service,
+        default  => undef
+      }
     }
   } else {
     file { $jardest:
       ensure => present,
       mode   => '0755',
+      owner  => $glassfish::user,
+      group  => $glassfish::group,
       source => $source,
-      notify => Service["glassfish_${domain}"]
-    # TODO fix service naming
-    #      notify  => Service["glassfish"]
+      notify => $install_location ? {
+        'domain' => $service,
+        default  => undef
+      }
     }
 
+  }
+
+  # Add dependencies to ensure runs after domain is created if installing to domain
+  if ($install_location == 'domain') {
+    Domain <| title == $domain_name |> -> Install_jars <| install_location == 'domain' |>
   }
 
 }

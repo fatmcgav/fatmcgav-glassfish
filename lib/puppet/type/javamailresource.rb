@@ -1,36 +1,34 @@
-Puppet::Type.newtype(:jmsresource) do
-  @doc = "Manage JMS resources of Glassfish domains"
-
+Puppet::Type.newtype(:javamailresource) do
+  @doc = "Manage javamail resources of Glassfish domains"
   ensurable
-
+  
   newparam(:name) do
-    desc "The JMS resource name."
+    desc "The resource name."
     isnamevar
     
     validate do |value|
-      unless value =~ /^\w+[\w=\-\/.]*$/
-         raise ArgumentError, "%s is not a valid JMS resource name." % value
+      unless value =~ /^[^\W]?[\w\-\.\/]+$/
+         raise ArgumentError, "%s is not a valid JavaMail resource name." % value
       end
     end
   end
 
-  newparam(:restype) do
-    desc "The resource type."
-    newvalues('javax.jms.Topic', 'javax.jms.Queue', 'javax.jms.TopicConnectionFactory', 'javax.jms.QueueConnectionFactory')
+  newparam(:mailhost) do
+    desc "The mail server address."
   end
 
-  newparam(:description) do
-    desc "The resource description"
+  newparam(:fromaddress) do
+    desc "The mail from address."
   end
-  
-  newparam(:properties) do
-    desc "The properties. Ex. jaas-context=agentRealm. Seperate multiple pairs using :."
+
+  newparam(:mailuser) do
+    desc "The mail user name."
   end
-  
+
   newparam(:portbase) do
     desc "The Glassfish domain port base. Default: 4800"
     defaultto '4800'
-    
+
     validate do |value|
       raise ArgumentError, "%s is not a valid portbase." % value unless value =~ /^\d{4,5}$/
     end
@@ -70,33 +68,23 @@ Puppet::Type.newtype(:jmsresource) do
 
   newparam(:user) do
     desc "The user to run the command as."
-
-    validate do |value|
+    
+    validate do |user|
       unless Puppet.features.root?
         self.fail "Only root can execute commands as other users"
       end
-      unless value =~ /^[\w-]+$/
-         raise ArgumentError, "%s is not a valid user name." % value
+      unless user =~ /^[\w-]+$/
+         raise ArgumentError, "%s is not a valid user name." % user
       end
     end
   end
   
-  # Validate mandatory params
-  validate do
-    raise Puppet::Error, 'Restype is required.' unless self[:restype]
-  end
-  
   # Autorequire the user running command
   autorequire(:user) do
-    self[:user]
+    self[:user]    
   end
   
-  # Autorequire the password file
-  autorequire(:file) do
-    self[:passwordfile]
-  end
-  
-  # Autorequire the relevant domain
+  # Autorequire the domain resource, based on portbase
   autorequire(:domain) do
     self.catalog.resources.select { |res|
       next unless res.type == :domain
@@ -105,4 +93,4 @@ Puppet::Type.newtype(:jmsresource) do
       res[:name]
     }
   end
-end
+end 

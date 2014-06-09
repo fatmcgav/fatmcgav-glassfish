@@ -16,9 +16,6 @@
 # [*cluster_user*] - Name of account running glassfish cluster.
 #  Defaults to $glassfish::user.
 #
-# [*create_service*] - Create a service init file for cluster
-#  Defaults to $glassfish::create_service
-#
 # [*dasport*] - Domain Adminsitration Service port.
 #  Defaults to '4848'.
 #
@@ -50,7 +47,6 @@ define glassfish::create_cluster (
   $asadmin_passfile      = $glassfish::asadmin_passfile,
   $cluster_name          = $name,
   $cluster_user          = $glassfish::user,
-  $create_service        = $glassfish::create_service,
   $das_port              = '4848',
   $ensure                = present,
   $gms_enabled           = $glassfish::gms_enabled,
@@ -76,17 +72,6 @@ define glassfish::create_cluster (
     gmsenabled       => $gms_enabled,
     multicastport    => $gms_multicast_port,
     multicastaddress => $gms_multicast_address
-  }
-
-  # Create a init.d service if required
-  if $create_service {
-    glassfish::create_service { $cluster_name:
-      mode         => 'cluster',
-      cluster_name => $cluster_name,
-      das_port     => $das_port,
-      status_cmd   => "${glassfish::glassfish_asadmin_path} --port ${das_port} --passwordfile ${asadmin_passfile} list-clusters |grep '${cluster_name} running'",
-      require      => Cluster[$cluster_name]
-    }
   }
 
 }

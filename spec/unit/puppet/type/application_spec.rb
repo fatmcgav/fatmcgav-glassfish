@@ -22,12 +22,7 @@ describe Puppet::Type.type(:application) do
     end
   end
 
-  describe "when validating values" do
-    # Stub the file.exists? for source file
-    before :each do
-      File.stubs(:exists?).with('/tmp/application.ear').returns(true)
-    end
-    
+  describe "when validating values" do   
     describe "for name" do
       it "should support an alphanumerical name" do
         described_class.new(:name => 'application', :ensure => :present, :source => '/tmp/application.ear')[:name].should == 'application'
@@ -73,11 +68,6 @@ describe Puppet::Type.type(:application) do
     describe "for source" do
       it "should support a valid file path" do
         described_class.new(:name => 'application', :source => '/tmp/application.ear')[:source].should == '/tmp/application.ear'
-      end
-
-      it "should fail an invalid file path" do
-        File.expects(:exists?).with('/tmp/nonexistent').returns(false).once
-        expect { described_class.new(:name => 'application', :source=> '/tmp/nonexistent') }.to raise_error(Puppet::Error, /does not exist/)
       end
     end
     
@@ -170,7 +160,6 @@ describe Puppet::Type.type(:application) do
     
     describe "validate" do
       it "should not fail with a valid source" do
-        File.expects(:exists?).with('/tmp/application.ear').returns(true).once
         expect { described_class.new(:name => 'application', :source => '/tmp/application.ear') }.not_to raise_error
       end
       it "should fail with a missing source" do
@@ -208,7 +197,6 @@ describe Puppet::Type.type(:application) do
       # Stub the user type, and expect File.exists? and Puppet.features.root?
       before :each do
         Puppet::Type.type(:user).stubs(:defaultprovider).returns userprovider
-        File.expects(:exists?).with('/tmp/application.ear').returns(true).once
         Puppet.features.expects(:root?).returns(true).once
       end
       
@@ -255,7 +243,6 @@ describe Puppet::Type.type(:application) do
       # Stub the user type, and expect File.exists? and Puppet.features.root?
       before :each do
         Puppet::Type.type(:file).stubs(:defaultprovider).returns fileprovider
-        File.expects(:exists?).with('/tmp/application.ear').returns(true).once
         Puppet.features.expects(:root?).returns(true).once
       end
       
@@ -304,7 +291,6 @@ describe Puppet::Type.type(:application) do
       # Stub the domain type, and expect File.exists? and Puppet.features.root?
       before :each do
         Puppet::Type.type(:domain).stubs(:defaultprovider).returns domainprovider
-        File.expects(:exists?).with('/tmp/application.ear').returns(true).once
         Puppet.features.expects(:root?).returns(true).once
       end
       
