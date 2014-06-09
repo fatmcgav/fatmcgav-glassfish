@@ -1,0 +1,6 @@
+com.puppetlabs.geppetto.pp.dsl.PP.saveactions.useProjectSettings=true
+eclipse.preferences.version=1
+ensureEndsWithNewLine=true
+formatOnSave=true
+replaceFunkySpaces=true
+trimLines=true
