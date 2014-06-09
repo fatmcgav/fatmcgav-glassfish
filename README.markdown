@@ -15,6 +15,7 @@ License: GPLv3
 	- [Requirements](#user-content-requirements)
 	- [Usage](#user-content-usage)
 	- [Limitations](#user-content-limitations)
+	- [Contributors](#user-content-contributors)
 	- [Development](#user-content-development)
 	- [Testing](#user-content-testing)
 	
@@ -45,6 +46,7 @@ This module can do the following:
   * JVM Options
   * Set options
   * System properties
+  * Javamail Resources
   
 Further features that are likely to be added include: 
  * Additional support for Cluster environments, such as targeting resources at cluster. 
@@ -119,6 +121,11 @@ E.g.
 ##Limitations
 This module has primarily been developed and tested on CentOS 6. 
 It has also been lightly tested on Debian and Ubuntu, so should support most common Linux distributions. 
+
+##Contributors
+Thanks to the following people who have helped with this module: 
+ * Stepan Stipl - Features and testing
+ * Jon Black - Testing
 
 ##Development
 If you have any features that you feel are missing or find any bugs for this module, 

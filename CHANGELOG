@@ -1,2 +1,8 @@
+0.2.0 2014-06-09 Gavin Williams <fatmcgav@gmail.com>
+* Feature & Bug fix release
+ * Added support for javamail resource
+ * Fixed a few bugs, such as EOL format and JMS resource naming. 
+ Thanks to Stepan Stipl (stepanstipl) for continued support & testing. 
+
 0.1.0 2014-05-28 Gavin Williams <fatmcgav@gmail.com>
 * Initial release.
