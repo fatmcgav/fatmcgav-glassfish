@@ -20,13 +20,13 @@ describe Puppet::Provider::Asadmin do
     
     # Test that correct boolean value is returned
     it "should return true with properties" do
-      subject.hasProperties?('property').should be_truthy
+      subject.hasProperties?('property').should be_true
     end
     it "should return false with nil properties" do
-      subject.hasProperties?(nil).should be_falsey
+      subject.hasProperties?(nil).should be_false
     end
     it "should return false with no properties" do
-      subject.hasProperties?('').should be_falsey
+      subject.hasProperties?('').should be_false
     end
   end
   
