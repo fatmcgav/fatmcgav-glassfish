@@ -50,7 +50,7 @@ describe 'glassfish::path' do
     } }
     
     it do 
-      expect { subject }.to raise_error(Puppet::Error, /OSFamily Suse is not currently supported./)
+      should compile.and_raise_error(/OSFamily Suse is not currently supported./)
     end
   end
   

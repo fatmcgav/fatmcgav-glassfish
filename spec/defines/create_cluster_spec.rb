@@ -52,7 +52,7 @@ describe 'glassfish::create_cluster' do
     end
     
     it do 
-      expect { subject }.to raise_error(Puppet::Error, /is not a boolean/)
+      should compile.and_raise_error(/is not a boolean/)
     end
   end
   

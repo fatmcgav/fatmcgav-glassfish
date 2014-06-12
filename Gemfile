@@ -13,7 +13,7 @@ gem 'rake'
 group :test do
   gem 'puppet', puppetversion
   gem 'rspec', '~> 2.0'
-  gem 'rspec-puppet', :git => 'https://github.com/rodjek/rspec-puppet.git'
+  gem 'rspec-puppet', :git => 'https://github.com/rodjek/rspec-puppet.git', :ref => '891c5794' # Known working commit SHA
   gem 'puppetlabs_spec_helper', '~> 0.4.0'
   gem 'puppet-lint'
   gem 'puppet-syntax'
