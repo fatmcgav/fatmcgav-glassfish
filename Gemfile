@@ -17,7 +17,7 @@ group :test do
   gem 'puppetlabs_spec_helper', '~> 0.4.0'
   gem 'puppet-lint'
   gem 'puppet-syntax'
-  gem 'librarian-puppet'
+  gem 'librarian-puppet', '~> 1.0.0'
   gem 'simplecov', :require => false
   gem 'coveralls', :require => false
 end
