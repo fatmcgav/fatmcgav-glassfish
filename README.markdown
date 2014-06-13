@@ -9,15 +9,15 @@ Copyright - Gavin Williams <fatmcgav@gmail.com>
 License: GPLv3
 
 ####Table of Contents
-- [Puppet Glassfish module](#user-content-puppet-glassfish-module)
-	- [Overview](#user-content-overview)
-	- [Features](#user-content-features)
-	- [Requirements](#user-content-requirements)
-	- [Usage](#user-content-usage)
-	- [Limitations](#user-content-limitations)
-	- [Contributors](#user-content-contributors)
-	- [Development](#user-content-development)
-	- [Testing](#user-content-testing)
+- [Puppet Glassfish module](#puppet-glassfish-module)
+	- [Overview](#overview)
+	- [Features](#features)
+	- [Requirements](#requirements)
+	- [Usage](#usage)
+	- [Limitations](#limitations)
+	- [Contributors](#contributors)
+	- [Development](#development)
+	- [Testing](#testing)
 	
 ##Overview
 This module adds support for installing and managing the Glassfish J2EE application server.
