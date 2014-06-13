@@ -6,6 +6,7 @@ Puppet::Type.type(:jmsresource).provide(:asadmin, :parent =>
   def create
     args = Array.new
     args << 'create-jms-resource'
+    args << "--target" << @resource[:target] if @resource[:target]
     args << '--restype' << @resource[:restype]
     if hasProperties? @resource[:properties]
       args << '--property'

@@ -5,6 +5,7 @@ Puppet::Type.type(:javamailresource).provide(:asadmin, :parent => Puppet::Provid
   def create
     args = []
     args << "create-javamail-resource"
+    args << "--target" << @resource[:target] if @resource[:target]
     args << "--mailhost" << @resource[:mailhost]
     args << "--mailuser" << @resource[:mailuser]
     args << "--fromaddress" << @resource[:fromaddress]

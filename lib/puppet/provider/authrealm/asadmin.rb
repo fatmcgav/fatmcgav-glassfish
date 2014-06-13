@@ -6,6 +6,7 @@ Puppet::Type.type(:authrealm).provide(:asadmin, :parent =>
   def create
     args = Array.new
     args << "create-auth-realm"
+    args << "--target" << @resource[:target] if @resource[:target]
     args << "--classname" << @resource[:classname]
     if hasProperties? @resource[:properties]
       args << "--property"

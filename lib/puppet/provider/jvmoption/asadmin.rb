@@ -6,6 +6,7 @@ Puppet::Type.type(:jvmoption).provide(:asadmin, :parent =>
   def create
     args = Array.new
     args << "create-jvm-options"
+    args << "--target" << @resource[:target] if @resource[:target]
     args << "'" + escape(@resource[:name]) + "'"
     asadmin_exec(args)
   end

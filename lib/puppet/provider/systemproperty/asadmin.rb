@@ -6,6 +6,7 @@ Puppet::Type.type(:systemproperty).provide(:asadmin, :parent =>
   def create
     args = Array.new
     args << "create-system-properties"
+    args << "--target" << @resource[:target] if @resource[:target]
     args << "'" + @resource[:name] + "=" + escape(@resource[:value]) + "'"
     asadmin_exec(args)
   end
