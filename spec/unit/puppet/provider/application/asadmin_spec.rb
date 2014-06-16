@@ -52,7 +52,7 @@ describe Puppet::Type.type(:application).provider(:asadmin) do
     it "should be able to deploy an application with a context root" do
       application[:contextroot] = 'test'
       application.provider.expects("`").
-        with("su - glassfish -c \"asadmin --port 8048 --user admin deploy --precompilejsp=true --contextroot test --target server --name test /tmp/test.war\"").
+        with("su - glassfish -c \"asadmin --port 8048 --user admin deploy --precompilejsp=true --target server --contextroot test --name test /tmp/test.war\"").
         returns("Application deployed with name test. \nCommand deploy executed successfully. \n")
       application.provider.create
     end
