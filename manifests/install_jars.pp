@@ -70,8 +70,8 @@ define glassfish::install_jars (
       $jardest = "${glassfish::glassfish_dir}/glassfish/lib/ext/${jar}"
       $notify  = undef
     }
-    'mq'           : { 
-      $jardest = "${glassfish::glassfish_dir}/mq/lib/ext/${jar}" 
+    'mq'           : {
+      $jardest = "${glassfish::glassfish_dir}/mq/lib/ext/${jar}"
       $notify  = undef
     }
     default        : {
@@ -84,15 +84,20 @@ define glassfish::install_jars (
     file { "${glassfish::glassfish_dir}/glassfish/lib/ext":
       ensure => directory,
       owner  => $glassfish::user,
-      group  => $glassfish::group,
-      before => File[$jardest]
+      group  => $glassfish::group
+    }
+
+    if ($download) {
+      File["${glassfish::glassfish_dir}/glassfish/lib/ext"] -> Exec["download_${jar}"]
+    } else {
+      File["${glassfish::glassfish_dir}/glassfish/lib/ext"] -> File[$jardest]
     }
   }
 
   # Download or copy the file?
   if $download {
-    exec { "download ${name}":
-      command => "wget -O ${jardest} ${jaraddress}",
+    exec { "download_${jar}":
+      command => "wget -q -O ${jardest} ${jaraddress}",
       path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
       creates => $jardest,
       user    => $glassfish::user,

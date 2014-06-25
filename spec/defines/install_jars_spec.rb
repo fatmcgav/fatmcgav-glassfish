@@ -1,0 +1,134 @@
+require 'spec_helper'
+
+# Start to describe glassfish::install_jars define
+describe 'glassfish::install_jars' do
+
+  # Set the osfamily fact
+  let(:facts) { {
+      :osfamily => 'RedHat'
+    } }
+
+  # Include Glassfish class
+  let (:pre_condition) { 
+    "class {'glassfish':
+      create_domain => true, 
+      domain_name   => 'test'
+    }" }
+
+  # Set-up default params values
+  let :default_params do
+    {
+      :domain_name => 'test',
+      :source      => 'source'
+    }
+  end
+
+  context 'with default params' do
+    # Set the title
+    let(:title) { 'test.jar' }
+
+    # Set the params
+    let(:params) { default_params }
+
+    it { should create_define('Glassfish::Install_jars[test.jar]') }
+    it { should contain_file('/usr/local/glassfish-3.1.2.2/glassfish/lib/ext').with({
+      'ensure' => 'directory',
+      'owner'  => 'glassfish',
+      'group'  => 'glassfish'
+    }).that_comes_before('File[/usr/local/glassfish-3.1.2.2/glassfish/lib/ext/test.jar]') }
+    it { should contain_file('/usr/local/glassfish-3.1.2.2/glassfish/lib/ext/test.jar').with({ 
+      'ensure' => 'present', 
+      'mode'   => '0755', 
+      'owner'  => 'glassfish',
+      'group'  => 'glassfish',
+      'source' => 'source',
+      'notify' => nil
+    }) }
+  end
+
+  context 'with install_location = domain' do
+    # Set the title
+    let(:title) { 'test.jar' }
+
+    # Set the params
+    let(:params) do 
+      default_params.merge({
+        :install_location => 'domain'
+      })
+    end
+
+    it { should create_define('Glassfish::Install_jars[test.jar]') }
+    it { should_not contain_file('/usr/local/glassfish-3.1.2.2/glassfish/lib/ext') }
+    it { should contain_file('/usr/local/glassfish-3.1.2.2/glassfish/domains/test/lib/ext/test.jar').with({ 
+      'ensure' => 'present', 
+      'mode'   => '0755', 
+      'owner'  => 'glassfish',
+      'group'  => 'glassfish',
+      'source' => 'source'
+    }).that_notifies('Service[glassfish_test]') }
+  end
+  
+  context 'with install_location = mq' do
+    # Set the title
+    let(:title) { 'test.jar' }
+
+    # Set the params
+    let(:params) do 
+      default_params.merge({
+        :install_location => 'mq'
+      })
+    end
+
+    it { should create_define('Glassfish::Install_jars[test.jar]') }
+    it { should_not contain_file('/usr/local/glassfish-3.1.2.2/glassfish/lib/ext') }
+    it { should contain_file('/usr/local/glassfish-3.1.2.2/mq/lib/ext/test.jar').with({ 
+      'ensure' => 'present', 
+      'mode'   => '0755', 
+      'owner'  => 'glassfish',
+      'group'  => 'glassfish',
+      'source' => 'source'
+    }) }
+  end
+  
+  context 'with download = true' do
+    # Set the title
+    let(:title) { 'http://www.test.com/test.jar' }
+
+    # Set the params
+    let(:params) do 
+      default_params.merge({
+        :download => true
+      })
+    end
+
+    it { should create_define('Glassfish::Install_jars[http://www.test.com/test.jar]') }
+    it { should contain_file('/usr/local/glassfish-3.1.2.2/glassfish/lib/ext').with({
+      'ensure' => 'directory',
+      'owner'  => 'glassfish',
+      'group'  => 'glassfish'
+    }).that_comes_before('Exec[download_test.jar]') }
+    it { should contain_exec('download_test.jar').with({ 
+      'command' => 'wget -q -O /usr/local/glassfish-3.1.2.2/glassfish/lib/ext/test.jar http://www.test.com/test.jar', 
+      'path'    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+      'creates' => '/usr/local/glassfish-3.1.2.2/glassfish/lib/ext/test.jar',
+      'user'    => 'glassfish',
+      'notify'  => nil
+    }) }
+  end
+  
+  context 'with an invalid install_location' do
+    # Set the title
+    let(:title) { 'test' }
+
+    # Set the params
+    let(:params) do
+      default_params.merge({
+        :install_location => 'invalid'
+      })
+    end
+
+    it do
+      should compile.and_raise_error(/Install location invalid is not supported/)
+    end
+  end
+end 
