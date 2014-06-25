@@ -11,7 +11,7 @@
 #  Defaults to false.
 #
 # [*install_location*] - Where to install the jar.
-#  Defaults to 'installation'. Can also be 'domain'.
+#  Defaults to 'installation'. Can also be 'domain' or 'mq'.
 #
 # [*service_name*] - Service name of domain to notify
 #  Required if `install_location' = 'domain` and a non-standard
@@ -64,6 +64,7 @@ define glassfish::install_jars (
   case $install_location {
     'domain'       : { $jardest = "${glassfish::glassfish_dir}/glassfish/domains/${domain_name}/lib/ext/${jar}" }
     'installation' : { $jardest = "${glassfish::glassfish_dir}/glassfish/lib/ext/${jar}" }
+    'mq'           : { $jardest = "${glassfish::glassfish_dir}/mq/lib/ext/${jar}" }
     default        : { fail("Install location ${install_location} is not supported.") }
   }
 
