@@ -11,7 +11,7 @@
 #  Defaults to false.
 #
 # [*install_location*] - Where to install the jar.
-#  Defaults to 'installation'. Can also be 'domain'.
+#  Defaults to 'installation'. Can also be 'domain' or 'mq'.
 #
 # [*service_name*] - Service name of domain to notify
 #  Required if `install_location' = 'domain` and a non-standard
@@ -68,6 +68,10 @@ define glassfish::install_jars (
     }
     'installation' : {
       $jardest = "${glassfish::glassfish_dir}/glassfish/lib/ext/${jar}"
+      $notify  = undef
+    }
+    'mq'           : { 
+      $jardest = "${glassfish::glassfish_dir}/mq/lib/ext/${jar}" 
       $notify  = undef
     }
     default        : {
