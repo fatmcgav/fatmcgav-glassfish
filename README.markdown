@@ -126,6 +126,7 @@ It has also been lightly tested on Debian and Ubuntu, so should support most com
 Thanks to the following people who have helped with this module: 
  * Stepan Stipl - Features and testing
  * Jon Black - Testing
+ * Alex Jennings - Features
 
 ##Development
 If you have any features that you feel are missing or find any bugs for this module, 
