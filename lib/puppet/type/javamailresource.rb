@@ -25,6 +25,13 @@ Puppet::Type.newtype(:javamailresource) do
     desc "The mail user name."
   end
 
+  newparam(:target) do
+    desc "This option helps specify the target to which you  are deploying. 
+    Valid options are: server, domain, [cluster name], [instance name]. 
+    Defaults to: server"
+    defaultto "server"
+  end
+  
   newparam(:portbase) do
     desc "The Glassfish domain port base. Default: 4800"
     defaultto '4800'
