@@ -163,7 +163,9 @@ class glassfish (
 
     # Run this before any resources that require it
     File['asadmin_passfile'] -> Create_domain <| |>
+    File['asadmin_passfile'] -> Create_cluster <| |>
     File['asadmin_passfile'] -> Create_node <| |>
+    File['asadmin_passfile'] -> Create_instance <| |>
   }
 
   # Call the install method
