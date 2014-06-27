@@ -143,13 +143,7 @@ describe Puppet::Type.type(:cluster_instance) do
     
     describe "for passwordfile" do
       it "should support a valid file path" do
-        File.expects(:exists?).with('/tmp/asadmin.pass').returns(true).once
         described_class.new(:instancename => 'test', :passwordfile => '/tmp/asadmin.pass', :nodename => 'node', :cluster => 'cluster')[:passwordfile].should == '/tmp/asadmin.pass'
-      end
-
-      it "should fail an invalid file path" do
-        File.expects(:exists?).with('/tmp/nonexistent').returns(false).once
-        expect { described_class.new(:instancename => 'test', :passwordfile => '/tmp/nonexistent', :nodename => 'node', :cluster => 'cluster') }.to raise_error(Puppet::Error, /does not exist/)
       end
     end
     
