@@ -19,8 +19,12 @@ Puppet::Type.type(:jdbcresource).provide(:asadmin, :parent =>
   end
 
   def exists?
-    asadmin_exec(["list-jdbc-resources"]).each do |line|
-      return true if @resource[:name] == line.strip!
+    args = Array.new
+    args << "list-jdbc-resources"
+    args << @resource[:target] if @resource[:target]
+
+    asadmin_exec(args).each do |line|
+      return true if @resource[:name] == line.strip
     end
     return false
   end

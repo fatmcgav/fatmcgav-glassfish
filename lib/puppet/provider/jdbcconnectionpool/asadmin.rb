@@ -24,7 +24,7 @@ Puppet::Type.type(:jdbcconnectionpool).provide(:asadmin, :parent =>
 
   def exists?
     asadmin_exec(["list-jdbc-connection-pools"]).each do |line|
-      return true if @resource[:name] == line.strip!
+      return true if @resource[:name] == line.strip
     end
     return false
   end
