@@ -29,14 +29,14 @@ describe Puppet::Type.type(:jdbcresource).provider(:asadmin) do
   describe "when asking exists?" do
     it "should return true if resource is present" do
       jdbcresource.provider.expects("`").
-        with("su - glassfish -c \"asadmin --port 8048 --user admin list-jdbc-resources\"").
+        with("su - glassfish -c \"asadmin --port 8048 --user admin list-jdbc-resources server\"").
         returns("jdbc/__TimerPool \njdbc/__default \njdbc/test \nCommand list-jdbc-resources executed successfully.")
       jdbcresource.provider.should be_exists
     end
 
     it "should return false if resource is absent" do
       jdbcresource.provider.expects("`").
-        with("su - glassfish -c \"asadmin --port 8048 --user admin list-jdbc-resources\"").
+        with("su - glassfish -c \"asadmin --port 8048 --user admin list-jdbc-resources server\"").
         returns("jdbc/__TimerPool \njdbc/__default \nCommand list-jdbc-resources executed successfully.")
       jdbcresource.provider.should_not be_exists
     end
