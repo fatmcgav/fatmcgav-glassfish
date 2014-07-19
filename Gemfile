@@ -18,8 +18,8 @@ group :test do
   gem 'puppet-lint'
   gem 'puppet-syntax'
   gem 'librarian-puppet', '~> 1.0.0'
-  gem 'simplecov', :require => false
-  gem 'coveralls', :require => false
+  gem 'simplecov', :platforms => [:ruby_19, :ruby_20]
+  gem 'coveralls', :platforms => [:ruby_19, :ruby_20]
 end
 
 group :development do
