@@ -14,11 +14,24 @@ describe 'glassfish' do
       ## Test default behaviour
       #
       it do
+        # Classes
+        should create_class('glassfish')
+        should contain_class('glassfish::params')
+        
         # Parent dir 
         should contain_file('/usr/local').with_ensure('directory')
         
         # Manage_java defaults to false
         should contain_class('glassfish::java').that_comes_before('Class[glassfish::install]')
+        
+        # Should create a password file
+        should contain_file('asadmin_passfile').with({ 
+          'ensure' => 'present', 
+          'path'   => '/home/glassfish/asadmin.pass',
+          'owner'  => 'glassfish',
+          'group'  => 'glassfish',
+          'mode'   => '0644'
+        }) # TODO: Add a fixture for the default asadmin.passfile
         
         # Should include install
         should contain_class('glassfish::install').that_requires('File[/usr/local]')
@@ -51,14 +64,46 @@ describe 'glassfish' do
       end
       
       it do
+        # Should contain asadmin_passfile with ordering
+        should contain_file('asadmin_passfile').that_comes_before('Glassfish::Create_domain[domain1]')
+        
         # Should include create_domain resource
         should contain_glassfish__create_domain('domain1').that_requires('Class[glassfish::install]')
+        should contain_domain('domain1').with({ 
+          'ensure'            => 'present',
+          'user'              => 'glassfish',
+          'asadminuser'       => 'admin',
+          'passwordfile'      => '/home/glassfish/asadmin.pass',
+          'portbase'          => '4800',
+          'startoncreate'     => true,
+          'enablesecureadmin' => true,
+          'template'          => nil
+        })
          
         # Should not include install_jars resource
         should_not contain_install_jars('[]')
         
         # Should include create_service resource
         should contain_glassfish__create_service('domain1')
+        should contain_file('domain1_servicefile').with({
+          'ensure' => 'present', 
+          'path'   => '/etc/init.d/glassfish_domain1',
+          'mode'   => '0755'
+        }).that_notifies('Service[glassfish_domain1]') # TODO: Add fixture for sample init.d content
+        should contain_exec('stop_domain1').with({ 
+          'command' => '/usr/local/glassfish-3.1.2.2/bin/asadmin stop-domain domain1',
+          'unless'  => 'service glassfish_domain1 status && pgrep -f domains/domain1',
+          'path'    => ['/sbin', '/usr/sbin', '/bin', '/usr/bin'],
+          'user'    => 'glassfish'
+        }).that_comes_before('Service[glassfish_domain1]')
+        should contain_service('glassfish_domain1').with({ 
+          'ensure'     => 'running', 
+          'enable'     => true,
+          'hasstatus'  => true,
+          'hasrestart' => true,
+          'status'     => nil
+        })
+        
       end
     end
     

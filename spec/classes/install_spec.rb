@@ -31,8 +31,12 @@ describe 'glassfish::install' do
       
       describe 'it should install glassfish using a zip' do
         it do
+          # Anchors
+          should contain_anchor('glassfish::install::start')
+          should contain_anchor('glassfish::install::end')
+          
           # Temp dir 
-          should contain_file('/tmp').with_ensure('directory')
+          should contain_file('/tmp').with_ensure('directory').that_requires('Anchor[glassfish::install::start]')
           
           # Download exec
           should contain_exec('download_glassfish-3.1.2.2.zip').with({
@@ -77,7 +81,7 @@ describe 'glassfish::install' do
             'ensure' => 'absent',
             'path'   => '/usr/local/glassfish-3.1.2.2/glassfish/domains/domain1',
             'force'  => true
-          }).that_requires('Exec[move-glassfish3]')
+          }).that_requires('Exec[move-glassfish3]').that_comes_before('Anchor[glassfish::install::end]')
         end
       end  
     end    
@@ -96,8 +100,12 @@ describe 'glassfish::install' do
     
     describe 'it should install glassfish 4.0 using a zip' do
       it do
+        # Anchors
+        should contain_anchor('glassfish::install::start')
+        should contain_anchor('glassfish::install::end')
+        
         # Temp dir 
-        should contain_file('/tmp').with_ensure('directory')
+        should contain_file('/tmp').with_ensure('directory').that_requires('Anchor[glassfish::install::start]')
         
         # Download exec
         should contain_exec('download_glassfish-4.0.zip').with({
@@ -142,7 +150,7 @@ describe 'glassfish::install' do
           'ensure' => 'absent',
           'path'   => '/usr/local/glassfish-4.0/glassfish/domains/domain1',
           'force'  => true
-        }).that_requires('Exec[move-glassfish4]')
+        }).that_requires('Exec[move-glassfish4]').that_comes_before('Anchor[glassfish::install::end]')
       end
     end
   end
@@ -187,7 +195,13 @@ describe 'glassfish::install' do
       
     # Should attempt to install using yum package
     it do
-      should contain_package('glassfish3-3.1.2.2').with_ensure('present').that_requires('User[glassfish]')
+      # Anchors
+      should contain_anchor('glassfish::install::start')
+      should contain_anchor('glassfish::install::end')
+      
+      # Package install
+      should contain_package('glassfish3-3.1.2.2').with_ensure('present').that_requires('User[glassfish]').
+        that_requires('Anchor[glassfish::install::start]').that_comes_before('Anchor[glassfish::install::end]')
     end
   end
   
@@ -205,7 +219,13 @@ describe 'glassfish::install' do
       
     # Should attempt to install using yum package
     it do
-      should contain_package('gftest-3.1.2.2').with_ensure('present').that_requires('User[glassfish]')
+      # Anchors
+      should contain_anchor('glassfish::install::start')
+      should contain_anchor('glassfish::install::end')
+      
+      # Package install
+      should contain_package('gftest-3.1.2.2').with_ensure('present').that_requires('User[glassfish]').
+        that_requires('Anchor[glassfish::install::start]').that_comes_before('Anchor[glassfish::install::end]')
     end
   end
   

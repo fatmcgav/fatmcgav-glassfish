@@ -9,14 +9,14 @@ describe 'glassfish::install_jars' do
     } }
 
   # Include Glassfish class
-  let (:pre_condition) {
+  let(:pre_condition) {
     "class {'glassfish':
       create_domain => true,
       domain_name   => 'test'
     }" }
 
   # Set-up default params values
-  let :default_params do
+  let(:default_params) do
     {
       :domain_name => 'test',
       :source      => 'source'
@@ -116,7 +116,7 @@ describe 'glassfish::install_jars' do
 
   context 'with a service_name provided' do
     # Create gf_service domain resource
-    let (:pre_condition) {
+    let(:pre_condition) {
       ["include glassfish",
         "glassfish::create_domain{ 'gf_test':
         service_name => 'gf_service'
@@ -147,7 +147,7 @@ describe 'glassfish::install_jars' do
   end
 
   context 'with a top-level service name' do
-    let (:pre_condition) {
+    let(:pre_condition) {
       "class {'glassfish':
         create_domain => true,
         domain_name   => 'gftest',
