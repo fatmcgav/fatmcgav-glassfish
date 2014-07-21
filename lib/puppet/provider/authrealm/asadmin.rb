@@ -10,7 +10,7 @@ Puppet::Provider::Asadmin) do
     args << "--classname" << @resource[:classname]
     if hasProperties? @resource[:properties]
       args << "--property"
-      args << "\"#{prepareProperties @resource[:properties]}\""
+      args << "#{prepareProperties @resource[:properties]}"
     end
     args << @resource[:name]
 

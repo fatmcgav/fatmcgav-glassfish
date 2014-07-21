@@ -92,7 +92,7 @@ class Puppet::Provider::Asadmin < Puppet::Provider
     properties.each do |key, value|
       rkey = key.to_s.gsub(/([=:])/, '\\\\\\1')
       rvalue = value.to_s.gsub(/([=:])/, '\\\\\\1')
-      list << "#{rkey}=#{rvalue}"
+      list << "#{rkey}=\\\"#{rvalue}\\\""
     end
     return list.sort!.join(':')
   end   
