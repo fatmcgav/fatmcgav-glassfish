@@ -63,7 +63,7 @@ describe Puppet::Type.type(:jdbcresource).provider(:asadmin) do
     it "should be able to undeploy a jdbcresource" do
       jdbcresource.provider.set(:ensure => :absent)
       jdbcresource.provider.expects("`").
-        with("su - glassfish -c \"asadmin --port 8048 --user admin delete-jdbc-resource jdbc/test\"").
+        with("su - glassfish -c \"asadmin --port 8048 --user admin delete-jdbc-resource --target server jdbc/test\"").
         returns("JDBC resource jdbc/test deleted successfully \nCommand delete-jdbc-resource executed successfully.")
       jdbcresource.provider.destroy
     end
