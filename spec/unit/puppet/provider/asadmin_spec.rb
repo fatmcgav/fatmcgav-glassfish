@@ -47,7 +47,7 @@ describe Puppet::Provider::Asadmin do
       subject.prepareProperties(:symbol).should == 'symbol'
     end
     it "should convert a hash to a key=value colon seperated string" do
-      subject.prepareProperties({'key' => 'value', 'key2' => 'value2'}).should == 'key2=\\\"value2\\\":key=\\\"value\\\"'
+      subject.prepareProperties({'key' => 'value', 'key2' => 'value2'}).should == 'key2=\"value2\":key=\"value\"'
     end
   end
 end
