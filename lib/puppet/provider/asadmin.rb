@@ -55,19 +55,19 @@ class Puppet::Provider::Asadmin < Puppet::Provider
     return value.gsub(/:/) { '\\:' }
   end
   
-  def exists?
-      commands :asadmin => "#{@@asadmin}"
-      version = asadmin('version')
-      return false if version.length == 0
+  # def exists?
+  #     commands :asadmin => "#{@@asadmin}"
+  #     version = asadmin('version')
+  #     return false if version.length == 0
       
-      version.each do |line|
-        if line =~ /(Version)/
-          return true
-        else 
-          return false
-        end
-      end
-  end
+      # version.each do |line|
+      #   if line =~ /(Version)/
+      #     return true
+      #   else 
+      #     return false
+      #   end
+      # end
+  # end
   
   protected
   
