@@ -1,5 +1,3 @@
-/.project
-/.settings
 /metadata.json
 /.librarian
 /.bundle
@@ -9,3 +7,5 @@ pkg
 /.rspec_system
 /Gemfile.lock
 /Puppetfile.lock
+/coverage
+*.swp

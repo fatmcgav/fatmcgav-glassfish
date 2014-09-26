@@ -13,6 +13,9 @@
 #  [*asadmin_passfile*] - Asadmin password file.
 #  Defaults to '/home/glassfish/asadmin.pass'
 #
+#  [*asadmin_master_password*] - Asadmin master password.
+#  Defaults to 'changeit'
+#
 #  [*asadmin_password*] - Asadmin password.
 #  Defaults to 'adminadmin'
 #
@@ -81,32 +84,33 @@
 # Copyright 2014 Gavin Williams, unless otherwise noted.
 #
 class glassfish (
-  $add_path              = $glassfish::params::glassfish_add_path,
-  $asadmin_user          = $glassfish::params::glassfish_asadmin_user,
-  $asadmin_passfile      = $glassfish::params::glassfish_asadmin_passfile,
-  $asadmin_password      = $glassfish::params::glassfish_asadmin_password,
-  $create_domain         = $glassfish::params::glassfish_create_domain,
-  $create_service        = $glassfish::params::glassfish_create_service,
-  $create_passfile       = $glassfish::params::glassfish_create_passfile,
-  $domain_name           = $glassfish::params::glassfish_domain,
-  $domain_template       = $glassfish::params::glassfish_domain_template,
-  $enable_secure_admin   = $glassfish::params::glassfish_enable_secure_admin,
-  $gms_enabled           = $glassfish::params::glassfish_gms_enabled,
-  $gms_multicast_port    = $glassfish::params::glassfish_multicast_port,
-  $gms_multicast_address = $glassfish::params::glassfish_multicast_address,
-  $group                 = $glassfish::params::glassfish_group,
-  $install_dir           = $glassfish::params::glassfish_install_dir,
-  $install_method        = $glassfish::params::glassfish_install_method,
-  $java_ver              = $glassfish::params::glassfish_java_ver,
-  $manage_accounts       = $glassfish::params::glassfish_manage_accounts,
-  $manage_java           = $glassfish::params::glassfish_manage_java,
-  $package_prefix        = $glassfish::params::glassfish_package_prefix,
-  $parent_dir            = $glassfish::params::glassfish_parent_dir,
-  $portbase              = $glassfish::params::glassfish_portbase,
-  $service_name          = $glassfish::params::glassfish_service_name,
-  $start_domain          = $glassfish::params::glassfish_start_domain,
-  $tmp_dir               = $glassfish::params::glassfish_tmp_dir,
-  $user                  = $glassfish::params::glassfish_user,
+  $add_path                = $glassfish::params::glassfish_add_path,
+  $asadmin_user            = $glassfish::params::glassfish_asadmin_user,
+  $asadmin_passfile        = $glassfish::params::glassfish_asadmin_passfile,
+  $asadmin_master_password = $glassfish::params::glassfish_asadmin_master_password,
+  $asadmin_password        = $glassfish::params::glassfish_asadmin_password,
+  $create_domain           = $glassfish::params::glassfish_create_domain,
+  $create_service          = $glassfish::params::glassfish_create_service,
+  $create_passfile         = $glassfish::params::glassfish_create_passfile,
+  $domain_name             = $glassfish::params::glassfish_domain,
+  $domain_template         = $glassfish::params::glassfish_domain_template,
+  $enable_secure_admin     = $glassfish::params::glassfish_enable_secure_admin,
+  $gms_enabled             = $glassfish::params::glassfish_gms_enabled,
+  $gms_multicast_port      = $glassfish::params::glassfish_multicast_port,
+  $gms_multicast_address   = $glassfish::params::glassfish_multicast_address,
+  $group                   = $glassfish::params::glassfish_group,
+  $install_dir             = $glassfish::params::glassfish_install_dir,
+  $install_method          = $glassfish::params::glassfish_install_method,
+  $java_ver                = $glassfish::params::glassfish_java_ver,
+  $manage_accounts         = $glassfish::params::glassfish_manage_accounts,
+  $manage_java             = $glassfish::params::glassfish_manage_java,
+  $package_prefix          = $glassfish::params::glassfish_package_prefix,
+  $parent_dir              = $glassfish::params::glassfish_parent_dir,
+  $portbase                = $glassfish::params::glassfish_portbase,
+  $service_name            = $glassfish::params::glassfish_service_name,
+  $start_domain            = $glassfish::params::glassfish_start_domain,
+  $tmp_dir                 = $glassfish::params::glassfish_tmp_dir,
+  $user                    = $glassfish::params::glassfish_user,
   $version               = $glassfish::params::glassfish_version) inherits glassfish::params {
   #
   # # Calculate some vars based on passed parameters
@@ -151,19 +155,20 @@ class glassfish (
 
   # Should we create a passfile?
   if $create_passfile {
-    # Create the required passfile
-    file { 'asadmin_passfile':
-      ensure  => present,
-      path    => $asadmin_passfile,
-      content => template('glassfish/passwordfile'),
-      owner   => $user,
-      group   => $group,
-      mode    => '0644'
+    # Create a passfile
+    glassfish::create_asadmin_passfile { "${user}_asadmin_passfile":
+      asadmin_master_password => $asadmin_master_password,
+      asadmin_password        => $asadmin_password,
+      group                   => $group,
+      path                    => $asadmin_passfile,
+      user                    => $user
     }
 
     # Run this before any resources that require it
-    File['asadmin_passfile'] -> Create_domain <| |>
-    File['asadmin_passfile'] -> Create_node <| |>
+    Glassfish::Create_asadmin_passfile["${user}_asadmin_passfile"] -> Create_domain <| |>
+    Glassfish::Create_asadmin_passfile["${user}_asadmin_passfile"] -> Create_cluster <| |>
+    Glassfish::Create_asadmin_passfile["${user}_asadmin_passfile"] -> Create_node <| |>
+    Glassfish::Create_asadmin_passfile["${user}_asadmin_passfile"] -> Create_instance <| |>
   }
 
   # Call the install method

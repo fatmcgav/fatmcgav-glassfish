@@ -1,5 +1,6 @@
 # Puppet Glassfish module
 
+[![Puppet Forge](http://img.shields.io/puppetforge/v/fatmcgav/glassfish.svg)](https://forge.puppetlabs.com/fatmcgav/glassfish)
 [![Build Status](https://travis-ci.org/fatmcgav/fatmcgav-glassfish.svg?branch=develop)](https://travis-ci.org/fatmcgav/fatmcgav-glassfish)
 [![Coverage Status](https://coveralls.io/repos/fatmcgav/fatmcgav-glassfish/badge.png?branch=develop)](https://coveralls.io/r/fatmcgav/fatmcgav-glassfish?branch=develop)
 
@@ -9,15 +10,15 @@ Copyright - Gavin Williams <fatmcgav@gmail.com>
 License: GPLv3
 
 ####Table of Contents
-- [Puppet Glassfish module](#user-content-puppet-glassfish-module)
-	- [Overview](#user-content-overview)
-	- [Features](#user-content-features)
-	- [Requirements](#user-content-requirements)
-	- [Usage](#user-content-usage)
-	- [Limitations](#user-content-limitations)
-	- [Contributors](#user-content-contributors)
-	- [Development](#user-content-development)
-	- [Testing](#user-content-testing)
+- [Puppet Glassfish module](#puppet-glassfish-module)
+	- [Overview](#overview)
+	- [Features](#features)
+	- [Requirements](#requirements)
+	- [Usage](#usage)
+	- [Limitations](#limitations)
+	- [Contributors](#contributors)
+	- [Development](#development)
+	- [Testing](#testing)
 	
 ##Overview
 This module adds support for installing and managing the Glassfish J2EE application server.
@@ -31,6 +32,7 @@ This module can do the following:
  * Manage user accounts if appropriate. 
  * Configure PATH to support Glassfish.
  * Create Linux service to run Glassfish on system startup.
+ * Create asadmin password files for different users or locations.
  * Install additional JARs if appropriate.
  * Create and manage Glassfish clusters, including: 
   * Domain Administration Service (DAS) 
@@ -126,6 +128,7 @@ It has also been lightly tested on Debian and Ubuntu, so should support most com
 Thanks to the following people who have helped with this module: 
  * Stepan Stipl - Features and testing
  * Jon Black - Testing
+ * Alex Jennings - Features
 
 ##Development
 If you have any features that you feel are missing or find any bugs for this module, 
@@ -136,3 +139,4 @@ or even better submit a PR and I will review as soon as I can.
 This module has been written to support Rspec testing of both the manifests and types/providers.
 In order to execute the tests, run the following from the root of the module: 
  `bundle install && bundle exec rake spec`  
+

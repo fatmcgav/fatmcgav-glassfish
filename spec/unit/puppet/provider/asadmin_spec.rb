@@ -7,7 +7,7 @@ describe Puppet::Provider::Asadmin do
     it "should escape a colon" do
       subject.escape('value:value').should == 'value\\:value'
     end
-    it "should not escape no colon" do
+    it "should not escape without a colon" do
       subject.escape('value=value').should == 'value=value'
     end
   end
@@ -20,13 +20,13 @@ describe Puppet::Provider::Asadmin do
     
     # Test that correct boolean value is returned
     it "should return true with properties" do
-      subject.hasProperties?('property').should be_truthy
+      subject.hasProperties?('property').should be(true)
     end
     it "should return false with nil properties" do
-      subject.hasProperties?(nil).should be_falsey
+      subject.hasProperties?(nil).should be(false)
     end
     it "should return false with no properties" do
-      subject.hasProperties?('').should be_falsey
+      subject.hasProperties?('').should be(false)
     end
   end
   
@@ -47,7 +47,7 @@ describe Puppet::Provider::Asadmin do
       subject.prepareProperties(:symbol).should == 'symbol'
     end
     it "should convert a hash to a key=value colon seperated string" do
-      subject.prepareProperties({'key' => 'value', 'key2' => 'value2'}).should == 'key2=value2:key=value'
+      subject.prepareProperties({'key' => 'value', 'key2' => 'value2'}).should == 'key2=\"value2\":key=\"value\"'
     end
   end
 end
