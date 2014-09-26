@@ -47,6 +47,8 @@ class glassfish::params {
   $glassfish_asadmin_user        = 'admin'
   # Default Glassfish asadmin password file
   $glassfish_asadmin_passfile    = '/home/glassfish/asadmin.pass'
+  # Default Glassfish asadmin master password
+  $glassfish_asadmin_master_pass = 'changeit'
   # Default Glassfish asadmin password
   $glassfish_asadmin_password    = 'adminadmin'
   # Should a passfile be created?

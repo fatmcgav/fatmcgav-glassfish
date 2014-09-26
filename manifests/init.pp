@@ -84,6 +84,7 @@ class glassfish (
   $add_path              = $glassfish::params::glassfish_add_path,
   $asadmin_user          = $glassfish::params::glassfish_asadmin_user,
   $asadmin_passfile      = $glassfish::params::glassfish_asadmin_passfile,
+  $asadmin_master_pass   = $glassfish::params::glassfish_asadmin_master_pass,
   $asadmin_password      = $glassfish::params::glassfish_asadmin_password,
   $create_domain         = $glassfish::params::glassfish_create_domain,
   $create_service        = $glassfish::params::glassfish_create_service,
@@ -151,21 +152,20 @@ class glassfish (
 
   # Should we create a passfile?
   if $create_passfile {
-    # Create the required passfile
-    file { 'asadmin_passfile':
-      ensure  => present,
-      path    => $asadmin_passfile,
-      content => template('glassfish/passwordfile'),
-      owner   => $user,
-      group   => $group,
-      mode    => '0644'
+    # Create a passfile
+    glassfish::create_asadmin_passfile { "${user}_asadmin_passfile":
+      asadmin_master_pass => $asadmin_master_pass,
+      asadmin_password    => $asadmin_password,
+      group               => $group,
+      path                => $asadmin_passfile,
+      user                => $user
     }
 
     # Run this before any resources that require it
-    File['asadmin_passfile'] -> Create_domain <| |>
-    File['asadmin_passfile'] -> Create_cluster <| |>
-    File['asadmin_passfile'] -> Create_node <| |>
-    File['asadmin_passfile'] -> Create_instance <| |>
+    Glassfish::Create_asadmin_passfile["${user}asadmin_passfile"] -> Create_domain <| |>
+    Glassfish::Create_asadmin_passfile["${user}asadmin_passfile"] -> Create_cluster <| |>
+    Glassfish::Create_asadmin_passfile["${user}asadmin_passfile"] -> Create_node <| |>
+    Glassfish::Create_asadmin_passfile["${user}asadmin_passfile"] -> Create_instance <| |>
   }
 
   # Call the install method
