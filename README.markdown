@@ -1,5 +1,6 @@
 # Puppet Glassfish module
 
+[![Puppet Forge](http://img.shields.io/puppetforge/v/fatmcgav/glassfish.svg)](https://forge.puppetlabs.com/fatmcgav/glassfish)
 [![Build Status](https://travis-ci.org/fatmcgav/fatmcgav-glassfish.svg?branch=develop)](https://travis-ci.org/fatmcgav/fatmcgav-glassfish)
 [![Coverage Status](https://coveralls.io/repos/fatmcgav/fatmcgav-glassfish/badge.png?branch=develop)](https://coveralls.io/r/fatmcgav/fatmcgav-glassfish?branch=develop)
 
@@ -31,6 +32,7 @@ This module can do the following:
  * Manage user accounts if appropriate. 
  * Configure PATH to support Glassfish.
  * Create Linux service to run Glassfish on system startup.
+ * Create asadmin password files for different users or locations.
  * Install additional JARs if appropriate.
  * Create and manage Glassfish clusters, including: 
   * Domain Administration Service (DAS) 
@@ -137,3 +139,4 @@ or even better submit a PR and I will review as soon as I can.
 This module has been written to support Rspec testing of both the manifests and types/providers.
 In order to execute the tests, run the following from the root of the module: 
  `bundle install && bundle exec rake spec`  
+

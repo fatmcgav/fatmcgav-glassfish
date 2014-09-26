@@ -13,6 +13,9 @@
 #  [*asadmin_passfile*] - Asadmin password file.
 #  Defaults to '/home/glassfish/asadmin.pass'
 #
+#  [*asadmin_master_password*] - Asadmin master password.
+#  Defaults to 'changeit'
+#
 #  [*asadmin_password*] - Asadmin password.
 #  Defaults to 'adminadmin'
 #
