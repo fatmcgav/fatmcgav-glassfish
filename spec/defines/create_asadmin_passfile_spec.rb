@@ -9,13 +9,13 @@ describe 'glassfish::create_asadmin_passfile' do
   } }
   
   # Include Glassfish class 
-  let (:pre_condition) { "include glassfish" }
+  let (:pre_condition) { "class {'glassfish':
+                         create_passfile => false
+                         }" }
   
   # Set-up default params values
   let :default_params do 
     {
-      :asadmin_master_pass => 'changeit',
-      :asadmin_password    => 'adminadmin',
       :group               => 'glassfish',
       :path                => '/tmp/asadmin.pass',
       :user                => 'glassfish'
@@ -48,8 +48,8 @@ describe 'glassfish::create_asadmin_passfile' do
     # Set the params
     let(:params) do 
       default_params.merge({
-        :asadmin_master_pass => 'different',
-        :asadmin_password    => 'password'
+        :asadmin_master_password => 'different',
+        :asadmin_password        => 'password'
       })
     end
     

@@ -18,7 +18,7 @@
 #
 # Copyright 2014 Gavin Williams, unless otherwise noted.
 #
-define glassfish::create_asadmin_passfile ($asadmin_master_pass = 'changeit', $asadmin_password, $group, $path = $name, $user) {
+define glassfish::create_asadmin_passfile ($group, $path, $user, $asadmin_master_password = 'changeit', $asadmin_password = 'adminadmin') {
   # Create the required passfile
   file { $name:
     ensure  => present,

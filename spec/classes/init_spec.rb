@@ -26,11 +26,11 @@ describe 'glassfish' do
 
         # Should create a password file
         should contain_glassfish__create_asadmin_passfile('glassfish_asadmin_passfile').with({
-          'asadmin_master_pass' => 'changeit',
-          'asadmin_password'    => 'adminadmin',
-          'group'               => 'glassfish',
-          'path'                => '/home/glassfish/asadmin.pass',
-          'user'                => 'glassfish'
+          'asadmin_master_password' => 'changeit',
+          'asadmin_password'        => 'adminadmin',
+          'group'                   => 'glassfish',
+          'path'                    => '/home/glassfish/asadmin.pass',
+          'user'                    => 'glassfish'
         }) # TODO: Add a fixture for the default asadmin.passfile
 
         # Should include install
@@ -117,11 +117,11 @@ describe 'glassfish' do
       # Should create a password file in /tmp/asadmin.pass
       it do
         should contain_glassfish__create_asadmin_passfile('glassfish_asadmin_passfile').with({
-          'asadmin_master_pass' => 'changeit',
-          'asadmin_password'    => 'adminadmin',
-          'group'               => 'glassfish',
-          'path'                => '/tmp/asadmin.pass',
-          'user'                => 'glassfish'
+          'asadmin_master_password' => 'changeit',
+          'asadmin_password'        => 'adminadmin',
+          'group'                   => 'glassfish',
+          'path'                    => '/tmp/asadmin.pass',
+          'user'                    => 'glassfish'
         }) # TODO: Add a fixture for the default asadmin.passfile
       end
     end
