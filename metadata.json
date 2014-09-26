@@ -4,12 +4,68 @@
   "license": "GPLv3",
   "project_page": "http://github.com/fatmcgav/puppet-glassfish",
   "source": "git://github.com/fatmcgav/puppet-glassfish.git",
-  "summary": "A resource type to manage Glassfish domains, system-properties, jdbc-connection-pools and jdbc-resources and application deployment.",
+  "issue_url": "https://github.com/fatmcgav/fatmcgav-glassfish/issues/new",
+  "summary": "Install and configure Glassfish J2EE application server.",
   "version": "0.3.0",
   "dependencies": [
   	{
   		"name": "puppetlabs-stdlib",
   		"version_requirement": ">=3.2.0"
   	}
+  ],
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": [
+        "5",
+        "6",
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "CentOS",
+      "operatingsystemrelease": [
+        "5",
+        "6",
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "OracleLinux",
+      "operatingsystemrelease": [
+        "5",
+        "6",
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "Scientific",
+      "operatingsystemrelease": [
+        "5",
+        "6",
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "Debian",
+      "operatingsystemrelease": [
+        "6",
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "Ubuntu",
+      "operatingsystemrelease": [
+        "10.04",
+        "12.04",
+        "14.04"
+      ]
+    }
+  ],
+  "requirements": [
+    {
+      "name": "puppet",
+      "version_requirement": ">=3.0.0 <4.0.0"
+    }
   ]
 }

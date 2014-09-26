@@ -1,3 +1,11 @@
+0.3.0 2014-09-26 Gavin Williams <fatmcgav@gmail.com>
+* Feature & Bug fix release
+  * Add support for creating resources against clusters.
+  * Add support for installing jars to mq dir. Thanks to Alex Jennings.
+  * Add support for creating asadmin password files for different users/locations.
+  * Fix various test framework issues and increase coverage.
+  * Update module to use metadata.json, and add dependencies, supported operating systems and requirements sections.
+
 0.2.0 2014-06-09 Gavin Williams <fatmcgav@gmail.com>
 * Feature & Bug fix release
  * Added support for javamail resource
