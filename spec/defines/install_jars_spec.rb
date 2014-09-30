@@ -30,7 +30,7 @@ describe 'glassfish::install_jars' do
     # Set the params
     let(:params) { default_params }
 
-    it { should create_define('Glassfish::Install_jars[test.jar]') }
+    it { should contain_glassfish__install_jars('test.jar') }
     it { should contain_file('/usr/local/glassfish-3.1.2.2/glassfish/lib/ext').with({
         'ensure' => 'directory',
         'owner'  => 'glassfish',
@@ -56,7 +56,7 @@ describe 'glassfish::install_jars' do
       })
     end
 
-    it { should create_define('Glassfish::Install_jars[test.jar]') }
+    it { should contain_glassfish__install_jars('test.jar') }
     it { should_not contain_file('/usr/local/glassfish-3.1.2.2/glassfish/lib/ext') }
     it { should contain_file('/usr/local/glassfish-3.1.2.2/glassfish/domains/test/lib/ext/test.jar').with({
         'ensure' => 'present',
@@ -78,7 +78,7 @@ describe 'glassfish::install_jars' do
       })
     end
 
-    it { should create_define('Glassfish::Install_jars[test.jar]') }
+    it { should contain_glassfish__install_jars('test.jar') }
     it { should_not contain_file('/usr/local/glassfish-3.1.2.2/glassfish/lib/ext') }
     it { should contain_file('/usr/local/glassfish-3.1.2.2/mq/lib/ext/test.jar').with({
         'ensure' => 'present',
@@ -100,7 +100,7 @@ describe 'glassfish::install_jars' do
       })
     end
 
-    it { should create_define('Glassfish::Install_jars[http://www.test.com/test.jar]') }
+    it { should contain_glassfish__install_jars('http://www.test.com/test.jar') }
     it { should contain_file('/usr/local/glassfish-3.1.2.2/glassfish/lib/ext').with({
         'ensure' => 'directory',
         'owner'  => 'glassfish',
@@ -135,7 +135,7 @@ describe 'glassfish::install_jars' do
       })
     end
 
-    it { should create_define('Glassfish::Install_jars[test.jar]') }
+    it { should contain_glassfish__install_jars('test.jar') }
     it { should_not contain_file('/usr/local/glassfish-3.1.2.2/glassfish/lib/ext') }
     it { should contain_file('/usr/local/glassfish-3.1.2.2/glassfish/domains/gf_test/lib/ext/test.jar').with({
         'ensure' => 'present',
@@ -165,7 +165,7 @@ describe 'glassfish::install_jars' do
       })
     end
 
-    it { should create_define('Glassfish::Install_jars[test.jar]') }
+    it { should contain_glassfish__install_jars('test.jar') }
     it { should_not contain_file('/usr/local/glassfish-3.1.2.2/glassfish/lib/ext') }
     it { should contain_file('/usr/local/glassfish-3.1.2.2/glassfish/domains/gftest/lib/ext/test.jar').with({
         'ensure' => 'present',
