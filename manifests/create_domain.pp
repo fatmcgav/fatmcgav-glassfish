@@ -101,6 +101,7 @@ define glassfish::create_domain (
       mode         => 'domain',
       domain_name  => $domain_name,
       service_name => $svc_name,
+      runuser      => $domain_user,
       require      => Domain[$domain_name]
     }
   }

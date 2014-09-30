@@ -22,7 +22,7 @@
 #
 # [*node_user*]
 #  Username to run node under.
-#  Defaults to $::hostname.
+#  Defaults to $glassfish::user.
 #
 # [*ensure*]
 #  Cluster ensure state
@@ -30,7 +30,7 @@
 #
 # [*das_host*]
 #  Domain Adminsitration Service host.
-#  Defaults to '4848'.
+#  No default.
 #
 # [*das_port*]
 #  Domain Adminsitration Service port.
