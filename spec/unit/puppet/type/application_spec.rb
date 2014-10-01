@@ -165,6 +165,9 @@ describe Puppet::Type.type(:application) do
       it "should fail with a missing source" do
         expect { described_class.new(:name => 'application') }.to raise_error(Puppet::Error, /Source is required./)
       end
+      it "should not fail with a missing source and ensure => absent" do
+        expect { described_class.new(:name => 'application', :ensure => :absent) }.not_to raise_error
+      end
     end
   end  
     
