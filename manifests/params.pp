@@ -43,6 +43,9 @@ class glassfish::params {
   # Default Glassfish Group
   $glassfish_group               = 'glassfish'
 
+  # Should the included default 'domain1' be removed?
+  $glassfish_remove_default_domain = true
+
   # Default Glassfish asadmin username
   $glassfish_asadmin_user        = 'admin'
   # Default Glassfish asadmin password file
