@@ -36,6 +36,14 @@ describe Puppet::Type.type(:jvmoption) do
         described_class.new(:option => '-Dgosh.args=--nointeractive', :ensure => :present)[:option].should == '-Dgosh.args=--nointeractive'
       end
 
+      it "should support slashes" do
+        described_class.new(:option => '-Dsun.security.smartcardio.library=/usr/lib64/libpcsclite.so.1', :ensure => :present)[:option].should == '-Dsun.security.smartcardio.library=/usr/lib64/libpcsclite.so.1.1'
+      end
+
+      it "should support $ values" do
+        described_class.new(:option => '-Djavax.net.ssl.trustStore=${com.sun.aas.instanceRoot}/config/cacerts.jks', :ensure => :present)[:option].should == '-Djavax.net.ssl.trustStore=${com.sun.aas.instanceRoot}/config/cacerts.jks'
+      end
+
       it "should not support spaces" do
         expect { described_class.new(:option => '-X Option', :ensure => :present) }.to raise_error(Puppet::Error, /-X Option is not a valid JVM option/)
       end

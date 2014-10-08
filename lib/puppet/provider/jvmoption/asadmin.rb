@@ -24,7 +24,7 @@ Puppet::Provider::Asadmin) do
   def exists?
     args = Array.new
     args << "list-jvm-options"
-    args << @resource[:target] if @resource[:target]
+    args << "--target" << @resource[:target] if @resource[:target]
 
     asadmin_exec(args).each do |line|
       line.sub!(/-XX: ([^\ ]+)/, '-XX:+\1')
