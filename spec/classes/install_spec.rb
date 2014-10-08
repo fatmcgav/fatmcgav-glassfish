@@ -247,6 +247,24 @@ describe 'glassfish::install' do
     end
   end
   
+  context 'with remove_default_domain => false' do
+    # Set the osfamily fact
+    let(:facts) { {
+      :osfamily => 'RedHat'
+    } }
+    
+    # Include required classe with default param values
+    let(:pre_condition) { 'class {"glassfish": 
+      remove_default_domain => false}' 
+    }
+      
+    # Should not attempt to remove domain1 
+    it do
+      should_not contain_file('remove-domain1')
+    end
+  end
+
+
   context 'with an unsupported installation method' do
     # Set the osfamily fact
     let(:facts) { {

@@ -62,6 +62,9 @@
 #  [*portbase*]        - Glassfish portbase. Used when creating a domain on install.
 #  Defaults to '4800'
 #
+#  [*remove_default_domain*] - Should the default domain doiman1' be removed on install?
+#  Defaults to true.
+#
 #  [*start_domain*] - Should the glassfish domain be started on creation?
 #  Defaults to true
 #
@@ -107,6 +110,7 @@ class glassfish (
   $package_prefix          = $glassfish::params::glassfish_package_prefix,
   $parent_dir              = $glassfish::params::glassfish_parent_dir,
   $portbase                = $glassfish::params::glassfish_portbase,
+  $remove_default_domain   = $glassfish::params::glassfish_remove_default_domain,
   $service_name            = $glassfish::params::glassfish_service_name,
   $start_domain            = $glassfish::params::glassfish_start_domain,
   $tmp_dir                 = $glassfish::params::glassfish_tmp_dir,

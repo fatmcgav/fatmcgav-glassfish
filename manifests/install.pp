@@ -123,14 +123,16 @@ class glassfish::install {
         require => Exec['change-mode']
       }
 
-      # Remove default domain1.
-      file { 'remove-domain1':
-        ensure  => absent,
-        path    => "${glassfish::glassfish_dir}/glassfish/domains/domain1",
-        force   => true,
-        backup  => false,
-        require => Exec["move-glassfish${mjversion}"],
-        before  => Anchor['glassfish::install::end']
+      if $glassfish::remove_default_domain {
+        # Remove default domain1.
+        file { 'remove-domain1':
+          ensure  => absent,
+          path    => "${glassfish::glassfish_dir}/glassfish/domains/domain1",
+          force   => true,
+          backup  => false,
+          require => Exec["move-glassfish${mjversion}"],
+          before  => Anchor['glassfish::install::end']
+        }
       }
     }
     default   : {
