@@ -37,7 +37,7 @@ describe Puppet::Type.type(:jvmoption) do
       end
 
       it "should support slashes" do
-        described_class.new(:option => '-Dsun.security.smartcardio.library=/usr/lib64/libpcsclite.so.1', :ensure => :present)[:option].should == '-Dsun.security.smartcardio.library=/usr/lib64/libpcsclite.so.1.1'
+        described_class.new(:option => '-Dsun.security.smartcardio.library=/usr/lib64/libpcsclite.so.1', :ensure => :present)[:option].should == '-Dsun.security.smartcardio.library=/usr/lib64/libpcsclite.so.1'
       end
 
       it "should support $ values" do
