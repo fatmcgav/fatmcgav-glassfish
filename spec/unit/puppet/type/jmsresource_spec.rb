@@ -68,6 +68,10 @@ describe Puppet::Type.type(:jmsresource) do
         described_class.new(:name => 'jmsresource', :restype => 'javax.jms.Topic', :portbase => '8000', :ensure => 'present')[:restype].should == :'javax.jms.Topic'
       end
       
+      it "should support Connection Factory" do
+        described_class.new(:name => 'jmsresource', :restype => 'javax.jms.ConnectionFactory', :portbase => '8000', :ensure => 'present')[:restype].should == :'javax.jms.ConnectionFactory'
+      end
+      
       it "should not support other values" do
       expect {described_class.new(:name => 'jmsresource', :restype => 'foo', :portbase => '8000', :ensure => 'present')  }.to raise_error(Puppet::Error, /Invalid value "foo"/)
       end
