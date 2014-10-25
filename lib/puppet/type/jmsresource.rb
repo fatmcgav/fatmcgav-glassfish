@@ -16,7 +16,7 @@ Puppet::Type.newtype(:jmsresource) do
 
   newparam(:restype) do
     desc "The resource type."
-    newvalues('javax.jms.Topic', 'javax.jms.Queue', 'javax.jms.TopicConnectionFactory', 'javax.jms.QueueConnectionFactory')
+    newvalues('javax.jms.Topic', 'javax.jms.Queue', 'javax.jms.ConnectionFactory', 'javax.jms.TopicConnectionFactory', 'javax.jms.QueueConnectionFactory')
   end
 
   newparam(:description) do
