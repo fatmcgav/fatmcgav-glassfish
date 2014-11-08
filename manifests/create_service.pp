@@ -115,10 +115,9 @@ define glassfish::create_service (
   # Need to stop the domain if it was auto-started
   if $running {
     exec { "stop_${domain_name}":
-      command => "${glassfish::glassfish_asadmin_path} stop-domain ${domain_name}",
+      command => "sudo -u ${runuser} ${glassfish::glassfish_asadmin_path} stop-domain ${domain_name}",
       unless  => "service ${svc_name} status && pgrep -f domains/${domain_name}",
       path    => ['/sbin', '/usr/sbin', '/bin', '/usr/bin'],
-      user    => $runuser,
       before  => Service[$svc_name]
     }
   }
