@@ -117,7 +117,7 @@ class glassfish (
   $user                    = $glassfish::params::glassfish_user,
   $version               = $glassfish::params::glassfish_version) inherits glassfish::params {
   #
-  # # Calculate some vars based on passed parameters
+  ## Calculate some vars based on passed parameters
   #
   # Installation location
   if ($install_dir == undef) {
@@ -146,7 +146,7 @@ class glassfish (
   validate_string($user)
 
   #
-  # # Start to run through the install process
+  ## Start to run through the install process
   #
 
   # Ensure that the $parent_dir exists
