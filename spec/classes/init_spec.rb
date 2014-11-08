@@ -91,10 +91,9 @@ describe 'glassfish' do
           'mode'   => '0755'
         }).that_notifies('Service[glassfish_domain1]') # TODO: Add fixture for sample init.d content
         should contain_exec('stop_domain1').with({
-          'command' => '/usr/local/glassfish-3.1.2.2/bin/asadmin stop-domain domain1',
+          'command' => 'sudo -u glassfish /usr/local/glassfish-3.1.2.2/bin/asadmin stop-domain domain1',
           'unless'  => 'service glassfish_domain1 status && pgrep -f domains/domain1',
           'path'    => ['/sbin', '/usr/sbin', '/bin', '/usr/bin'],
-          'user'    => 'glassfish'
         }).that_comes_before('Service[glassfish_domain1]')
         should contain_service('glassfish_domain1').with({
           'ensure'     => 'running',
