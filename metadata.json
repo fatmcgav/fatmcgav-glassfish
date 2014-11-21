@@ -6,7 +6,7 @@
   "source": "git://github.com/fatmcgav/puppet-glassfish.git",
   "issue_url": "https://github.com/fatmcgav/fatmcgav-glassfish/issues/new",
   "summary": "Install and configure Glassfish J2EE application server.",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "dependencies": [
     {
       "name": "puppetlabs-stdlib",
