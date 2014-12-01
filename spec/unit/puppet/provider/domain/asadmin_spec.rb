@@ -51,6 +51,9 @@ describe Puppet::Type.type(:domain).provider(:asadmin) do
       domain.provider.expects("`").
         with("su - glassfish -c \"asadmin --port 8048 --user admin --passwordfile /tmp/asadmin.pass enable-secure-admin\"").
         returns("Command enable-secure-admin executed successfully.")
+      domain.provider.expects("`").
+        with("su - glassfish -c \"asadmin --port 8048 --user admin --passwordfile /tmp/asadmin.pass restart-domain test\"").
+        returns("Command restart-domain executed successfully.")
       domain.provider.create
     end
     
@@ -89,6 +92,9 @@ describe Puppet::Type.type(:domain).provider(:asadmin) do
       domain.provider.expects("`").
         with("su - glassfish -c \"asadmin --port 8048 --user admin --passwordfile /tmp/asadmin.pass enable-secure-admin\"").
         returns("Command enable-secure-admin executed successfully.")
+      domain.provider.expects("`").
+        with("su - glassfish -c \"asadmin --port 8048 --user admin --passwordfile /tmp/asadmin.pass restart-domain test\"").
+        returns("Command restart-domain executed successfully.")
       domain.provider.create
     end
   end
