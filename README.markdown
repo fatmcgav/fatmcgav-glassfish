@@ -49,6 +49,7 @@ This module can do the following:
   * Set options
   * System properties
   * Javamail Resources
+  * Network Listeners
   
 Further features that are likely to be added include: 
  * Additional support for Cluster environments, such as targeting resources at cluster. 
