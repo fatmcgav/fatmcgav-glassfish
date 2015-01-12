@@ -31,3 +31,6 @@ matrix:
 notifications:
   email:
     - fatmcgav@gmail.com
+addons:
+  code_climate:
+    repo_token: 3c5a58e415766a086d4546e0bfa00feb8468f5a4927aa744c2c1d6a2be394f2f
