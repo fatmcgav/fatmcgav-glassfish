@@ -76,7 +76,7 @@ class glassfish::install {
 
       # Download file
       exec { "download_${glassfish_download_file}":
-        command => "wget -q ${glassfish::glassfish_download_mirror}/${glassfish_download_file} -O ${glassfish_download_dest}",
+        command => "wget -q ${glassfish::download_mirror}/${glassfish_download_file} -O ${glassfish_download_dest}",
         path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
         creates => $glassfish_download_dest,
         timeout => '300',
