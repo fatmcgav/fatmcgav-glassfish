@@ -15,9 +15,14 @@ Puppet::Type.type(:set).provide(:asadmin, :parent =>
   end
 
   def exists?
-    asadmin_exec(["get #{@resource[:name]}"]).each do |line|
-      return true if "#{@resource[:name]}=#{@resource[:value]}" == line.chomp
+    begin
+      asadmin_exec(["get #{@resource[:name]}"]).each do |line|
+        return true if "#{@resource[:name]}=#{@resource[:value]}" == line.chomp
+      end
+      return false
+    rescue Exception => msg
+      #We need to allow the set command to continue if the variable is not found.
+      return false
     end
-    return false
   end
 end

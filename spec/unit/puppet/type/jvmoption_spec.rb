@@ -43,6 +43,14 @@ describe Puppet::Type.type(:jvmoption) do
       it "should support $ values" do
         described_class.new(:option => '-Djavax.net.ssl.trustStore=${com.sun.aas.instanceRoot}/config/cacerts.jks', :ensure => :present)[:option].should == '-Djavax.net.ssl.trustStore=${com.sun.aas.instanceRoot}/config/cacerts.jks'
       end
+      
+      it "should support \: values in the option name" do
+        described_class.new(:option => '-XX\:MaxPermSize=512m', :ensure => :present)[:option].should == '-XX\:MaxPermSize=512m'
+      end
+      
+      it "should support \: values in the option value" do
+        described_class.new(:option => '-Dtest.url=http\:www.gmail.com', :ensure => :present)[:option].should == '-Dtest.url=http\:www.gmail.com'
+      end
 
       it "should not support spaces" do
         expect { described_class.new(:option => '-X Option', :ensure => :present) }.to raise_error(Puppet::Error, /-X Option is not a valid JVM option/)
