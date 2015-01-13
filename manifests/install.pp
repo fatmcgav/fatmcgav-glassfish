@@ -61,6 +61,10 @@ class glassfish::install {
     'zip'     : {
       # Need to download glassfish from java.net
       # $glassfish_download_site = "http://download.java.net/glassfish/${glassfish::version}/release"
+      $glassfish_download_site = $glassfish::download_mirror ? {
+        ''      => "http://download.java.net/glassfish/${glassfish::version}/release",
+        default => $glassfish::download_mirror
+      }
       $glassfish_download_file = "glassfish-${glassfish::version}.zip"
       $glassfish_download_dest = "${glassfish::tmp_dir}/${glassfish_download_file}"
 
@@ -76,7 +80,7 @@ class glassfish::install {
 
       # Download file
       exec { "download_${glassfish_download_file}":
-        command => "wget -q ${glassfish::download_mirror}/${glassfish_download_file} -O ${glassfish_download_dest}",
+        command => "wget -q ${glassfish_download_site}/${glassfish_download_file} -O ${glassfish_download_dest}",
         path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
         creates => $glassfish_download_dest,
         timeout => '300',

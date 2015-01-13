@@ -99,7 +99,7 @@ class glassfish (
   $create_passfile         = $glassfish::params::glassfish_create_passfile,
   $domain_name             = $glassfish::params::glassfish_domain,
   $domain_template         = $glassfish::params::glassfish_domain_template,
-  $download_mirror         = $glassfish::params::glassfish_download_mirror,
+  $download_mirror         = undef,
   $enable_secure_admin     = $glassfish::params::glassfish_enable_secure_admin,
   $gms_enabled             = $glassfish::params::glassfish_gms_enabled,
   $gms_multicast_port      = $glassfish::params::glassfish_multicast_port,

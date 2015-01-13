@@ -21,8 +21,6 @@
 class glassfish::params {
   # Installation method. Can be: 'package','zip'.
   $glassfish_install_method      = 'zip'
-  # Zip file download mirror site
-  $glassfish_download_mirror     = "http://download.java.net/glassfish/${glassfish::version}/release"
 
   # Default glassfish install location
   $glassfish_install_dir         = undef
