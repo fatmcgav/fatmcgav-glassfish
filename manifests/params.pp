@@ -22,6 +22,7 @@ class glassfish::params {
   # Installation method. Can be: 'package','zip'.
   $glassfish_install_method      = 'zip'
 
+  # Default glassfish install location
   $glassfish_install_dir         = undef
 
   # Default glassfish temporary directory for downloading Zip.
