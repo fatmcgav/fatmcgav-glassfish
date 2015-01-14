@@ -24,12 +24,15 @@ Puppet::Provider::Asadmin) do
   def exists?
     args = Array.new
     args << "list-jvm-options"
-    args << @resource[:target] if @resource[:target]
+    args << "--target" << @resource[:target] if @resource[:target]
+    
+    #Remove escaped semi-colons for matching the jvm option name
+    name = @resource[:name].sub "\\:" , ":"
 
     asadmin_exec(args).each do |line|
       line.sub!(/-XX: ([^\ ]+)/, '-XX:+\1')
       if line.match(/^-.[^\ ]+/)
-        return true if @resource[:name] == line.chomp
+        return true if name == line.chomp
       end
     end
     return false

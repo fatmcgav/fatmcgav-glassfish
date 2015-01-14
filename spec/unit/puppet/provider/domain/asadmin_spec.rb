@@ -43,7 +43,7 @@ describe Puppet::Type.type(:domain).provider(:asadmin) do
   describe "when creating a resource" do
     it "should be able to create a domain with default values" do
       domain.provider.expects("`").
-        with("su - glassfish -c \"asadmin --port 8048 --user admin --passwordfile /tmp/asadmin.pass create-domain --portbase 8000 --savelogin test\"").
+        with("su - glassfish -c \"asadmin --port 8048 --user admin --passwordfile /tmp/asadmin.pass create-domain --portbase 8000 --savelogin --savemasterpassword test\"").
         returns("Command create-domain executed successfully.")
       domain.provider.expects("`").
         with("su - glassfish -c \"asadmin --port 8048 --user admin --passwordfile /tmp/asadmin.pass start-domain test\"").
@@ -51,13 +51,16 @@ describe Puppet::Type.type(:domain).provider(:asadmin) do
       domain.provider.expects("`").
         with("su - glassfish -c \"asadmin --port 8048 --user admin --passwordfile /tmp/asadmin.pass enable-secure-admin\"").
         returns("Command enable-secure-admin executed successfully.")
+      domain.provider.expects("`").
+        with("su - glassfish -c \"asadmin --port 8048 --user admin --passwordfile /tmp/asadmin.pass restart-domain test\"").
+        returns("Command restart-domain executed successfully.")
       domain.provider.create
     end
     
     it "should be able to create a domain with enablesecureadmin set to false" do
       domain['enablesecureadmin'] = :false
       domain.provider.expects("`").
-        with("su - glassfish -c \"asadmin --port 8048 --user admin --passwordfile /tmp/asadmin.pass create-domain --portbase 8000 --savelogin test\"").
+        with("su - glassfish -c \"asadmin --port 8048 --user admin --passwordfile /tmp/asadmin.pass create-domain --portbase 8000 --savelogin --savemasterpassword test\"").
         returns("Command create-domain executed successfully.")
       domain.provider.expects("`").
         with("su - glassfish -c \"asadmin --port 8048 --user admin --passwordfile /tmp/asadmin.pass start-domain test\"").
@@ -69,7 +72,7 @@ describe Puppet::Type.type(:domain).provider(:asadmin) do
       domain['startoncreate'] = :false
       domain['enablesecureadmin'] = :false
       domain.provider.expects("`").
-        with("su - glassfish -c \"asadmin --port 8048 --user admin --passwordfile /tmp/asadmin.pass create-domain --portbase 8000 --savelogin test\"").
+        with("su - glassfish -c \"asadmin --port 8048 --user admin --passwordfile /tmp/asadmin.pass create-domain --portbase 8000 --savelogin --savemasterpassword test\"").
         returns("Command create-domain executed successfully.")
       domain.provider.create
     end
@@ -81,7 +84,7 @@ describe Puppet::Type.type(:domain).provider(:asadmin) do
       domain['template'] = '/tmp/template.xml'
       # Check that provider executes as expected... 
       domain.provider.expects("`").
-        with("su - glassfish -c \"asadmin --port 8048 --user admin --passwordfile /tmp/asadmin.pass create-domain --portbase 8000 --savelogin --template /tmp/template.xml test\"").
+        with("su - glassfish -c \"asadmin --port 8048 --user admin --passwordfile /tmp/asadmin.pass create-domain --portbase 8000 --savelogin --savemasterpassword --template /tmp/template.xml test\"").
         returns("Command create-domain executed successfully.")
       domain.provider.expects("`").
         with("su - glassfish -c \"asadmin --port 8048 --user admin --passwordfile /tmp/asadmin.pass start-domain test\"").
@@ -89,6 +92,9 @@ describe Puppet::Type.type(:domain).provider(:asadmin) do
       domain.provider.expects("`").
         with("su - glassfish -c \"asadmin --port 8048 --user admin --passwordfile /tmp/asadmin.pass enable-secure-admin\"").
         returns("Command enable-secure-admin executed successfully.")
+      domain.provider.expects("`").
+        with("su - glassfish -c \"asadmin --port 8048 --user admin --passwordfile /tmp/asadmin.pass restart-domain test\"").
+        returns("Command restart-domain executed successfully.")
       domain.provider.create
     end
   end

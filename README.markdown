@@ -49,6 +49,7 @@ This module can do the following:
   * Set options
   * System properties
   * Javamail Resources
+  * Network Listeners
   
 Further features that are likely to be added include: 
  * Additional support for Cluster environments, such as targeting resources at cluster. 
@@ -129,6 +130,8 @@ Thanks to the following people who have helped with this module:
  * Stepan Stipl - Features and testing
  * Jon Black - Testing
  * Alex Jennings - Features
+ * joliveira - Bug fixes
+ * Jesse Cotton - Features
 
 ##Development
 If you have any features that you feel are missing or find any bugs for this module, 

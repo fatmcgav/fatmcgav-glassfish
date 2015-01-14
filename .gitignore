@@ -2,6 +2,7 @@
 /.librarian
 /.bundle
 /.tmp
+/.vagrant
 spec/fixtures
 pkg
 /.rspec_system

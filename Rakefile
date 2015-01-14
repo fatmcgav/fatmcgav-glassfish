@@ -9,20 +9,22 @@ begin
 rescue LoadError
 end
 
-# Tweak Puppet-lint config
-PuppetLint.configuration.send('disable_class_inherits_from_params_class')
-PuppetLint.configuration.send('disable_80chars')
-PuppetLint.configuration.send('disable_autoloader_layout')
-PuppetLint.configuration.log_format = "%{path}:%{linenumber}:%{check}:%{KIND}:%{message}"
-PuppetLint.configuration.fail_on_warnings = true
-  
 exclude_paths = [
   "pkg/**/*",
   "vendor/**/*",
   "spec/**/*",
 ]
-PuppetLint.configuration.ignore_paths = exclude_paths
 PuppetSyntax.exclude_paths = exclude_paths
+
+# Puppet-Lint 1.1.0
+Rake::Task[:lint].clear
+PuppetLint::RakeTask.new :lint do |config|
+  config.ignore_paths = exclude_paths 
+  config.log_format = '%{path}:%{linenumber}:%{check}:%{KIND}:%{message}'
+  config.disable_checks = [ "class_inherits_from_params_class", "80chars" ]
+  config.fail_on_warnings = true
+  config.relative = true
+end
 
 # use librarian-puppet to manage fixtures instead of .fixtures.yml
 # offers more possibilities like explicit version management, forge downloads,...

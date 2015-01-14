@@ -9,6 +9,7 @@ Puppet::Type.type(:domain).provide(:asadmin,
     args << "create-domain"
     args << "--portbase" << @resource[:portbase]
     args << "--savelogin"
+    args << "--savemasterpassword"
     args << "--template" << @resource[:template] if @resource[:template]
     args << @resource[:name]
     
@@ -22,6 +23,7 @@ Puppet::Type.type(:domain).provide(:asadmin,
       # Enable secure admin if required and domain started
       if @resource[:enablesecureadmin] == :true
         asadmin_exec(['enable-secure-admin'])
+        asadmin_exec(['restart-domain', @resource[:name]])
       end
     end
   end

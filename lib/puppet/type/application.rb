@@ -85,7 +85,7 @@ Puppet::Type.newtype(:application) do
   
   # Validate mandatory params
   validate do
-    raise Puppet::Error, 'Source is required.' unless self[:source]
+    raise Puppet::Error, 'Source is required.' if self[:source].nil? and self[:ensure] == :present
   end
   
   # Autorequire the user running command

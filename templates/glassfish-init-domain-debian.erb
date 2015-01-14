@@ -32,6 +32,23 @@ function procStart() {
 	log_end_msg $_isOk
 	return $_isOk
 }
+
+function procStatus() {
+	# Make sure only root can run our script
+	if [[ $EUID -ne 0 ]]; then
+		echo "This script must be run as root" 1>&2
+		exit 1
+	fi
+	log_daemon_msg "Status for $__NAME"
+	_isOk=0
+	sudo -u $USER ${GLASSFISHPATH}/asadmin list-domains | grep run | grep -v not > /dev/null
+	if [[ $? -ne 0 ]]; then
+		_isOk=3
+	fi
+	log_end_msg $_isOk
+	return $_isOk
+}
+
 function procStop() {
 	# Make sure only root can run our script
 	if [[ $EUID -ne 0 ]]; then
@@ -58,18 +75,9 @@ case "$1" in
 		exit $?
 	;;
 	status)
-		echo -n "$__NAME status: "
-		count=`sudo -u $USER ${GLASSFISHPATH}/asadmin list-domains | grep run | grep -v not | wc -l`
-		if test "$count" -gt "0"; then
-			realpath=`dirname $(readlink -f $GLASSFISHPATH)`
-			pid=`ps aux | grep $realpath | grep -v grep | awk '{print $2}'`
-			echo "running (pid: $pid)"
-			exit 0
-		else
-			echo stopped
-			exit 4
-		fi
-	;;
+    procStatus
+    exit $?
+  ;;
 	restart)
 		procStop
 		if test "$?" != "0"; then

@@ -17,7 +17,7 @@
 #
 # === Copyright
 #
-# Copyright 2014 Gavin Williams, unless otherwise noted.
+# Copyright 2015 Gavin Williams, unless otherwise noted.
 #
 class glassfish::install {
   # Create user/group if required
@@ -60,7 +60,11 @@ class glassfish::install {
     }
     'zip'     : {
       # Need to download glassfish from java.net
-      $glassfish_download_site = "http://download.java.net/glassfish/${glassfish::version}/release"
+      # $glassfish_download_site = "http://download.java.net/glassfish/${glassfish::version}/release"
+      $glassfish_download_site = $glassfish::download_mirror ? {
+        ''      => "http://download.java.net/glassfish/${glassfish::version}/release",
+        default => $glassfish::download_mirror
+      }
       $glassfish_download_file = "glassfish-${glassfish::version}.zip"
       $glassfish_download_dest = "${glassfish::tmp_dir}/${glassfish_download_file}"
 
@@ -123,14 +127,16 @@ class glassfish::install {
         require => Exec['change-mode']
       }
 
-      # Remove default domain1.
-      file { 'remove-domain1':
-        ensure  => absent,
-        path    => "${glassfish::glassfish_dir}/glassfish/domains/domain1",
-        force   => true,
-        backup  => false,
-        require => Exec["move-glassfish${mjversion}"],
-        before  => Anchor['glassfish::install::end']
+      if $glassfish::remove_default_domain {
+        # Remove default domain1.
+        file { 'remove-domain1':
+          ensure  => absent,
+          path    => "${glassfish::glassfish_dir}/glassfish/domains/domain1",
+          force   => true,
+          backup  => false,
+          require => Exec["move-glassfish${mjversion}"],
+          before  => Anchor['glassfish::install::end']
+        }
       }
     }
     default   : {

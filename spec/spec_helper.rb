@@ -1,6 +1,14 @@
 require 'rubygems'
 require 'puppetlabs_spec_helper/module_spec_helper'
 
+# Code Climate loading
+begin
+  require 'codeclimate-test-reporter'
+  CodeClimate::TestReporter.start
+rescue Exception => e
+  warn "CodeClimate disabled - #{e}"
+end
+
 # Coveralls loading 
 begin
   require 'simplecov'
@@ -10,7 +18,7 @@ begin
     add_filter '/spec/'
   end
 rescue Exception => e
-  warn "Coveralls disabled"
+  warn "Coveralls disabled - #{e}"
 end
 
 Dir[File.join(File.dirname(__FILE__), 'support', '*.rb')].each do |support_file|

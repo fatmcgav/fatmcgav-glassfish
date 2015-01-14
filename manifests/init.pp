@@ -32,6 +32,8 @@
 #
 #  [*domain_template*] - Glassfish domain template to use.
 #
+#  [*download_mirror*] - Glassfish zip file download mirror.
+#
 #  [*enable_secure_admin*] - Should secure admin be enabled?
 #  Defaults to true
 #
@@ -61,6 +63,9 @@
 #
 #  [*portbase*]        - Glassfish portbase. Used when creating a domain on install.
 #  Defaults to '4800'
+#
+#  [*remove_default_domain*] - Should the default domain doiman1' be removed on install?
+#  Defaults to true.
 #
 #  [*start_domain*] - Should the glassfish domain be started on creation?
 #  Defaults to true
@@ -94,6 +99,7 @@ class glassfish (
   $create_passfile         = $glassfish::params::glassfish_create_passfile,
   $domain_name             = $glassfish::params::glassfish_domain,
   $domain_template         = $glassfish::params::glassfish_domain_template,
+  $download_mirror         = undef,
   $enable_secure_admin     = $glassfish::params::glassfish_enable_secure_admin,
   $gms_enabled             = $glassfish::params::glassfish_gms_enabled,
   $gms_multicast_port      = $glassfish::params::glassfish_multicast_port,
@@ -107,13 +113,15 @@ class glassfish (
   $package_prefix          = $glassfish::params::glassfish_package_prefix,
   $parent_dir              = $glassfish::params::glassfish_parent_dir,
   $portbase                = $glassfish::params::glassfish_portbase,
+  $remove_default_domain   = $glassfish::params::glassfish_remove_default_domain,
   $service_name            = $glassfish::params::glassfish_service_name,
   $start_domain            = $glassfish::params::glassfish_start_domain,
   $tmp_dir                 = $glassfish::params::glassfish_tmp_dir,
   $user                    = $glassfish::params::glassfish_user,
-  $version               = $glassfish::params::glassfish_version) inherits glassfish::params {
+  $version                 = $glassfish::params::glassfish_version
+  ) inherits glassfish::params {
   #
-  # # Calculate some vars based on passed parameters
+  ## Calculate some vars based on passed parameters
   #
   # Installation location
   if ($install_dir == undef) {
@@ -142,7 +150,7 @@ class glassfish (
   validate_string($user)
 
   #
-  # # Start to run through the install process
+  ## Start to run through the install process
   #
 
   # Ensure that the $parent_dir exists

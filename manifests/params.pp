@@ -22,6 +22,7 @@ class glassfish::params {
   # Installation method. Can be: 'package','zip'.
   $glassfish_install_method      = 'zip'
 
+  # Default glassfish install location
   $glassfish_install_dir         = undef
 
   # Default glassfish temporary directory for downloading Zip.
@@ -42,6 +43,9 @@ class glassfish::params {
   $glassfish_user                = 'glassfish'
   # Default Glassfish Group
   $glassfish_group               = 'glassfish'
+
+  # Should the included default 'domain1' be removed?
+  $glassfish_remove_default_domain = true
 
   # Default Glassfish asadmin username
   $glassfish_asadmin_user        = 'admin'
