@@ -1,4 +1,4 @@
-0.5.0 2014-xx-xx Gavin Williams <fatmcgav@gmail.com>
+0.5.0 2014-01-14 Gavin Williams <fatmcgav@gmail.com>
 * Feature and Bug fix release
   * Add support for providing an alternative download mirror.
   * Bug fixes around jvmoption and set providers. Thanks to joliveira.
