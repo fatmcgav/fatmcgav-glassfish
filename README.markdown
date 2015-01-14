@@ -130,6 +130,8 @@ Thanks to the following people who have helped with this module:
  * Stepan Stipl - Features and testing
  * Jon Black - Testing
  * Alex Jennings - Features
+ * joliveira - Bug fixes
+ * Jesse Cotton - Features
 
 ##Development
 If you have any features that you feel are missing or find any bugs for this module, 
