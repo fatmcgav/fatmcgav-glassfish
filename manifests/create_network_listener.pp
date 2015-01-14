@@ -24,7 +24,7 @@
 #
 # [*jkenabled*] - Whether mod_jk is enabled for this listener
 # Defaults to false
-# 
+#
 # [*target*] - Creates the network listener only on the specified target.
 # Defaults to "server"
 #
@@ -50,7 +50,7 @@ define glassfish::create_network_listener (
   $port              = undef,
   $threadpool        = undef,
   $protocol          = undef,
-  $transport         = "tcp",
+  $transport         = 'tcp',
   $enabled           = true,
   $jkenabled         = false,
   $target            = server,
@@ -69,20 +69,20 @@ define glassfish::create_network_listener (
   validate_string($portbase)
   validate_string($user)
 
-  # Create 
+  # Create
   networklistener { $name:
-    ensure            => $ensure,
-    address           => $address,
-    port              => $port,
-    threadpool        => $threadpool,
-    protocol          => $protocol,
-    transport         => $transport,
-    enabled           => $enabled,
-    jkenabled         => $jkenabled,
-    target            => $target,
-    asadminuser       => $asadmin_user,
-    passwordfile      => $asadmin_passfile,
-    portbase          => $portbase,
-    user              => $user
+    ensure       => $ensure,
+    address      => $address,
+    port         => $port,
+    threadpool   => $threadpool,
+    protocol     => $protocol,
+    transport    => $transport,
+    enabled      => $enabled,
+    jkenabled    => $jkenabled,
+    target       => $target,
+    asadminuser  => $asadmin_user,
+    passwordfile => $asadmin_passfile,
+    portbase     => $portbase,
+    user         => $user
   }
 }
