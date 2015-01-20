@@ -12,8 +12,9 @@ gem 'rake'
 
 group :test do
   gem 'puppet', puppetversion
-  gem 'rspec', '~> 2.0'
-  gem 'rspec-puppet', :git => 'https://github.com/rodjek/rspec-puppet.git', :ref => '891c5794' # Known working commit SHA
+  # gem 'rspec', '~> 2.0'
+  # gem 'rspec-puppet', :git => 'https://github.com/rodjek/rspec-puppet.git', :ref => '891c5794' # Known working commit SHA
+  gem 'rspec-puppet', :git => 'https://github.com/rodjek/rspec-puppet.git'
   gem 'puppetlabs_spec_helper'
   #gem 'puppet-lint'
   gem 'puppet-lint', :git => 'https://github.com/fatmcgav/puppet-lint.git', :ref => 'c033c373' # Fix for #335 
