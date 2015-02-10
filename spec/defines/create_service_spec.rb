@@ -47,7 +47,7 @@ describe 'glassfish::create_service' do
           
         it do
           should contain_exec('stop_test').with({
-            'command' => /stop-domain test$/,
+            'command' => /stop-domain test/,
           })
         end
         
@@ -103,7 +103,7 @@ describe 'glassfish::create_service' do
           
         it do
           should contain_exec('stop_test').with({
-            'command' => /stop-domain test$/,
+            'command' => /stop-domain test/,
           })
         end
         

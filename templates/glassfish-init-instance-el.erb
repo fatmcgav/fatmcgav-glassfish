@@ -14,12 +14,11 @@ GLASSFISH_BIN="<%= scope.lookupvar('glassfish::glassfish_dir') %>/glassfish/bin"
 # Setup Domain and User values
 INSTANCE="<%= @instance_name %>"
 NODE="<%= @node_name %>"
-PWFILE="<%= @asadmin_passfile %>"
 USER="<%= @runuser %>"
 
 start() {
 	echo -n "Starting glassfish  instance $INSTANCE on node $NODE: "
-	daemon --user $USER --pidfile /var/run/glassfish_$DOMAIN.pid "$GLASSFISH_BIN/asadmin start-local-instance --passwordfile $PWFILE --node $NODE --sync normal $INSTANCE"
+	daemon --user $USER --pidfile /var/run/glassfish_$DOMAIN.pid "$GLASSFISH_BIN/asadmin start-local-instance --node $NODE --sync normal $INSTANCE"
 	RETVAL=$?
 	if [ $RETVAL -eq 0 ]; then
 		PID=`ps U $USER | grep $INSTANCE | awk '{ print $1}'`
