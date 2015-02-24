@@ -16,7 +16,11 @@ Puppet::Type.type(:log_attribute).provide(:asadmin, :parent =>
   end
 
   def exists?
-    asadmin_exec(["list-log-attributes"]).each do |line|
+    args = Array.new
+    args << 'list-log-attributes'
+    args << @resource[:target] if @resource[:target]
+
+    asadmin_exec(args).each do |line|
       return true if "#{@resource[:name]}\t<#{@resource[:value]}>" == line.chomp
     end
     return false

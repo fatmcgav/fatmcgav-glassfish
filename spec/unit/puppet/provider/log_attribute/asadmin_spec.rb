@@ -29,7 +29,7 @@ describe Puppet::Type.type(:log_attribute).provider(:asadmin) do
   describe "when asking exists?" do
     it "should return true if resource value matches" do
       log_attribute.provider.expects("`").
-        with("su - glassfish -c \"asadmin --port 8048 --user admin list-log-attributes\"").
+        with("su - glassfish -c \"asadmin --port 8048 --user admin list-log-attributes server\"").
         returns("com.sun.enterprise.server.logging.GFFileHandler.flushFrequency\t<1>
 com.sun.enterprise.server.logging.GFFileHandler.formatter\t<com.sun.enterprise.server.logging.UniformLogFormatter>
 com.sun.enterprise.server.logging.GFFileHandler.logtoConsole\t<false>")
@@ -38,7 +38,17 @@ com.sun.enterprise.server.logging.GFFileHandler.logtoConsole\t<false>")
 
     it "should return false if resource value doesn't match" do
       log_attribute.provider.expects("`").
-        with("su - glassfish -c \"asadmin --port 8048 --user admin list-log-attributes\"").
+        with("su - glassfish -c \"asadmin --port 8048 --user admin list-log-attributes server\"").
+        returns("com.sun.enterprise.server.logging.GFFileHandler.flushFrequency\t<1>
+com.sun.enterprise.server.logging.GFFileHandler.formatter\t<com.sun.enterprise.server.logging.UniformLogFormat>
+com.sun.enterprise.server.logging.GFFileHandler.logtoConsole\t<false>")
+      log_attribute.provider.should_not be_exists
+    end
+
+    it "should support querying for cluster resources" do
+      log_attribute[:target] = 'cluster'
+      log_attribute.provider.expects("`").
+        with("su - glassfish -c \"asadmin --port 8048 --user admin list-log-attributes cluster\"").
         returns("com.sun.enterprise.server.logging.GFFileHandler.flushFrequency\t<1>
 com.sun.enterprise.server.logging.GFFileHandler.formatter\t<com.sun.enterprise.server.logging.UniformLogFormat>
 com.sun.enterprise.server.logging.GFFileHandler.logtoConsole\t<false>")
