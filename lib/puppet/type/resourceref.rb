@@ -94,4 +94,23 @@ Puppet::Type.newtype(:resourceref) do
       res[:name]
     }
   end
+
+  # Autorequire the relevant resources
+  # autorequire(:domain) do
+  self.catalog.resources.select { |res|
+    next if res.type == :domain # Skip domain resources, as autorequired above...
+    next if res.type == :user # Skip user resources, as autorequired above...
+    next if res.type == :resourceref # Skip resourceref resources, as that's us...
+    # Match on resource name...
+    debug("Res = #{res[:name]}, type = #{res.type}. Self = #{self[:name]}.")
+    debug("Match = #{res[:name] == self[:name]}.")
+    res if res[:name] == self[:name]
+  }.collect { |res|
+    debug("Collected resource: #{res[:name]}.")
+    autorequire(res.type) do
+      debug("Requiring res.type #{res.type}")
+      res[:name]
+    end
+  }
+  # end
 end

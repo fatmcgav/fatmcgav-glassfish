@@ -258,5 +258,59 @@ describe Puppet::Type.type(:resourceref) do
         reqs[0].target.ref.should == resourceref.ref
       end
     end
+
+    describe "resource autorequire" do
+      let :resourceref do
+        described_class.new(
+          :name   => 'jdbc/connectionPool',
+          :target => 'cluster',
+          :user   => 'glassfish'
+        )
+      end
+      
+      # Need to stub jdbcresource type and provider.
+      let :jdbcresourceprovider do
+        Puppet::Type.type(:jdbcresource).provide(:fake_jdbcresource_provider) { mk_resource_methods }
+      end
+      
+      let :jdbcresource do
+        Puppet::Type.type(:jdbcresource).new(
+          :name           => 'jdbc/connectionPool',
+          :ensure         => 'present',
+          :connectionpool => 'connectionPool',
+          :user           => 'glassfish'
+        )
+      end
+      
+      let :catalog do
+        Puppet::Resource::Catalog.new
+      end
+    
+      # Stub the jdbcresource type, and expect File.exists? and Puppet.features.root?
+      before :each do
+        Puppet::Type.type(:jdbcresource).stubs(:defaultprovider).returns jdbcresourceprovider
+        Puppet.features.expects(:root?).returns(true).once
+      end
+      
+      it "should not autorequire a resource when no matching resource can be found" do
+        catalog.add_resource resourceref
+        resourceref.autorequire.should be_empty
+      end
+    
+      it "should autorequire a matching resource" do
+        # Temporary debugging
+        Puppet::Util::Log.level = :debug
+        Puppet::Util::Log.newdestination(:console)
+        # Expects for jdbcresource resource
+        Puppet.features.expects(:root?).returns(true).once
+        # Create catalogue
+        catalog.add_resource resourceref
+        catalog.add_resource jdbcresource
+        reqs = resourceref.autorequire
+        reqs.size.should == 1
+        reqs[0].source.ref.should == jdbcresource.ref
+        reqs[0].target.ref.should == resourceref.ref
+      end
+    end
   end
 end
