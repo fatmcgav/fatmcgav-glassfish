@@ -298,9 +298,6 @@ describe Puppet::Type.type(:resourceref) do
       end
     
       it "should autorequire a matching resource" do
-        # Temporary debugging
-        Puppet::Util::Log.level = :debug
-        Puppet::Util::Log.newdestination(:console)
         # Expects for jdbcresource resource
         Puppet.features.expects(:root?).returns(true).once
         # Create catalogue

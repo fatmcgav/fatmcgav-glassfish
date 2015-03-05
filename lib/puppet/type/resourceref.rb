@@ -96,21 +96,18 @@ Puppet::Type.newtype(:resourceref) do
   end
 
   # Autorequire the relevant resources
-  # autorequire(:domain) do
-  self.catalog.resources.select { |res|
-    next if res.type == :domain # Skip domain resources, as autorequired above...
-    next if res.type == :user # Skip user resources, as autorequired above...
-    next if res.type == :resourceref # Skip resourceref resources, as that's us...
-    # Match on resource name...
-    debug("Res = #{res[:name]}, type = #{res.type}. Self = #{self[:name]}.")
-    debug("Match = #{res[:name] == self[:name]}.")
-    res if res[:name] == self[:name]
-  }.collect { |res|
-    debug("Collected resource: #{res[:name]}.")
-    autorequire(res.type) do
-      debug("Requiring res.type #{res.type}")
-      res[:name]
+  [:jdbcresource, :jmsresource, :javamailresource].each do |resource|
+    autorequire(resource) do
+      catalog.resources.select { |res|
+        # Skip it if we're not interested in it...
+        next unless res.type == resource 
+
+        # Match on resource name...
+        res if res[:name] == self[:name]
+      }.collect { |res|
+        # Return resource name to autorequire
+        res[:name]
+      }
     end
-  }
-  # end
+  end
 end

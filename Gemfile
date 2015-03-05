@@ -19,11 +19,10 @@ group :test do
   #gem 'puppet-lint'
   gem 'puppet-lint', :git => 'https://github.com/fatmcgav/puppet-lint.git', :ref => 'c033c373' # Fix for #335 
   gem 'puppet-syntax'
-  gem 'librarian-puppet', '~> 1.0.0'
+  gem 'librarian-puppet', '~> 1.4.0'
   gem 'simplecov', :platforms => [:ruby_19, :ruby_20]
   gem 'coveralls', :platforms => [:ruby_19, :ruby_20]
   gem 'codeclimate-test-reporter', :platforms => [:ruby_19, :ruby_20]
-
 end
 
 group :development do
