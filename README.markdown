@@ -42,14 +42,15 @@ This module can do the following:
   * Applications
   * Auth Realm
   * Custom Resources
+  * Javamail Resources
   * JDBC Connection Pools
   * JDBC Resources
   * JMS Resources
   * JVM Options
+  * Network Listeners
+  * Resource references
   * Set options
   * System properties
-  * Javamail Resources
-  * Network Listeners
   
 Further features that are likely to be added include: 
  * Additional support for Cluster environments, such as targeting resources at cluster. 
