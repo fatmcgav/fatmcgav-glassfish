@@ -3,6 +3,9 @@ Puppet::Type.newtype(:resourceref) do
 
   ensurable
 
+  # Array of resources we can reference
+  referenceable_resources = [:jdbcresource, :jmsresource, :javamailresource, :customresource]
+
   newparam(:name) do
     desc "The reference resource name."
     isnamevar
@@ -14,11 +17,12 @@ Puppet::Type.newtype(:resourceref) do
     end
   end
 
- newparam(:target) do
+  newparam(:target) do
     desc "This option helps specify the target to which you  are deploying. 
     Valid options are: server, domain, [cluster name], [instance name]. 
     Defaults to: server"
     defaultto "server"
+
   end
   
   newparam(:portbase) do
@@ -75,6 +79,18 @@ Puppet::Type.newtype(:resourceref) do
     end
   end
   
+
+  # Validate that we're not using the same target as resource
+  validate do 
+    @resource.catalog.resources.select { |res|
+      # Skip resource if we're not interested in it...
+      next unless referenceable_resources.include?(res.type)
+
+      # Match on resource name...
+      raise Puppet::Error, 'Referenced resource has matching target.' if res[:name] == self[:name] and res[:target] == self[:target]
+    }
+  end
+
   # Autorequire the user running command
   autorequire(:user) do
     self[:user]
@@ -96,7 +112,7 @@ Puppet::Type.newtype(:resourceref) do
   end
 
   # Autorequire the relevant resources
-  [:jdbcresource, :jmsresource, :javamailresource].each do |resource|
+  referenceable_resources.each do |resource|
     autorequire(resource) do
       catalog.resources.select { |res|
         # Skip it if we're not interested in it...
