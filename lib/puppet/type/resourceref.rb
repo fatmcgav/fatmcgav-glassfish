@@ -79,18 +79,6 @@ Puppet::Type.newtype(:resourceref) do
     end
   end
   
-
-  # Validate that we're not using the same target as resource
-  validate do 
-    @resource.catalog.resources.select { |res|
-      # Skip resource if we're not interested in it...
-      next unless referenceable_resources.include?(res.type)
-
-      # Match on resource name...
-      raise Puppet::Error, 'Referenced resource has matching target.' if res[:name] == self[:name] and res[:target] == self[:target]
-    }
-  end
-
   # Autorequire the user running command
   autorequire(:user) do
     self[:user]

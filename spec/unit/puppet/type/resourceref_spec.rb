@@ -268,7 +268,7 @@ describe Puppet::Type.type(:resourceref) do
         )
       end
       
-      # Need to stub jdbcresource type and provider.
+      # Need to stub jdbcresource provider.
       let :jdbcresourceprovider do
         Puppet::Type.type(:jdbcresource).provide(:fake_jdbcresource_provider) { mk_resource_methods }
       end
