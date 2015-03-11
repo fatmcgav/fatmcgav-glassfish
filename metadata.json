@@ -1,7 +1,7 @@
 {
   "name": "fatmcgav-glassfish",
   "author": "Gavin Williams",
-  "license": "GPLv3",
+  "license": "Apache-2.0",
   "project_page": "http://github.com/fatmcgav/puppet-glassfish",
   "source": "git://github.com/fatmcgav/puppet-glassfish.git",
   "issue_url": "https://github.com/fatmcgav/fatmcgav-glassfish/issues/new",
