@@ -14,6 +14,9 @@ describe 'glassfish' do
       ## Test default behaviour
       #
       it do
+        # Should compile
+        should compile.with_all_deps()
+
         # Classes
         should create_class('glassfish')
         should contain_class('glassfish::params')
@@ -55,21 +58,21 @@ describe 'glassfish' do
       it { should_not contain_class('glassfish::java') }
     end
 
-    describe 'with create_domain => true' do
+    describe 'with create_domain => true and domain_name => domain' do
       # Set relevant params
       let(:params) do  {
           :create_domain => true,
-          :domain_name   => 'domain1'
+          :domain_name   => 'domain'
         }
       end
 
       it do
         # Should contain asadmin_passfile with ordering
-        should contain_glassfish__create_asadmin_passfile('glassfish_asadmin_passfile').that_comes_before('Glassfish::Create_domain[domain1]')
+        should contain_glassfish__create_asadmin_passfile('glassfish_asadmin_passfile').that_comes_before('Glassfish::Create_domain[domain]')
 
         # Should include create_domain resource
-        should contain_glassfish__create_domain('domain1').that_requires('Class[glassfish::install]')
-        should contain_domain('domain1').with({
+        should contain_glassfish__create_domain('domain').that_requires('Class[glassfish::install]')
+        should contain_domain('domain').with({
           'ensure'            => 'present',
           'user'              => 'glassfish',
           'asadminuser'       => 'admin',
@@ -84,18 +87,18 @@ describe 'glassfish' do
         should_not contain_install_jars('[]')
 
         # Should include create_service resource
-        should contain_glassfish__create_service('domain1')
-        should contain_file('domain1_servicefile').with({
+        should contain_glassfish__create_service('domain')
+        should contain_file('domain_servicefile').with({
           'ensure' => 'present',
-          'path'   => '/etc/init.d/glassfish_domain1',
+          'path'   => '/etc/init.d/glassfish_domain',
           'mode'   => '0755'
-        }).that_notifies('Service[glassfish_domain1]') # TODO: Add fixture for sample init.d content
-        should contain_exec('stop_domain1').with({
-          'command' => 'su - glassfish -c "/usr/local/glassfish-3.1.2.2/bin/asadmin stop-domain domain1"',
-          'unless'  => 'service glassfish_domain1 status && pgrep -f domains/domain1',
+        }).that_notifies('Service[glassfish_domain]') # TODO: Add fixture for sample init.d content
+        should contain_exec('stop_domain').with({
+          'command' => 'su - glassfish -c "/usr/local/glassfish-3.1.2.2/bin/asadmin stop-domain domain"',
+          'unless'  => 'service glassfish_domain status && pgrep -f domains/domain',
           'path'    => ['/sbin', '/usr/sbin', '/bin', '/usr/bin'],
-        }).that_comes_before('Service[glassfish_domain1]')
-        should contain_service('glassfish_domain1').with({
+        }).that_comes_before('Service[glassfish_domain]')
+        should contain_service('glassfish_domain').with({
           'ensure'     => 'running',
           'enable'     => true,
           'hasstatus'  => true,
@@ -103,6 +106,20 @@ describe 'glassfish' do
           'status'     => nil
         })
 
+      end
+    end
+
+    describe 'with create_domain => true, default domain name and remove_default_domain => true' do
+      # Set relevant params
+      let(:params) do {
+          :create_domain => true,
+          :domain_name   => 'domain1'
+        }
+      end
+
+      # Should  fail due to invalid boolean
+      it do
+        should compile.and_raise_error(/creating 'domain1' and removing default domain 'domain1' together makes no sense/)
       end
     end
 
