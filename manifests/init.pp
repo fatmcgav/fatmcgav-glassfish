@@ -149,6 +149,13 @@ class glassfish (
   validate_string($package_prefix)
   validate_string($user)
 
+
+  if $remove_default_domain and $create_domain {
+      if $domain_name == 'domain1' {
+        fail("creating 'domain1' and removing default domain 'domain1' together makes no sense")
+      }
+  }
+
   #
   ## Start to run through the install process
   #
