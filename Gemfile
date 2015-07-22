@@ -12,7 +12,7 @@ gem 'rake'
 
 group :test do
   gem 'puppet', puppetversion
-  gem 'rspec', '~> 2.0'
+  gem 'rspec', '< 3.x'
   gem 'highline', '~>1.6.0' # Pin to support Ruby 1.8.7
   gem 'rspec-puppet', '~>2.0.0'
   gem 'puppetlabs_spec_helper', '~>0.8.0'
