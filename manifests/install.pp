@@ -145,6 +145,6 @@ class glassfish::install {
   }
 
   # Ensure that install runs before any Create_domain & Create_node resources
-  Class['glassfish::install'] -> Create_domain <| |>
-  Class['glassfish::install'] -> Create_node <| |>
+  Class['glassfish::install'] -> Glassfish::Create_domain <| |>
+  Class['glassfish::install'] -> Glassfish::Create_node <| |>
 }
