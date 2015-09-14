@@ -1,4 +1,6 @@
+$LOAD_PATH.unshift(File.join(File.dirname(__FILE__),"..","..",".."))
 require 'puppet/provider/asadmin'
+
 Puppet::Type.type(:cluster).provide(:asadmin,
                                    :parent => Puppet::Provider::Asadmin) do
   desc "Glassfish Cluster support."
@@ -11,7 +13,7 @@ Puppet::Type.type(:cluster).provide(:asadmin,
     args << "--multicastport" << @resource[:multicastport] if @resource[:multicastport]
     args << "--multicastaddress" << @resource[:multicastaddress] if @resource[:multicastaddress]
     args << @resource[:name]
-    
+
     # Run the create command
     asadmin_exec(args)
 

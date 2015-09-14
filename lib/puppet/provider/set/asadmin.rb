@@ -1,4 +1,6 @@
+$LOAD_PATH.unshift(File.join(File.dirname(__FILE__),"..","..",".."))
 require 'puppet/provider/asadmin'
+
 Puppet::Type.type(:set).provide(:asadmin, :parent =>
                                       Puppet::Provider::Asadmin) do
   desc "Glassfish domain attribute support."
@@ -11,7 +13,7 @@ Puppet::Type.type(:set).provide(:asadmin, :parent =>
   end
 
   def destroy
-    # Destroy can't do anything with set. 
+    # Destroy can't do anything with set.
   end
 
   def exists?

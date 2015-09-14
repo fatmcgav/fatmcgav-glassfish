@@ -1,11 +1,13 @@
+$LOAD_PATH.unshift(File.join(File.dirname(__FILE__),"..","..",".."))
+
 Puppet::Type.newtype(:javamailresource) do
   @doc = "Manage javamail resources of Glassfish domains"
   ensurable
-  
+
   newparam(:name) do
     desc "The resource name."
     isnamevar
-    
+
     validate do |value|
       unless value =~ /^[^\W]?[\w\-\.\/]+$/
          raise ArgumentError, "%s is not a valid JavaMail resource name." % value
@@ -26,12 +28,12 @@ Puppet::Type.newtype(:javamailresource) do
   end
 
   newparam(:target) do
-    desc "This option helps specify the target to which you  are deploying. 
-    Valid options are: server, domain, [cluster name], [instance name]. 
+    desc "This option helps specify the target to which you  are deploying.
+    Valid options are: server, domain, [cluster name], [instance name].
     Defaults to: server"
     defaultto "server"
   end
-  
+
   newparam(:portbase) do
     desc "The Glassfish domain port base. Default: 4800"
     defaultto '4800'
@@ -55,7 +57,7 @@ Puppet::Type.newtype(:javamailresource) do
   newparam(:asadminuser) do
     desc "The internal Glassfish user asadmin uses. Default: admin"
     defaultto "admin"
-    
+
     validate do |value|
       unless value =~ /^[\w-]+$/
          raise ArgumentError, "%s is not a valid asadmin user name." % value
@@ -75,7 +77,7 @@ Puppet::Type.newtype(:javamailresource) do
 
   newparam(:user) do
     desc "The user to run the command as."
-    
+
     validate do |user|
       unless Puppet.features.root?
         self.fail "Only root can execute commands as other users"
@@ -85,12 +87,12 @@ Puppet::Type.newtype(:javamailresource) do
       end
     end
   end
-  
+
   # Autorequire the user running command
   autorequire(:user) do
-    self[:user]    
+    self[:user]
   end
-  
+
   # Autorequire the domain resource, based on portbase
   autorequire(:domain) do
     self.catalog.resources.select { |res|
@@ -100,4 +102,4 @@ Puppet::Type.newtype(:javamailresource) do
       res[:name]
     }
   end
-end 
+end

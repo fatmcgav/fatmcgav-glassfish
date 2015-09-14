@@ -1,4 +1,6 @@
+$LOAD_PATH.unshift(File.join(File.dirname(__FILE__),"..","..",".."))
 require 'puppet/provider/asadmin'
+
 Puppet::Type.type(:jdbcconnectionpool).provide(:asadmin, :parent =>
                                            Puppet::Provider::Asadmin) do
   desc "Glassfish JDBC connection pool support."
@@ -11,7 +13,7 @@ Puppet::Type.type(:jdbcconnectionpool).provide(:asadmin, :parent =>
     if hasProperties? @resource[:properties]
       args << "--property"
       args << "\'#{prepareProperties @resource[:properties]}\'"
-    end 
+    end
     args << @resource[:name]
     asadmin_exec(args)
   end

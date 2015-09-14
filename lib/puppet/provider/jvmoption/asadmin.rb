@@ -1,3 +1,4 @@
+$LOAD_PATH.unshift(File.join(File.dirname(__FILE__),"..","..",".."))
 require 'puppet/provider/asadmin'
 
 Puppet::Type.type(:jvmoption).provide(:asadmin, :parent =>
@@ -25,7 +26,7 @@ Puppet::Provider::Asadmin) do
     args = Array.new
     args << "list-jvm-options"
     args << "--target" << @resource[:target] if @resource[:target]
-    
+
     #Remove escaped semi-colons for matching the jvm option name
     name = @resource[:name].sub "\\:" , ":"
 

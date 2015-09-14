@@ -1,4 +1,6 @@
+$LOAD_PATH.unshift(File.join(File.dirname(__FILE__),"..","..",".."))
 require 'puppet/provider/asadmin'
+
 Puppet::Type.type(:javamailresource).provide(:asadmin, :parent => Puppet::Provider::Asadmin) do
   desc "Glassfish javamail resources support."
 
@@ -25,5 +27,5 @@ Puppet::Type.type(:javamailresource).provide(:asadmin, :parent => Puppet::Provid
     end
     return false
   end
-  
+
 end

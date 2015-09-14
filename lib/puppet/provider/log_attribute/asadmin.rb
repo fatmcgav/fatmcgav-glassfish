@@ -1,4 +1,6 @@
+$LOAD_PATH.unshift(File.join(File.dirname(__FILE__),"..","..",".."))
 require 'puppet/provider/asadmin'
+
 Puppet::Type.type(:log_attribute).provide(:asadmin, :parent =>
                                       Puppet::Provider::Asadmin) do
   desc "Glassfish domain log attribute support."
@@ -12,7 +14,7 @@ Puppet::Type.type(:log_attribute).provide(:asadmin, :parent =>
   end
 
   def destroy
-    # Destroy can't do anything with log_attribute. 
+    # Destroy can't do anything with log_attribute.
   end
 
   def exists?
