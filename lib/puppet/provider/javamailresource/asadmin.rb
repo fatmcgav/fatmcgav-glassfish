@@ -21,9 +21,9 @@ Puppet::Type.type(:javamailresource).provide(:asadmin, :parent => Puppet::Provid
 
   def exists?
     asadmin_exec(["list-javamail-resources"]).each do |line|
-      return true if @resource[:name] == line.chomp
+      return true if @resource[:name] == line.strip
     end
     return false
   end
-  
+
 end
