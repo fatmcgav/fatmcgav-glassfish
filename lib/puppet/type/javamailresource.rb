@@ -26,12 +26,16 @@ Puppet::Type.newtype(:javamailresource) do
   end
 
   newparam(:target) do
-    desc "This option helps specify the target to which you  are deploying. 
-    Valid options are: server, domain, [cluster name], [instance name]. 
+    desc "This option helps specify the target to which you  are deploying.
+    Valid options are: server, domain, [cluster name], [instance name].
     Defaults to: server"
     defaultto "server"
   end
-  
+
+  newparam(:properties) do
+    desc "The properties. Ex. port=1234 Seperate multiple pairs using :"
+  end
+
   newparam(:portbase) do
     desc "The Glassfish domain port base. Default: 4800"
     defaultto '4800'

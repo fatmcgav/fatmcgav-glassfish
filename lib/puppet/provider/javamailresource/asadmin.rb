@@ -9,6 +9,10 @@ Puppet::Type.type(:javamailresource).provide(:asadmin, :parent => Puppet::Provid
     args << "--mailhost" << @resource[:mailhost]
     args << "--mailuser" << @resource[:mailuser] if @resource[:mailuser]
     args << "--fromaddress" << @resource[:fromaddress]
+    if hasProperties? @resource[:properties]
+      args << "--property"
+      args << "\'#{prepareProperties @resource[:properties]}\'"
+    end
     args << @resource[:name]
     asadmin_exec(args)
   end

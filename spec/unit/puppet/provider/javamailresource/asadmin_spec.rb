@@ -55,6 +55,14 @@ describe Puppet::Type.type(:javamailresource).provider(:asadmin) do
         returns("Mail Resource test created. \nCommand create-javamail-resource executed successfully. \n")
       javamailresource.provider.create
     end
+
+    it "should be possible to pass properties" do
+      javamailresource[:properties] = 'port=12345'
+      javamailresource.provider.expects("`").
+        with("su - glassfish -c \"asadmin --port 4848 --user admin create-javamail-resource --target server --mailhost localhost --fromaddress noreply@example.com --property 'port=12345' test\"").
+        returns("Mail Resource test created. \nCommand create-javamail-resource executed successfully. \n")
+      javamailresource.provider.create
+    end
   end
 
   describe "when destroying a resource" do

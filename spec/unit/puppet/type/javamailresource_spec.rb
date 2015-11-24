@@ -62,9 +62,16 @@ describe Puppet::Type.type(:javamailresource) do
         described_class.new(:name => 'test')[:ensure].should == nil
       end
     end
-    
+
+    describe "for properties" do
+      it "should support a value" do
+        described_class.new(:name => 'test', :properties => 'port=1234',
+          :ensure => 'present')[:properties].should == 'port=1234'
+      end
+    end
+
     # TODO: Add tests for mailhost, fromaddress and mailuser
-    
+
     describe "for portbase" do
       it "should support a numerical value" do
         described_class.new(:name => 'test', :portbase => '8000', :ensure => 'present')[:portbase].should == 8000
