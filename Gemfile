@@ -14,8 +14,8 @@ group :test do
   gem 'puppet', puppetversion
   gem 'rspec', '< 3.x'
   gem 'highline', '~>1.6.0' # Pin to support Ruby 1.8.7
-  gem 'rspec-puppet', '~>2.0.0'
-  gem 'puppetlabs_spec_helper', '~>0.8.0'
+  # gem 'rspec-puppet', '~>2.0.0'
+  gem 'puppetlabs_spec_helper'
   #gem 'puppet-lint', '~>1.1.0'
   gem 'puppet-lint', :git => 'https://github.com/rodjek/puppet-lint.git'
   gem 'puppet-syntax', '~>1.0'
