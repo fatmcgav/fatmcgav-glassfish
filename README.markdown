@@ -138,6 +138,9 @@ Thanks to the following people who have helped with this module:
  * Alex Jennings - Features
  * joliveira - Bug fixes
  * Jesse Cotton - Features
+ * Bjoern Lippert - Bug fixes
+ * Doug Neal - Features
+ * Svante Paldan - Features and bug fixes
 
 ##Development
 If you have any features that you feel are missing or find any bugs for this module, 

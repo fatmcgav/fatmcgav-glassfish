@@ -1,3 +1,10 @@
+0.7.0 x Gavin Williams <fatmcgav@gmail.com>
+* Feature and Bug fix release
+	* Support refresh signal on Application provider. Thanks to Doug Neal.
+	* Fix issues with Puppet 4.x compilation. Thanks to Bjoern Lippert.
+	* Add support for passing properties to Javamailresource. Thanks to Svante
+	Paldan
+
 0.6.0 2014-03-11 Gavin Williams <fatmcgav@gmail.com>
 * Feature and Bug fix release
   * Add support for managing following resources:
