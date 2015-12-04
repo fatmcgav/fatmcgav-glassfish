@@ -1,4 +1,4 @@
-0.7.0 x Gavin Williams <fatmcgav@gmail.com>
+0.7.0 2015-12-04 Gavin Williams <fatmcgav@gmail.com>
 * Feature and Bug fix release
 	* Support refresh signal on Application provider. Thanks to Doug Neal.
 	* Fix issues with Puppet 4.x compilation. (#52) Thanks to Bjoern Lippert.
