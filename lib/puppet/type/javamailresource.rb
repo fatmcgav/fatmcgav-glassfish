@@ -27,6 +27,38 @@ Puppet::Type.newtype(:javamailresource) do
     desc "The mail user name."
   end
 
+  newparam(:storeprotocol) do
+    desc "The mail server store protocol. The default is imap. Change this value only if you have reconfigured the GlassFish Server's mail provider to use a non-default store protocol."
+  end
+
+  newparam(:storeprotocolclass) do
+    desc "The mail server store protocol class name. The default is com.sun.mail.imap.IMAPStore. Change this value only if you have reconfigured the GlassFish Server's mail provider to use a nondefault store protocol."
+  end
+
+  newparam(:transprotocol) do
+    desc "The mail server transport protocol. The default is smtp. Change this value only if you have reconfigured the GlassFish Server's mail provider to use a nondefault transport protocol."
+  end
+
+  newparam(:transprotocolclass) do
+    desc "The mail server transport protocol class name. The default is com.sun.mail.smtp.SMTPTransport. Change this value only if you have reconfigured the GlassFish Server's mail provider to use a nondefault transport protocol."
+  end
+
+  newparam(:debug) do
+    desc "If set to true, the server starts up in debug mode for this resource. If the JavaMail log level is set to FINE or FINER, the debugging output will be generated and will be included in the server log file. The default value is false."
+  end
+
+  newparam(:enabled) do
+    desc "If set to true, the resource is enabled at runtime. The default value is true."
+  end
+
+  newparam(:properties) do
+    desc "The properties. Ex. jaas-context=agentRealm. Seperate multiple pairs using :."
+  end
+
+  newparam(:description) do
+    desc "The object description"
+  end
+
   newparam(:target) do
     desc "This option helps specify the target to which you  are deploying.
     Valid options are: server, domain, [cluster name], [instance name].
