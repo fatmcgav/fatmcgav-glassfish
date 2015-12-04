@@ -1,4 +1,6 @@
+$LOAD_PATH.unshift(File.join(File.dirname(__FILE__),"..","..",".."))
 require 'puppet/provider/asadmin'
+
 Puppet::Type.type(:domain).provide(:asadmin,
                                    :parent => Puppet::Provider::Asadmin) do
   desc "Glassfish Domain support."
@@ -12,7 +14,7 @@ Puppet::Type.type(:domain).provide(:asadmin,
     args << "--savemasterpassword"
     args << "--template" << @resource[:template] if @resource[:template]
     args << @resource[:name]
-    
+
     # Run the create command
     asadmin_exec(args)
 

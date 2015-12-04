@@ -1,4 +1,6 @@
+$LOAD_PATH.unshift(File.join(File.dirname(__FILE__),"..","..",".."))
 require 'puppet/provider/asadmin'
+
 Puppet::Type.type(:networklistener).provide(:asadmin, :parent => Puppet::Provider::Asadmin) do
   desc "Glassfish network listener management."
 
@@ -18,7 +20,7 @@ Puppet::Type.type(:networklistener).provide(:asadmin, :parent => Puppet::Provide
     args << "--jkenabled" << @resource[:jkenabled]
     args << "--target" << @resource[:target]
     args << @resource[:name]
-    
+
     asadmin_exec(args)
   end
 

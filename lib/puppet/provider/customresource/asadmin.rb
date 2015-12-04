@@ -1,4 +1,6 @@
+$LOAD_PATH.unshift(File.join(File.dirname(__FILE__),"..","..",".."))
 require 'puppet/provider/asadmin'
+
 Puppet::Type.type(:customresource).provide(:asadmin, :parent => Puppet::Provider::Asadmin) do
   desc "Glassfish custom resources support."
 
@@ -27,5 +29,5 @@ Puppet::Type.type(:customresource).provide(:asadmin, :parent => Puppet::Provider
     end
     return false
   end
-  
+
 end

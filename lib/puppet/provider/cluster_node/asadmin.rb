@@ -1,4 +1,6 @@
+$LOAD_PATH.unshift(File.join(File.dirname(__FILE__),"..","..",".."))
 require 'puppet/provider/asadmin'
+
 Puppet::Type.type(:cluster_node).provide(:asadmin,
                                    :parent => Puppet::Provider::Asadmin) do
   desc "Glassfish Node support."
@@ -15,7 +17,7 @@ Puppet::Type.type(:cluster_node).provide(:asadmin,
     # Optionally install GF software
     args << "--install" << @resource[:install] if @resource[:install]
     args << @resource[:name]
-    
+
     # Run the create command
     asadmin_exec(args)
 

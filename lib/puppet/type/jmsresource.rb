@@ -1,3 +1,5 @@
+$LOAD_PATH.unshift(File.join(File.dirname(__FILE__),"..","..",".."))
+
 Puppet::Type.newtype(:jmsresource) do
   @doc = "Manage JMS resources of Glassfish domains"
 
@@ -6,7 +8,7 @@ Puppet::Type.newtype(:jmsresource) do
   newparam(:name) do
     desc "The JMS resource name."
     isnamevar
-    
+
     validate do |value|
       unless value =~ /^\w+[\w=\-\/.]*$/
          raise ArgumentError, "%s is not a valid JMS resource name." % value
@@ -22,22 +24,22 @@ Puppet::Type.newtype(:jmsresource) do
   newparam(:description) do
     desc "The resource description"
   end
-  
+
   newparam(:properties) do
     desc "The properties. Ex. jaas-context=agentRealm. Seperate multiple pairs using :."
   end
-  
+
   newparam(:target) do
-    desc "This option helps specify the target to which you  are deploying. 
-    Valid options are: server, domain, [cluster name], [instance name]. 
+    desc "This option helps specify the target to which you  are deploying.
+    Valid options are: server, domain, [cluster name], [instance name].
     Defaults to: server"
     defaultto "server"
   end
-  
+
   newparam(:portbase) do
     desc "The Glassfish domain port base. Default: 4800"
     defaultto '4800'
-    
+
     validate do |value|
       raise ArgumentError, "%s is not a valid portbase." % value unless value =~ /^\d{4,5}$/
     end
@@ -57,7 +59,7 @@ Puppet::Type.newtype(:jmsresource) do
   newparam(:asadminuser) do
     desc "The internal Glassfish user asadmin uses. Default: admin"
     defaultto "admin"
-    
+
     validate do |value|
       unless value =~ /^[\w-]+$/
          raise ArgumentError, "%s is not a valid asadmin user name." % value
@@ -87,22 +89,22 @@ Puppet::Type.newtype(:jmsresource) do
       end
     end
   end
-  
+
   # Validate mandatory params
   validate do
     raise Puppet::Error, 'Restype is required.' unless self[:restype]
   end
-  
+
   # Autorequire the user running command
   autorequire(:user) do
     self[:user]
   end
-  
+
   # Autorequire the password file
   autorequire(:file) do
     self[:passwordfile]
   end
-  
+
   # Autorequire the relevant domain
   autorequire(:domain) do
     self.catalog.resources.select { |res|
