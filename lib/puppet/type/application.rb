@@ -90,6 +90,13 @@ Puppet::Type.newtype(:application) do
     raise Puppet::Error, 'Source is required.' if self[:source].nil? and self[:ensure] == :present
   end
 
+  # Redeploy the application on a refresh signal
+  def refresh
+    if self[:ensure] == :present and provider.exists? then
+      provider.redeploy
+    end
+  end
+
   # Autorequire the user running command
   autorequire(:user) do
     self[:user]

@@ -170,7 +170,19 @@ describe Puppet::Type.type(:application) do
       end
     end
   end  
-    
+
+  describe "when refreshing" do
+    describe "an application that isn't deployed" do
+      it "should not be refreshed" do
+      end
+    end
+
+    describe "an application that is deployed" do
+      it "should be refreshed" do
+      end
+    end
+  end
+
   describe "when autorequiring" do    
     describe "user autorequire" do
       let :application do
