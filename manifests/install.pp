@@ -62,7 +62,7 @@ class glassfish::install {
       # Need to download glassfish from java.net
       # $glassfish_download_site = "http://download.java.net/glassfish/${glassfish::version}/release"
       $glassfish_download_site = $glassfish::download_mirror ? {
-        ''      => "http://download.java.net/glassfish/${glassfish::version}/release",
+        undef   => "http://download.java.net/glassfish/${glassfish::version}/release",
         default => $glassfish::download_mirror
       }
       $glassfish_download_file = "glassfish-${glassfish::version}.zip"
@@ -145,6 +145,6 @@ class glassfish::install {
   }
 
   # Ensure that install runs before any Create_domain & Create_node resources
-  Class['glassfish::install'] -> Create_domain <| |>
-  Class['glassfish::install'] -> Create_node <| |>
+  Class['glassfish::install'] -> Glassfish::Create_domain <| |>
+  Class['glassfish::install'] -> Glassfish::Create_node <| |>
 }

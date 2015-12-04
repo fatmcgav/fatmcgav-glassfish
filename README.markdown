@@ -42,17 +42,19 @@ This module can do the following:
   * Applications
   * Auth Realm
   * Custom Resources
+  * Log Attribute properties
+  * Javamail Resources
   * JDBC Connection Pools
   * JDBC Resources
   * JMS Resources
   * JVM Options
+  * Network Listeners
+  * Resource references
   * Set options
   * System properties
-  * Javamail Resources
-  * Network Listeners
   
 Further features that are likely to be added include: 
- * Additional support for Cluster environments, such as targeting resources at cluster. 
+ * ~~Additional support for Cluster environments, such as targeting resources at cluster.~~
 
 ##Requirements
 This module requires the Puppetlabs-Stdlib module >= 3.2.0. 
@@ -105,7 +107,11 @@ E.g.
     ensure       => present,
     resourcetype => 'javax.sql.ConnectionPoolDataSource',
     dsclassname  => 'oracle.jdbc.pool.OracleConnectionPoolDataSource',
-    properties   => 'user=con_user:password=con_password:url=jdbc\:oracle\:thin\:@localhost\:1521\:XE',
+    properties   => {
+      'user'     => 'con_user', 
+      'password' => 'con_password',
+      'url'      => 'jdbc\:oracle\:thin\:@localhost\:1521\:XE'
+    },
     portbase     => '8000',
     asadminuser  => 'admin',
     user         => 'glassfish'
@@ -132,6 +138,9 @@ Thanks to the following people who have helped with this module:
  * Alex Jennings - Features
  * joliveira - Bug fixes
  * Jesse Cotton - Features
+ * Bjoern Lippert - Bug fixes
+ * Doug Neal - Features
+ * Svante Paldan - Features and bug fixes
 
 ##Development
 If you have any features that you feel are missing or find any bugs for this module, 

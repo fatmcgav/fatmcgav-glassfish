@@ -79,8 +79,8 @@ class glassfish::params {
 
   # Should the path be updated?
   case $::osfamily {
-    RedHat  : { $glassfish_add_path = true }
-    Debian  : { $glassfish_add_path = true }
+    'RedHat'  : { $glassfish_add_path = true }
+    'Debian'  : { $glassfish_add_path = true }
     default : { $glassfish_add_path = false }
   }
 
@@ -91,13 +91,13 @@ class glassfish::params {
 
   # Set package names based on Operating System...
   case $::osfamily {
-    RedHat  : {
+    'RedHat' : {
       $java6_openjdk_package = 'java-1.6.0-openjdk-devel'
       $java6_sun_package     = undef
       $java7_openjdk_package = 'java-1.7.0-openjdk-devel'
       $java7_sun_package     = undef
     }
-    Debian  : {
+    'Debian' : {
       $java6_openjdk_package = 'openjdk-6-jdk'
       $java6_sun_package     = 'sun-java6-jdk'
       $java7_openjdk_package = 'openjdk-7-jdk'

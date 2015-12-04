@@ -149,6 +149,13 @@ class glassfish (
   validate_string($package_prefix)
   validate_string($user)
 
+
+  if $remove_default_domain and $create_domain {
+      if $domain_name == 'domain1' {
+        fail("creating 'domain1' and removing default domain 'domain1' together makes no sense")
+      }
+  }
+
   #
   ## Start to run through the install process
   #
@@ -173,10 +180,10 @@ class glassfish (
     }
 
     # Run this before any resources that require it
-    Glassfish::Create_asadmin_passfile["${user}_asadmin_passfile"] -> Create_domain <| |>
-    Glassfish::Create_asadmin_passfile["${user}_asadmin_passfile"] -> Create_cluster <| |>
-    Glassfish::Create_asadmin_passfile["${user}_asadmin_passfile"] -> Create_node <| |>
-    Glassfish::Create_asadmin_passfile["${user}_asadmin_passfile"] -> Create_instance <| |>
+    Glassfish::Create_asadmin_passfile["${user}_asadmin_passfile"] -> Glassfish::Create_domain <| |>
+    Glassfish::Create_asadmin_passfile["${user}_asadmin_passfile"] -> Glassfish::Create_cluster <| |>
+    Glassfish::Create_asadmin_passfile["${user}_asadmin_passfile"] -> Glassfish::Create_node <| |>
+    Glassfish::Create_asadmin_passfile["${user}_asadmin_passfile"] -> Glassfish::Create_instance <| |>
   }
 
   # Call the install method
@@ -191,7 +198,7 @@ class glassfish (
 
     # Setup path before creating the domain...
     if $create_domain {
-      Class['glassfish::path'] -> Create_domain[$domain_name]
+      Class['glassfish::path'] -> Glassfish::Create_domain[$domain_name]
     }
   }
 
@@ -209,7 +216,7 @@ class glassfish (
     }
 
     # Need to create the required domain
-    create_domain { $domain_name: require => Class['glassfish::install'] }
+    glassfish::create_domain { $domain_name: require => Class['glassfish::install'] }
 
   }
 

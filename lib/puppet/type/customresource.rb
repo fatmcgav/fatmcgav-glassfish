@@ -1,38 +1,40 @@
+$LOAD_PATH.unshift(File.join(File.dirname(__FILE__),"..","..",".."))
+
 Puppet::Type.newtype(:customresource) do
   @doc = "Manage custom resources of Glassfish domains"
   ensurable
-  
+
   newparam(:name) do
     desc "The custom resource name."
     isnamevar
-    
+
     validate do |value|
       unless value =~ /^[^\W]?[\w\-\.=]+$/
          raise ArgumentError, "%s is not a valid custom resource name." % value
       end
     end
   end
-  
+
   newparam(:restype) do
     desc "The type of custom resource to be created. Specify a fully qualified type definition, for example javax.naming.spi.ObjectFactory. The resource type definition follows the format, xxx.xxx.xxx"
-    
+
     validate do |value|
       if /^(?:[a-zA-Z_$][a-zA-Z\d_$]*\.)*[A-Z$][a-zA-Z\d_$]{1,}$/.match(value).nil?
         raise ArgumentError, "%s is not valid Java fully qualified type name" % value
       end
     end
   end
-  
+
   newparam(:factoryclass) do
     desc "Factory class name for the custom resource. This class implements the javax.naming.spi.ObjectFactory interface."
-    
+
     validate do |value|
       if /^(?:[a-zA-Z_$][a-zA-Z\d_$]*\.)*[A-Z$][a-zA-Z\d_$]{1,}$/.match(value).nil?
         raise ArgumentError, "%s is not valid Java fully qualified type name" % value
       end
     end
   end
-  
+
   newparam(:properties) do
     desc "Optional attribute name/value pairs for configuring the resource. As String or Hash. Eg: \"user=myuser:password=mypass\""
   end
@@ -90,12 +92,12 @@ Puppet::Type.newtype(:customresource) do
       end
     end
   end
-  
+
   # Autorequire the user running command
   autorequire(:user) do
-    self[:user]    
+    self[:user]
   end
-  
+
   # Autorequire the domain resource, based on portbase
   autorequire(:domain) do
     self.catalog.resources.select { |res|
@@ -105,4 +107,4 @@ Puppet::Type.newtype(:customresource) do
       res[:name]
     }
   end
-end 
+end

@@ -81,11 +81,15 @@ define glassfish::install_jars (
 
   # Create the lib/ext folder if required
   if ($install_location == 'installation') {
-    file { "${glassfish::glassfish_dir}/glassfish/lib/ext":
-      ensure => directory,
-      owner  => $glassfish::user,
-      group  => $glassfish::group
-    }
+
+    # Use ensure_resource to avoid duplicate declaration issues...
+    ensure_resource('file',
+    "${glassfish::glassfish_dir}/glassfish/lib/ext",
+    {
+      'ensure' => 'directory',
+      'owner'  => $glassfish::user,
+      'group'  => $glassfish::group
+    })
 
     if ($download) {
       File["${glassfish::glassfish_dir}/glassfish/lib/ext"] -> Exec["download_${jar}"]
@@ -117,7 +121,7 @@ define glassfish::install_jars (
 
   # Add dependencies to ensure runs after domain is created if installing to domain
   if ($install_location == 'domain') {
-    Domain <| title == $domain_name |> -> Install_jars <| install_location == 'domain' |>
+    Domain <| title == $domain_name |> -> Glassfish::Install_jars <| install_location == 'domain' |>
   }
 
 }

@@ -1,32 +1,22 @@
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__),"..","..",".."))
 
-Puppet::Type.newtype(:jmsresource) do
-  @doc = "Manage JMS resources of Glassfish domains"
+Puppet::Type.newtype(:resourceref) do
+  @doc = "Manage resources references for Glassfish domains"
 
   ensurable
 
+  # Array of resources we can reference
+  referenceable_resources = [:jdbcresource, :jmsresource, :javamailresource, :customresource]
+
   newparam(:name) do
-    desc "The JMS resource name."
+    desc "The reference resource name."
     isnamevar
 
     validate do |value|
       unless value =~ /^\w+[\w=\-\/.]*$/
-         raise ArgumentError, "%s is not a valid JMS resource name." % value
+         raise ArgumentError, "%s is not a valid reference resource name." % value
       end
     end
-  end
-
-  newparam(:restype) do
-    desc "The resource type."
-    newvalues('javax.jms.Topic', 'javax.jms.Queue', 'javax.jms.ConnectionFactory', 'javax.jms.TopicConnectionFactory', 'javax.jms.QueueConnectionFactory')
-  end
-
-  newparam(:description) do
-    desc "The resource description"
-  end
-
-  newparam(:properties) do
-    desc "The properties. Ex. jaas-context=agentRealm. Seperate multiple pairs using :."
   end
 
   newparam(:target) do
@@ -34,6 +24,7 @@ Puppet::Type.newtype(:jmsresource) do
     Valid options are: server, domain, [cluster name], [instance name].
     Defaults to: server"
     defaultto "server"
+
   end
 
   newparam(:portbase) do
@@ -90,11 +81,6 @@ Puppet::Type.newtype(:jmsresource) do
     end
   end
 
-  # Validate mandatory params
-  validate do
-    raise Puppet::Error, 'Restype is required.' unless self[:restype]
-  end
-
   # Autorequire the user running command
   autorequire(:user) do
     self[:user]
@@ -113,5 +99,21 @@ Puppet::Type.newtype(:jmsresource) do
     }.collect { |res|
       res[:name]
     }
+  end
+
+  # Autorequire the relevant resources
+  referenceable_resources.each do |resource|
+    autorequire(resource) do
+      catalog.resources.select { |res|
+        # Skip it if we're not interested in it...
+        next unless res.type == resource
+
+        # Match on resource name...
+        res if res[:name] == self[:name]
+      }.collect { |res|
+        # Return resource name to autorequire
+        res[:name]
+      }
+    end
   end
 end

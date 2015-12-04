@@ -1,6 +1,11 @@
+$LOAD_PATH.unshift(File.join(File.dirname(__FILE__),"..","..",".."))
+
 Puppet::Type.newtype(:application) do
   @doc = "Manage applications of Glassfish domains"
   ensurable
+
+  feature :refreshable, "The provider can redeploy the application",
+    :methods => [:redeploy]
 
   newparam(:name) do
     desc "The application name."
@@ -23,15 +28,15 @@ Puppet::Type.newtype(:application) do
   end
 
   newparam(:target) do
-    desc "This option helps specify the target to which you  are deploying. 
-    Valid options are: server, domain, [cluster name], [instance name]. 
+    desc "This option helps specify the target to which you  are deploying.
+    Valid options are: server, domain, [cluster name], [instance name].
     Defaults to: server"
     defaultto "server"
   end
-  
+
   newparam(:portbase) do
     desc "The Glassfish domain port base. Default: 4800"
-    defaultto '4800'   
+    defaultto '4800'
 
     validate do |value|
       raise ArgumentError, "%s is not a valid portbase." % value unless value =~ /^\d{4,5}$/
@@ -82,22 +87,29 @@ Puppet::Type.newtype(:application) do
       end
     end
   end
-  
+
   # Validate mandatory params
   validate do
     raise Puppet::Error, 'Source is required.' if self[:source].nil? and self[:ensure] == :present
   end
-  
+
+  # Redeploy the application on a refresh signal
+  def refresh
+    if self[:ensure] == :present and provider.exists? then
+      provider.redeploy
+    end
+  end
+
   # Autorequire the user running command
   autorequire(:user) do
-    self[:user]    
+    self[:user]
   end
-  
+
   # Autorequire the source application file
-  autorequire(:file) do 
+  autorequire(:file) do
     self[:source]
   end
-  
+
   # Autorequire the domain resource, based on portbase
   autorequire(:domain) do
     self.catalog.resources.select { |res|

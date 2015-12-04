@@ -21,6 +21,13 @@ rescue Exception => e
   warn "Coveralls disabled - #{e}"
 end
 
+# Enable future parser
+if ENV['PARSER'] == 'future'
+  RSpec.configure do |c|
+    c.parser = 'future'
+  end
+end
+
 Dir[File.join(File.dirname(__FILE__), 'support', '*.rb')].each do |support_file|
   require support_file
 end

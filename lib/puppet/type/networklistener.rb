@@ -1,3 +1,5 @@
+$LOAD_PATH.unshift(File.join(File.dirname(__FILE__),"..","..",".."))
+
 Puppet::Type.newtype(:networklistener) do
   @doc = "Manage Glassfish network listeners"
 
@@ -39,12 +41,12 @@ Puppet::Type.newtype(:networklistener) do
         end
       end
       return value
-    end 
+    end
   end
 
   newparam(:threadpool) do
     desc "The Glassfish listener threadpool"
-    
+
     validate do |value|
       unless value =~ /^[\w-]+$/
          raise ArgumentError, "%s is not a valid threadpool name." % value
@@ -127,7 +129,7 @@ Puppet::Type.newtype(:networklistener) do
       end
     end
   end
-  
+
   # Global validation
   validate do
     required_params = [ :port, :protocol ]
@@ -137,14 +139,14 @@ Puppet::Type.newtype(:networklistener) do
       end
     end
   end
-  
+
   # Autorequire the user running command
   autorequire(:user) do
-    self[:user]    
+    self[:user]
   end
-  
+
   # Autorequire the password file
   autorequire(:file) do
-    self[:passwordfile]    
+    self[:passwordfile]
   end
 end

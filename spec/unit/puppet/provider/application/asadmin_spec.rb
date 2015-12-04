@@ -75,4 +75,13 @@ describe Puppet::Type.type(:application).provider(:asadmin) do
       application.provider.destroy
     end
   end
+
+  describe "when refreshing a resource" do
+    it "should redeploy an application" do
+      application.provider.expects("`").
+        with("su - glassfish -c \"asadmin --port 8048 --user admin redeploy --name test /tmp/test.war\"").
+        returns("Application deployed with name test. \nCommand redeploy executed successfully. \n")
+      application.provider.redeploy
+    end
+  end
 end

@@ -1,3 +1,4 @@
+$LOAD_PATH.unshift(File.join(File.dirname(__FILE__),"..","..",".."))
 require 'puppet/provider/asadmin'
 
 Puppet::Type.type(:application).provide(:asadmin, :parent =>
@@ -33,4 +34,14 @@ Puppet::Provider::Asadmin) do
     end
     return false
   end
+
+  def redeploy
+    args = Array.new
+    args << "redeploy"
+    args << "--name" << @resource[:name]
+    args << @resource[:source]
+
+    asadmin_exec(args)
+  end
+
 end

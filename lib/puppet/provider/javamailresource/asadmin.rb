@@ -1,4 +1,6 @@
+$LOAD_PATH.unshift(File.join(File.dirname(__FILE__),"..","..",".."))
 require 'puppet/provider/asadmin'
+
 Puppet::Type.type(:javamailresource).provide(:asadmin, :parent => Puppet::Provider::Asadmin) do
   desc "Glassfish javamail resources support."
 
@@ -7,8 +9,12 @@ Puppet::Type.type(:javamailresource).provide(:asadmin, :parent => Puppet::Provid
     args << "create-javamail-resource"
     args << "--target" << @resource[:target] if @resource[:target]
     args << "--mailhost" << @resource[:mailhost]
-    args << "--mailuser" << @resource[:mailuser]
+    args << "--mailuser" << @resource[:mailuser] if @resource[:mailuser]
     args << "--fromaddress" << @resource[:fromaddress]
+    if hasProperties? @resource[:properties]
+      args << "--property"
+      args << "\'#{prepareProperties @resource[:properties]}\'"
+    end
     args << @resource[:name]
     asadmin_exec(args)
   end
@@ -21,9 +27,9 @@ Puppet::Type.type(:javamailresource).provide(:asadmin, :parent => Puppet::Provid
 
   def exists?
     asadmin_exec(["list-javamail-resources"]).each do |line|
-      return true if @resource[:name] == line.chomp
+      return true if @resource[:name] == line.strip
     end
     return false
   end
-  
+
 end

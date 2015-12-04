@@ -48,8 +48,8 @@ class glassfish::path {
   }
 
   # Ensure glassfish::path runs before any resources that require asadmin
-  Class['glassfish::path'] -> Create_domain <| |>
-  Class['glassfish::path'] -> Create_cluster <| |>
-  Class['glassfish::path'] -> Create_node <| |>
+  Class['glassfish::path'] -> Glassfish::Create_domain <| |>
+  Class['glassfish::path'] -> Glassfish::Create_cluster <| |>
+  Class['glassfish::path'] -> Glassfish::Create_node <| |>
 
 }

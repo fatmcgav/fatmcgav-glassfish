@@ -1,3 +1,5 @@
+$LOAD_PATH.unshift(File.join(File.dirname(__FILE__),"..","..",".."))
+
 Puppet::Type.newtype(:domain) do
   @doc = "Manage Glassfish domains"
 
@@ -61,20 +63,20 @@ Puppet::Type.newtype(:domain) do
       end
     end
   end
-  
+
   newparam(:startoncreate) do
     desc "Start the domain immediately after it is created. Default: true"
     defaultto(:true)
     newvalues(:true, :false)
   end
-  
+
   newparam(:enablesecureadmin) do
     desc "Should secure admin be enabled. Default: true"
     defaultto(:true)
     newvalues(:true, :false)
   end
-  
-  newparam(:template) do 
+
+  newparam(:template) do
     desc "Path to Glassfish template to use when creating the domain"
 
     validate do |value|
@@ -83,21 +85,21 @@ Puppet::Type.newtype(:domain) do
       end
     end
   end
-  
+
   # Validate multiple param values
   validate do
     if self[:enablesecureadmin] == :true and self[:startoncreate] == :false
       raise Puppet::Error, "Enablesecureadmin cannot be true if startoncreate is false"
     end
   end
-  
+
   # Autorequire the user running command
   autorequire(:user) do
-    self[:user]    
+    self[:user]
   end
-  
+
   # Autorequire the password file
   autorequire(:file) do
-    self[:passwordfile]    
+    self[:passwordfile]
   end
 end

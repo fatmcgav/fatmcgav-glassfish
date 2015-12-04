@@ -1,3 +1,21 @@
+0.7.0 2015-12-04 Gavin Williams <fatmcgav@gmail.com>
+* Feature and Bug fix release
+	* Support refresh signal on Application provider. Thanks to Doug Neal.
+	* Fix issues with Puppet 4.x compilation. (#52) Thanks to Bjoern Lippert.
+	* Fix a duplicate declaration issue with calling install_jars more than
+	once. (#55)
+	* Add support for passing properties to Javamailresource. Thanks to Svante
+	Paldan
+
+0.6.0 2014-03-11 Gavin Williams <fatmcgav@gmail.com>
+* Feature and Bug fix release
+  * Add support for managing following resources:
+    * Log Attributes
+    * Resource references
+  * Fixes to support future parser
+  * Improve support for cluster setup and management
+  * Tighten file permissions on asadmin password file. 
+
 0.5.0 2014-01-14 Gavin Williams <fatmcgav@gmail.com>
 * Feature and Bug fix release
   * Add support for providing an alternative download mirror.

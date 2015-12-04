@@ -35,7 +35,7 @@ describe 'glassfish::create_asadmin_passfile' do
         'path'   => '/tmp/asadmin.pass',
         'owner'  => 'glassfish',
         'group'  => 'glassfish',
-        'mode'   => '0644'
+        'mode'   => '0600'
       }).with_content(/AS_ADMIN_PASSWORD=adminadmin/).
       with_content(/AS_ADMIN_MASTERPASSWORD=changeit/)
     end
@@ -59,7 +59,7 @@ describe 'glassfish::create_asadmin_passfile' do
         'path'   => '/tmp/asadmin.pass',
         'owner'  => 'glassfish',
         'group'  => 'glassfish',
-        'mode'   => '0644'
+        'mode'   => '0600'
       }).with_content(/AS_ADMIN_PASSWORD=password/).
       with_content(/AS_ADMIN_MASTERPASSWORD=different/)
     end
@@ -82,7 +82,7 @@ describe 'glassfish::create_asadmin_passfile' do
         'path'   => '/tmp/asadmin.pass2',
         'owner'  => 'glassfish',
         'group'  => 'glassfish',
-        'mode'   => '0644'
+        'mode'   => '0600'
       }).with_content(/AS_ADMIN_PASSWORD=adminadmin/).
       with_content(/AS_ADMIN_MASTERPASSWORD=changeit/)
     end

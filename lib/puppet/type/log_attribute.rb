@@ -1,32 +1,24 @@
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__),"..","..",".."))
 
-Puppet::Type.newtype(:jmsresource) do
-  @doc = "Manage JMS resources of Glassfish domains"
+Puppet::Type.newtype(:log_attribute) do
+  @doc = "Manage log attributes of Glassfish domains"
 
   ensurable
 
   newparam(:name) do
-    desc "The JMS resource name."
+    desc "The log attribute name."
     isnamevar
 
     validate do |value|
-      unless value =~ /^\w+[\w=\-\/.]*$/
-         raise ArgumentError, "%s is not a valid JMS resource name." % value
+      unless value =~ /^[^\W]?[\w\-\.]+$/
+         raise ArgumentError, "%s is not a valid log attribute name." % value
       end
     end
   end
 
-  newparam(:restype) do
-    desc "The resource type."
-    newvalues('javax.jms.Topic', 'javax.jms.Queue', 'javax.jms.ConnectionFactory', 'javax.jms.TopicConnectionFactory', 'javax.jms.QueueConnectionFactory')
-  end
-
-  newparam(:description) do
-    desc "The resource description"
-  end
-
-  newparam(:properties) do
-    desc "The properties. Ex. jaas-context=agentRealm. Seperate multiple pairs using :."
+  newparam(:value) do
+    desc "The log attribute value."
+    #TODO: Add validation
   end
 
   newparam(:target) do
@@ -34,6 +26,7 @@ Puppet::Type.newtype(:jmsresource) do
     Valid options are: server, domain, [cluster name], [instance name].
     Defaults to: server"
     defaultto "server"
+    #TODO: Validate
   end
 
   newparam(:portbase) do
@@ -92,7 +85,7 @@ Puppet::Type.newtype(:jmsresource) do
 
   # Validate mandatory params
   validate do
-    raise Puppet::Error, 'Restype is required.' unless self[:restype]
+    raise Puppet::Error, 'Value is required.' unless self[:value]
   end
 
   # Autorequire the user running command

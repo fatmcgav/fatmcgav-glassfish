@@ -1,3 +1,4 @@
+$LOAD_PATH.unshift(File.join(File.dirname(__FILE__),"..","..",".."))
 require 'ipaddr'
 
 Puppet::Type.newtype(:cluster) do
@@ -19,7 +20,7 @@ Puppet::Type.newtype(:cluster) do
   newparam(:dashost) do
     desc "The Glassfish DAS hostname."
   end
-  
+
   newparam(:dasport) do
     desc "The Glassfish DAS port. Default: 4848"
     defaultto '4848'
@@ -39,23 +40,23 @@ Puppet::Type.newtype(:cluster) do
       return value
     end
   end
-  
+
   newparam(:gmsenabled) do
     desc "Should Group Messaging service be enabled. Default: true"
     defaultto(:true)
     newvalues(:true, :false)
   end
-  
+
   newparam(:multicastport) do
     desc "The port number of  communication  port  on  which  GMS
     listens  for  group  events. This option must specify a
     valid port number in the range 2048-49151. The default
     is an automatically generated value in this range"
-    
+
     validate do |value|
       raise ArgumentError, "Multicast port must be between 2048 and 49151." unless value.to_i.between?(2048,49151)
     end
-    
+
     munge do |value|
       case value
       when String
@@ -67,14 +68,14 @@ Puppet::Type.newtype(:cluster) do
       return value
     end
   end
-  
+
   newparam(:multicastaddress) do
     desc "The address on which GMS listens for group events. This
     option  must  specify  a multicast address in the range
     224.0.0.0  through  239.255.255.255.  The  default   is
     228.9.XX.YY,  where  XX  and  YY are automatically gen-
     erated independent values between 0 and 255."
-    
+
     validate do |value|
       begin
         # Create required IPAddr objects
@@ -84,12 +85,12 @@ Puppet::Type.newtype(:cluster) do
       rescue ArgumentError
         fail("Invalid value for multicastaddress: #{value}")
       end
-      
-      # Check that the value is between low and high thresholds        
+
+      # Check that the value is between low and high thresholds
       raise ArgumentError, "Multicast address must be between 224.0.0.0 and 239.255.255.255." unless t.between?(low,high)
     end
   end
-  
+
   newparam(:asadminuser) do
     desc "The internal Glassfish user asadmin uses. Default: admin"
     defaultto 'admin'
@@ -104,7 +105,7 @@ Puppet::Type.newtype(:cluster) do
   newparam(:passwordfile) do
     desc "The file containing the password for the user."
   end
-  
+
   newparam(:user) do
     desc "The user to run the command as."
 
@@ -117,17 +118,17 @@ Puppet::Type.newtype(:cluster) do
       end
     end
   end
-  
+
   # Autorequire the user running command
   autorequire(:user) do
-    self[:user]    
+    self[:user]
   end
-  
+
   # Autorequire the password file
   autorequire(:file) do
-    self[:passwordfile]    
+    self[:passwordfile]
   end
-  
+
   # Autorequire the das domain
   autorequire(:domain) do
     self.catalog.resources.select { |res|
