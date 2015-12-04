@@ -1,7 +1,9 @@
 0.7.0 x Gavin Williams <fatmcgav@gmail.com>
 * Feature and Bug fix release
 	* Support refresh signal on Application provider. Thanks to Doug Neal.
-	* Fix issues with Puppet 4.x compilation. Thanks to Bjoern Lippert.
+	* Fix issues with Puppet 4.x compilation. (#52) Thanks to Bjoern Lippert.
+	* Fix a duplicate declaration issue with calling install_jars more than
+	once. (#55)
 	* Add support for passing properties to Javamailresource. Thanks to Svante
 	Paldan
 
