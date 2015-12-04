@@ -4,6 +4,9 @@ Puppet::Type.newtype(:application) do
   @doc = "Manage applications of Glassfish domains"
   ensurable
 
+  feature :refreshable, "The provider can redeploy the application",
+    :methods => [:redeploy]
+
   newparam(:name) do
     desc "The application name."
     isnamevar

@@ -7,11 +7,32 @@ describe Puppet::Type.type(:application) do
   end
 
   let :providerclass do
-    described_class.provide(:fake_application_provider) { mk_resource_methods }
+    described_class.provide(:fake_application_provider) do
+      attr_accessor :property_hash
+      def create; end
+      def destroy; end
+      def exists?
+        get(:ensure) != :absent
+      end
+      def redeploy; end
+      mk_resource_methods
+    end
+  end
+
+  let :provider do
+    providerclass.new(:name => 'test')
+  end
+
+  let :resource do
+    described_class.new(:name => 'test', :provider => provider)
   end
 
   it "should have :name as it's namevar" do
     described_class.key_attributes.should == [:name]
+  end
+
+  it "should have a :refreshable feature that requires the :redeploy method" do
+    expect(described_class.provider_feature(:refreshable).methods).to eq([:redeploy])
   end
 
   describe "when validating attributes" do
@@ -174,11 +195,20 @@ describe Puppet::Type.type(:application) do
   describe "when refreshing" do
     describe "an application that isn't deployed" do
       it "should not be refreshed" do
+        resource[:ensure] = :absent
+        provider.expects(:redeploy).never
+
+        resource.refresh
       end
     end
 
     describe "an application that is deployed" do
       it "should be refreshed" do
+        resource[:ensure] = :present
+        provider.expects(:exists?).returns(:true)
+        provider.expects(:redeploy)
+
+        resource.refresh
       end
     end
   end
