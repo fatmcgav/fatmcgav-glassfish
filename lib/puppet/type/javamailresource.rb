@@ -34,6 +34,10 @@ Puppet::Type.newtype(:javamailresource) do
     defaultto "server"
   end
 
+  newparam(:properties) do
+    desc "The properties. Ex. port=1234 Seperate multiple pairs using :"
+  end
+
   newparam(:portbase) do
     desc "The Glassfish domain port base. Default: 4800"
     defaultto '4800'
