@@ -1,8 +1,13 @@
 FORGE
   remote: http://forge.puppetlabs.com
   specs:
+    puppet-archive (0.4.4)
+      puppetlabs-pe_gem (>= 0.0.1)
+      puppetlabs-stdlib (>= 2.2.1)
+    puppetlabs-pe_gem (0.1.2)
     puppetlabs-stdlib (4.5.0)
 
 DEPENDENCIES
+  puppet-archive (>= 0.4.4)
   puppetlabs-stdlib (>= 3.2.0)
 
