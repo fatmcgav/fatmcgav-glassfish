@@ -38,44 +38,29 @@ describe 'glassfish::install' do
           # Temp dir 
           should contain_file('/tmp').with_ensure('directory').that_requires('Anchor[glassfish::install::start]')
           
-          # Download exec
-          should contain_exec('download_glassfish-3.1.2.2.zip').with({
-            'command' => 'wget -q http://download.java.net/glassfish/3.1.2.2/release/glassfish-3.1.2.2.zip -O /tmp/glassfish-3.1.2.2.zip',
-            'path'    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-            'creates' => '/tmp/glassfish-3.1.2.2.zip',
-            'timeout' => '300'
+          # Archive resource
+          should contain_archive('/tmp/glassfish-3.1.2.2.zip').with({
+            'ensure'       => 'present',
+            'extract'      => true,
+            'extract_path' => '/usr/local',
+            'source'       => 'http://download.java.net/glassfish/3.1.2.2/release/glassfish-3.1.2.2.zip',
+            'creates'      => '/usr/local/glassfish-3.1.2.2'
           }).that_requires('File[/tmp]')
-          
-          # Unzip exec
-          should contain_exec('unzip-downloaded').with({
-            'command' => 'unzip /tmp/glassfish-3.1.2.2.zip',
-            'path'    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-            'cwd'     => '/tmp',
-            'creates' => '/usr/local/glassfish-3.1.2.2',
-          }).that_requires('Exec[download_glassfish-3.1.2.2.zip]')
-          
-          # Chown exec
-          should contain_exec('change-ownership').with({
-            'command' => 'chown -R glassfish:glassfish /tmp/glassfish3',
-            'path'    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-            'creates' => '/usr/local/glassfish-3.1.2.2',
-          }).that_requires('Exec[unzip-downloaded]')
-          
-          # Chmod exec
-          should contain_exec('change-mode').with({
-            'command' => 'chmod -R g+rwX /tmp/glassfish3',
-            'path'    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-            'creates' => '/usr/local/glassfish-3.1.2.2',
-          }).that_requires('Exec[change-ownership]')
-          
+
           # Move exec
           should contain_exec('move-glassfish3').with({
-            'command' => 'mv /tmp/glassfish3 /usr/local/glassfish-3.1.2.2',
+            'command' => 'mv /usr/local/glassfish3 /usr/local/glassfish-3.1.2.2',
             'path'    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-            'cwd'     => '/tmp',
             'creates' => '/usr/local/glassfish-3.1.2.2',
-          }).that_requires('Exec[change-mode]')
-          
+          }).that_requires('Archive[/tmp/glassfish-3.1.2.2.zip]').that_notifies('Exec[change-ownership]')
+
+          # Chown exec
+          should contain_exec('change-ownership').with({
+            'command'     => 'chown -R glassfish:glassfish /usr/local/glassfish-3.1.2.2',
+            'path'        => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+            'refreshonly' => true
+          })
+
           # Remove-domain1 exec
           should contain_file('remove-domain1').with({
             'ensure' => 'absent',
@@ -99,13 +84,14 @@ describe 'glassfish::install' do
       
       describe 'it should download glassfish 3.1.2.2 from different URL' do
         it do
-          # Download exec
-          should contain_exec('download_glassfish-3.1.2.2.zip').with({
-          'command' => 'wget -q http://test.local/glassfish-mirror/glassfish-3.1.2.2.zip -O /tmp/glassfish-3.1.2.2.zip',
-          'path'    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-          'creates' => '/tmp/glassfish-3.1.2.2.zip',
-          'timeout' => '300'
-        }).that_requires('File[/tmp]')
+          # Archive resource
+          should contain_archive('/tmp/glassfish-3.1.2.2.zip').with({
+            'ensure'       => 'present',
+            'extract'      => true,
+            'extract_path' => '/usr/local',
+            'source'       => 'http://test.local/glassfish-mirror/glassfish-3.1.2.2.zip',
+            'creates'      => '/usr/local/glassfish-3.1.2.2'
+          }).that_requires('File[/tmp]')
         end
       end
     end
@@ -130,44 +116,29 @@ describe 'glassfish::install' do
           # Temp dir 
           should contain_file('/tmp').with_ensure('directory').that_requires('Anchor[glassfish::install::start]')
           
-          # Download exec
-          should contain_exec('download_glassfish-4.0.zip').with({
-            'command' => 'wget -q http://download.java.net/glassfish/4.0/release/glassfish-4.0.zip -O /tmp/glassfish-4.0.zip',
-            'path'    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-            'creates' => '/tmp/glassfish-4.0.zip',
-            'timeout' => '300'
+          # Archive resource
+          should contain_archive('/tmp/glassfish-4.0.zip').with({
+            'ensure'       => 'present',
+            'extract'      => true,
+            'extract_path' => '/usr/local',
+            'source'       => 'http://download.java.net/glassfish/4.0/release/glassfish-4.0.zip',
+            'creates'      => '/usr/local/glassfish-4.0'
           }).that_requires('File[/tmp]')
-          
-          # Unzip exec
-          should contain_exec('unzip-downloaded').with({
-            'command' => 'unzip /tmp/glassfish-4.0.zip',
-            'path'    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-            'cwd'     => '/tmp',
-            'creates' => '/usr/local/glassfish-4.0',
-          }).that_requires('Exec[download_glassfish-4.0.zip]')
-          
-          # Chown exec
-          should contain_exec('change-ownership').with({
-            'command' => 'chown -R glassfish:glassfish /tmp/glassfish4',
-            'path'    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-            'creates' => '/usr/local/glassfish-4.0',
-          }).that_requires('Exec[unzip-downloaded]')
-          
-          # Chmod exec
-          should contain_exec('change-mode').with({
-            'command' => 'chmod -R g+rwX /tmp/glassfish4',
-            'path'    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-            'creates' => '/usr/local/glassfish-4.0',
-          }).that_requires('Exec[change-ownership]')
-          
+
           # Move exec
           should contain_exec('move-glassfish4').with({
-            'command' => 'mv /tmp/glassfish4 /usr/local/glassfish-4.0',
+            'command' => 'mv /usr/local/glassfish4 /usr/local/glassfish-4.0',
             'path'    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-            'cwd'     => '/tmp',
             'creates' => '/usr/local/glassfish-4.0',
-          }).that_requires('Exec[change-mode]')
-          
+          }).that_requires('Archive[/tmp/glassfish-4.0.zip]').that_notifies('Exec[change-ownership]')
+
+          # Chown exec
+          should contain_exec('change-ownership').with({
+            'command'     => 'chown -R glassfish:glassfish /usr/local/glassfish-4.0',
+            'path'        => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+            'refreshonly' => true
+          })
+
           # Remove-domain1 exec
           should contain_file('remove-domain1').with({
             'ensure' => 'absent',
