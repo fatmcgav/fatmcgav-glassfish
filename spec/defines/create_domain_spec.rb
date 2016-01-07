@@ -88,7 +88,8 @@ describe 'glassfish::create_domain' do
     # Set the params
     let(:params) do 
       default_params.merge({
-        :start_domain => false
+        :start_domain        => false,
+        :enable_secure_admin => false
       })
     end
     
@@ -100,7 +101,7 @@ describe 'glassfish::create_domain' do
         'passwordfile'      => '/tmp/asadmin.pass',
         'portbase'          => '8000',
         'startoncreate'     => false,
-        'enablesecureadmin' => true
+        'enablesecureadmin' => false
       })
     end
     
