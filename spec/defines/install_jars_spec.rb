@@ -42,8 +42,8 @@ describe 'glassfish::install_jars' do
         'owner'  => 'glassfish',
         'group'  => 'glassfish',
         'source' => 'puppet:///source'
-      }).that_requires('File[/usr/local/glassfish-3.1.2.2/glassfish/lib/ext/test.jar]')
-        .without_notify() }
+      }).that_requires('File[/usr/local/glassfish-3.1.2.2/glassfish/lib/ext]').
+        without_notify() }
   end
 
   context 'with install_location = domain' do
