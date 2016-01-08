@@ -156,6 +156,7 @@ describe 'glassfish::create_domain' do
     end
     
     it do
+      File.expects(:exists?).with('/tmp/template.xml').returns(true).once 
       should contain_glassfish__create_service('test').with({
         'running'      => 'true',
         'mode'         => 'domain', 
