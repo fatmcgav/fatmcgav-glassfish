@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'tempfile'
 
 # Start to describe glassfish::create_domain define
 describe 'glassfish::create_domain' do
@@ -135,10 +136,14 @@ describe 'glassfish::create_domain' do
     # Set the title
     let(:title) { 'test' }
       
+    let(:template) do
+      Tempfile.new('template')
+    end
+
     # Set the params
     let(:params) do 
       default_params.merge({
-        :domain_template => '/tmp/template.xml'
+        :domain_template => template.path
       })
     end
     
@@ -151,7 +156,7 @@ describe 'glassfish::create_domain' do
         'portbase'          => '8000',
         'startoncreate'     => true,
         'enablesecureadmin' => true,
-        'template'          => '/tmp/template.xml'
+        'template'          => template.path
       })
     end
     
