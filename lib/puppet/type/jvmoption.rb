@@ -10,8 +10,8 @@ Puppet::Type.newtype(:jvmoption) do
     isnamevar
 
     validate do |value|
-      unless value =~ /^-(?:[\w\-.:\\+])+(?:=[\w\-\.\/${}\\:]+)?$/
-         raise ArgumentError, "%s is not a valid JVM option." % value
+      unless value =~ /^-(?:[\w\-.:\\+])+(?:=[\w\-\.\/${}\\:]+|=\\\".*\\\")?$/
+        raise ArgumentError, "%s is not a valid JVM option." % value
       end
     end
   end
