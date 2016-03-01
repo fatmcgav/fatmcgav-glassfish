@@ -49,8 +49,14 @@ class glassfish::params {
 
   # Default Glassfish asadmin username
   $glassfish_asadmin_user = 'admin'
+
   # Default Glassfish asadmin password file
-  $glassfish_asadmin_passfile = '/home/glassfish/asadmin.pass'
+  case $::osfamily {
+    'RedHat', 'Debian' : { $glassfish_asadmin_passfile = "/home/${glassfish_user}/asadmin.pass" }
+    'Solaris'          : { $glassfish_asadmin_passfile = "/export/home/${glassfish_user}/asadmin.pass" }
+    default            : { fail("${::osfamily} not supported by this module.") }
+  }
+
   # Default Glassfish asadmin master password
   $glassfish_asadmin_master_password = 'changeit'
   # Default Glassfish asadmin password
@@ -81,7 +87,7 @@ class glassfish::params {
   case $::osfamily {
     'RedHat' : { $glassfish_add_path = true }
     'Debian' : { $glassfish_add_path = true }
-    default  : { $glassfish_add_path = false }
+    default  : { fail("${::osfamily} not supported by this module.") }
   }
 
   # Should this module manage Java installation?
@@ -104,7 +110,7 @@ class glassfish::params {
       $java7_sun_package = undef
     }
     'Solaris' : {
-      if $::os[release][major] == 11 {
+      if $::os[release][major] == '11' {
         $java6_openjdk_package = undef
         $java7_openjdk_package = undef
         $java6_sun_package = 'jdk-6'
