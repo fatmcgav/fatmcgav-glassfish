@@ -87,7 +87,7 @@ class glassfish::params {
   case $::osfamily {
     'RedHat' : { $glassfish_add_path = true }
     'Debian' : { $glassfish_add_path = true }
-    default  : { fail("${::osfamily} not supported by this module.") }
+    default  : { $glassfish_add_path = false }
   }
 
   # Should this module manage Java installation?
