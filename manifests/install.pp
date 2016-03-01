@@ -33,6 +33,12 @@ class glassfish::install {
       gid        => $glassfish::group,
       require    => Group[$glassfish::group]
     }
+
+    file { '.hushlogin':
+      ensure  => 'present',
+      path    => User[$glassfish::user][home],
+      require => User[$glassfish::user]
+    }
   }
 
   # Anchor the install class
@@ -69,8 +75,8 @@ class glassfish::install {
       $glassfish_download_dest = "${glassfish::tmp_dir}/${glassfish_download_file}"
 
       # Work out major version for installation
-      $version_arr             = split($glassfish::version, '[.]')
-      $mjversion               = $version_arr[0]
+      $version_arr = split($glassfish::version, '[.]')
+      $mjversion = $version_arr[0]
 
       # Make sure that $tmp_dir exists.
       file { $glassfish::tmp_dir:
