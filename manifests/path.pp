@@ -43,9 +43,14 @@ class glassfish::path {
       }
     }
     'Solaris' : {
-      notify { 'TODO':
-        message  => "TODO: Setup global path for ${::osfamily}",
-        withpath => true
+      # Add asadmin path to the .profile of the glassfish user
+      file { "/export/home/${::glassfish::user}/.profile":
+        ensure  => present,
+        owner   => 'root',
+        group   => 'root',
+        mode    => '0644',
+        content => template('glassfish/glassfish-profile-deb.erb'),
+        require => Class['glassfish::install']
       }
     }
     default   : {
