@@ -1,6 +1,6 @@
 # File managed by Puppet
 if [ -d <%= scope.lookupvar('glassfish::glassfish_dir') %>/glassfish/bin ]; then
-	PATH=$PATH:<%= scope.lookupvar('glassfish::glassfish_dir') %>/glassfish/bin
+	export PATH=$PATH:<%= scope.lookupvar('glassfish::glassfish_dir') %>/glassfish/bin
 fi
 
 if [ -f /usr/bin/less ]; then
@@ -8,6 +8,11 @@ if [ -f /usr/bin/less ]; then
 elif [ -f /usr/bin/more ]; then
     export PAGER="/usr/bin/more -s"
 fi
+
+if [ -d /usr/jdk/instances/jdk1.7.0 ]; then
+    export JAVA_HOME=/usr/jdk/instances/jdk1.7.0
+fi
+
 
 #
 # Define default prompt to <username>@<hostname>:<path><"($|#) ">
