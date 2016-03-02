@@ -34,9 +34,15 @@ class glassfish::install {
       require    => Group[$glassfish::group]
     }
 
-    file { '.hushlogin':
+    case $::osfamily {
+      'RedHat', 'Debian' : { $userhome = "/home/${glassfish::user}" }
+      'Solaris'          : { $userhome = "/export/home/${glassfish::user}" }
+      default            : { fail("${::osfamily} not supported by this module.") }
+    }
+
+    # Make sure motd doesn't interfere with SU commands
+    file { "${userhome}/.hushlogin":
       ensure  => 'present',
-      path    => User[$glassfish::user][home],
       require => User[$glassfish::user]
     }
   }
