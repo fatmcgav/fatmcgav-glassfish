@@ -46,10 +46,10 @@ class glassfish::path {
       # Add asadmin path to the .profile of the glassfish user
       file { "/export/home/${::glassfish::user}/.profile":
         ensure  => present,
-        owner   => 'root',
-        group   => 'root',
+        owner   => $::glassfish::user,
+        group   => $::glassfish::group,
         mode    => '0644',
-        content => template('glassfish/glassfish-profile-deb.erb'),
+        content => template('glassfish/glassfish-profile-sol.erb'),
         require => Class['glassfish::install']
       }
     }
