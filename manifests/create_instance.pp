@@ -73,17 +73,20 @@ define glassfish::create_instance (
     $svc_name = $service_name
   }
 
-  # Create the cluster
-  cluster_instance { $instance_name:
-    ensure       => $ensure,
-    user         => $node_user,
-    asadminuser  => $asadmin_user,
-    passwordfile => $asadmin_passfile,
-    dashost      => $das_host,
-    dasport      => $das_port,
-    nodename     => $node_name,
-    cluster      => $cluster,
-    portbase     => $instance_portbase
+  if ($cluster != undef) {
+    # Create the cluster if $cluster is defined
+    cluster_instance { $instance_name:
+      ensure       => $ensure,
+      user         => $node_user,
+      asadminuser  => $asadmin_user,
+      passwordfile => $asadmin_passfile,
+      dashost      => $das_host,
+      dasport      => $das_port,
+      nodename     => $node_name,
+      cluster      => $cluster,
+      portbase     => $instance_portbase
+    }
+
   }
 
   # Create a init.d service if required
