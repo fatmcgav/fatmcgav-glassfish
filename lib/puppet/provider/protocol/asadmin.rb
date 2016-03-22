@@ -7,7 +7,7 @@ Puppet::Type.type(:protocol).provide(:asadmin, :parent => Puppet::Provider::Asad
   def create
     args = Array.new
     args << "create-protocol"
-    args << "--securityenabled" << @resource[:transport]
+    args << "--securityenabled" << @resource[:securityenabled]
     args << "--target" << @resource[:target]
     args << @resource[:name]
 
