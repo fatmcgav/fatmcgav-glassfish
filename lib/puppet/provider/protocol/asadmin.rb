@@ -23,7 +23,7 @@ Puppet::Type.type(:protocol).provide(:asadmin, :parent => Puppet::Provider::Asad
 
   def exists?
     args = [
-      "list-protocol",
+      "list-protocols",
       @resource[:target],
     ]
     return true if asadmin_exec(args).include?(@resource[:name])
