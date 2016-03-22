@@ -80,7 +80,7 @@ Puppet::Type.newtype(:protocol) do
 
   # Global validation
   validate do
-    required_params = [ :port, :protocol ]
+    required_params = [ :securityenabled ]
     required_params.each do |param|
       if not self[param] then
         raise Puppet::Error, "networklisterner:#{param} is required"
