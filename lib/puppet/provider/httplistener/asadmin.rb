@@ -1,12 +1,12 @@
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__),"..","..",".."))
 require 'puppet/provider/asadmin'
 
-Puppet::Type.type(:networklistener).provide(:asadmin, :parent => Puppet::Provider::Asadmin) do
-  desc "Glassfish network listener management."
+Puppet::Type.type(:httplistener).provide(:asadmin, :parent => Puppet::Provider::Asadmin) do
+  desc "Glassfish http listener management."
 
   def create
     args = Array.new
-    args << "create-network-listener"
+    args << "create-http-listener"
     if @resource[:listeneraddress]
       args << "--listeneraddress" << @resource[:listeneraddress]
     end

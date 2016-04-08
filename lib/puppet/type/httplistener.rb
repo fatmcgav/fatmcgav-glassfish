@@ -59,7 +59,7 @@ Puppet::Type.newtype(:httplistener) do
   end
 
   newparam(:xpowered) do
-    desc "f set to true, adds the X-Powered-By: Servlet/3.0 and X-Powered-By: JSP/2.0 headers to the appropriate responses."
+    desc "If set to true, adds the X-Powered-By: Servlet/3.0 and X-Powered-By: JSP/2.0 headers to the appropriate responses."
     defaultto "true"
   end
 
