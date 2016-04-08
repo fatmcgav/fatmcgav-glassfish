@@ -132,7 +132,7 @@ Puppet::Type.newtype(:httplistener) do
 
   # Global validation
   validate do
-    required_params = [ :listenerport ]
+    required_params = [ :listenerport, :listeneraddress ]
     required_params.each do |param|
       if not self[param] then
         raise Puppet::Error, "httplistener:#{param} is required"

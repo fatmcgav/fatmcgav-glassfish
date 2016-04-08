@@ -7,9 +7,7 @@ Puppet::Type.type(:httplistener).provide(:asadmin, :parent => Puppet::Provider::
   def create
     args = Array.new
     args << "create-http-listener"
-    if @resource[:listeneraddress]
-      args << "--listeneraddress" << @resource[:listeneraddress]
-    end
+    args << "--listeneraddress" << @resource[:listeneraddress]
     args << "--listenerport" << @resource[:listenerport]
     if @resource[:defaultvirtualserver]
       args << "--defaultvs" << @resource[:defaultvirtualserver]
