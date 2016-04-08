@@ -6,7 +6,7 @@ Puppet::Type.newtype(:httplistener) do
   ensurable
 
   newparam(:name) do
-    desc "The Glassfish network listener name."
+    desc "The Glassfish http listener name."
     isnamevar
 
     validate do |value|
@@ -132,10 +132,10 @@ Puppet::Type.newtype(:httplistener) do
 
   # Global validation
   validate do
-    required_params = [ :listenerport, :address ]
+    required_params = [ :listenerport ]
     required_params.each do |param|
       if not self[param] then
-        raise Puppet::Error, "networklisterner:#{param} is required"
+        raise Puppet::Error, "httplistener:#{param} is required"
       end
     end
   end
