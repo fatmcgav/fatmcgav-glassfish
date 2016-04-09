@@ -24,6 +24,9 @@ Puppet::Type.type(:httplistener).provide(:asadmin, :parent => Puppet::Provider::
     if @resource[:enabled]
       args << "--enabled" << @resource[:enabled]
     end
+    if @resource[:target]
+      args << "--target" << @resource[:target]
+    end
     args << @resource[:name]
 
     asadmin_exec(args)
@@ -31,7 +34,11 @@ Puppet::Type.type(:httplistener).provide(:asadmin, :parent => Puppet::Provider::
 
   def destroy
     args = Array.new
-    args << "delete-http-listener" << @resource[:name]
+    args << "delete-http-listener"
+    if @resource[:target]
+      args << "--target" << @resource[:target]
+    end 
+    args << @resource[:name]
     asadmin_exec(args)
   end
 
