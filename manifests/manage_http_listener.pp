@@ -1,6 +1,6 @@
-# == Define: glassfish::create_http_listener
+# == Define: glassfish::manage_http_listener
 #
-# Create a glassfish http listener.
+# Manage a glassfish http listener.
 #
 # === Parameters
 #
@@ -48,9 +48,9 @@
 #
 # === Authors
 #
-# Jesse Cotton <jcotton1123@gmail.com>
+# Richard Gareau <richard.gareau@bell.ca>
 #
-define glassfish::create_http_listener (
+define glassfish::manage_http_listener (
   $ensure               = present,
   $listeneraddress      = undef,
   $listenerport         = undef,
