@@ -1,0 +1,14 @@
+[Unit]
+Description = GlassFish Server <%= scope.lookupvar('glassfish::glassfish_version') %> - <%= @domain_name %>
+After = syslog.target network.target
+
+[Service]
+User=<%= @runuser %>
+ExecStart = /usr/local/glassfish-<%= scope.lookupvar('glassfish::glassfish_version') %>/bin/asadmin start-domain <%= @domain_name %>
+ExecStop = /usr/local/glassfish-<%= scope.lookupvar('glassfish::glassfish_version') %>/bin/asadmin stop-domain <%= @domain_name %>
+ExecReload = /usr/local/glassfish-<%= scope.lookupvar('glassfish::glassfish_version') %>/bin/asadmin restart-domain <%= @domain_name %>
+Type = forking
+
+[Install]
+WantedBy = multi-user.target
+
