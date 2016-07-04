@@ -123,6 +123,13 @@ define glassfish::create_service (
     true    => "/etc/systemd/system/${svc_name}.service",
     default => "/etc/init.d/${svc_name}",
   }
+  $service_config_notify = $use_systemd ? {
+    true  => [
+      Service[$svc_name],
+      Exec['reload-systemd'],
+    ],
+    false => Service[$svc_name],
+  }
 
   # Create the init file
   file { "${title}_servicefile":
@@ -130,7 +137,12 @@ define glassfish::create_service (
     path    => $service_config_path,
     mode    => '0755',
     content => $service_file,
-    notify  => Service[$svc_name]
+    notify  => $service_config_notify,
+  }
+  exec { 'reload-systemd':
+    command     => 'systemctl daemon-reload',
+    path        => ['/bin'],
+    refreshonly => true,
   }
 
   # Need to stop the domain if it was auto-started

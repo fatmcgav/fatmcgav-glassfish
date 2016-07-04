@@ -4,9 +4,9 @@ After = syslog.target network.target
 
 [Service]
 User=<%= @runuser %>
-ExecStart = <%= scope.lookupvar('glassfish::parent_dir') %>/bin/asadmin start-domain <%= @domain_name %>
-ExecStop = <%= scope.lookupvar('glassfish::parent_dir') %>/bin/asadmin stop-domain <%= @domain_name %>
-ExecReload = <%= scope.lookupvar('glassfish::parent_dir') %>/bin/asadmin restart-domain <%= @domain_name %>
+ExecStart = <%= scope.lookupvar('glassfish::glassfish_dir') %>/bin/asadmin start-domain <%= @domain_name %>
+ExecStop = <%= scope.lookupvar('glassfish::glassfish_dir') %>/bin/asadmin stop-domain <%= @domain_name %>
+ExecReload = <%= scope.lookupvar('glassfish::glassfish_dir') %>/bin/asadmin restart-domain <%= @domain_name %>
 Type = forking
 
 [Install]
