@@ -94,7 +94,7 @@ define glassfish::create_instance (
       node_name     => $node_name,
       runuser       => $node_user,
       service_name  => $svc_name,
-      require       => Cluster_Instance[$instance_name]
+      require       => Cluster_instance[$instance_name]
     }
   }
 
