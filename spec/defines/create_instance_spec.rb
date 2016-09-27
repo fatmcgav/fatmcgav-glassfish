@@ -46,7 +46,7 @@ describe 'glassfish::create_instance' do
         'instance_name' => 'test',
         'node_name'     => 'testhost',
         'service_name'  => 'glassfish_test'
-      }).that_requires('Cluster_Instance[test]')
+      }).that_requires('Cluster_instance[test]')
     end
   end
   
