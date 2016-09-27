@@ -1,13 +1,13 @@
 require 'spec_helper'
 
-describe Puppet::Type.type(:application) do
+describe Puppet::Type.type(:app) do
 
   before :each do
     described_class.stubs(:defaultprovider).returns providerclass
   end
 
   let :providerclass do
-    described_class.provide(:fake_application_provider) do
+    described_class.provide(:fake_app_provider) do
       attr_accessor :property_hash
       def create; end
       def destroy; end
@@ -215,7 +215,7 @@ describe Puppet::Type.type(:application) do
 
   describe "when autorequiring" do    
     describe "user autorequire" do
-      let :application do
+      let :app do
         described_class.new(
           :name         => 'test',
           :source       => '/tmp/application.ear',
@@ -246,22 +246,22 @@ describe Puppet::Type.type(:application) do
       end
       
       it "should not autorequire a user when no matching user can be found" do
-        catalog.add_resource application
-        application.autorequire.should be_empty
+        catalog.add_resource app
+        app.autorequire.should be_empty
       end
   
       it "should autorequire a matching user" do
-        catalog.add_resource application
+        catalog.add_resource app
         catalog.add_resource user
-        reqs = application.autorequire
+        reqs = app.autorequire
         reqs.size.should == 1
         reqs[0].source.ref.should == user.ref
-        reqs[0].target.ref.should == application.ref
+        reqs[0].target.ref.should == app.ref
       end
     end
   
     describe "file autorequire" do
-      let :application do
+      let :app do
         described_class.new(
           :name         => 'test',
           :source       => '/tmp/application.ear',
@@ -292,22 +292,22 @@ describe Puppet::Type.type(:application) do
       end
       
       it "should not autorequire a file when no matching file can be found" do
-        catalog.add_resource application
-        application.autorequire.should be_empty
+        catalog.add_resource app
+        app.autorequire.should be_empty
       end
     
       it "should autorequire a matching file" do
-        catalog.add_resource application
+        catalog.add_resource app
         catalog.add_resource file
-        reqs = application.autorequire
+        reqs = app.autorequire
         reqs.size.should == 1
         reqs[0].source.ref.should == file.ref
-        reqs[0].target.ref.should == application.ref
+        reqs[0].target.ref.should == app.ref
       end
     end
     
     describe "domain autorequire" do
-      let :application do
+      let :app do
         described_class.new(
           :name         => 'test',
           :source       => '/tmp/application.ear',
@@ -340,20 +340,20 @@ describe Puppet::Type.type(:application) do
       end
       
       it "should not autorequire a domain when no matching domain can be found" do
-        catalog.add_resource application
-        application.autorequire.should be_empty
+        catalog.add_resource app
+        app.autorequire.should be_empty
       end
     
       it "should autorequire a matching domain" do
         # Create catalogue
-        catalog.add_resource application
+        catalog.add_resource app
         # Additional expect for domain resource. 
         Puppet.features.expects(:root?).returns(true).once
         catalog.add_resource domain
-        reqs = application.autorequire
+        reqs = app.autorequire
         reqs.size.should == 1
         reqs[0].source.ref.should == domain.ref
-        reqs[0].target.ref.should == application.ref
+        reqs[0].target.ref.should == app.ref
       end
     end
   end
