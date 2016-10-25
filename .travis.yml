@@ -2,39 +2,37 @@
 language: ruby
 cache: bundler
 rvm: 
-  - 1.8.7
+  # - 1.8.7
   - 1.9.3
-  - 2.0
   - 2.1
   - 2.2
-bundler_args: --without development
-before_install: rm Gemfile.lock || true
+  - 2.3.1
+bundler_args: --without system_tests development
+before_install:
+  - bundle -v
+  - rm Gemfile.lock || true
+  - gem update --system
+  - gem update bundler
+  - gem --version
+  - bundle -v
 script: bundle exec rake test
 sudo: false
 env:
-  - PUPPET_VERSION="~> 3.7.0"
-  - PUPPET_VERSION="~> 3.7.0" PARSER="future"
-  - PUPPET_VERSION="~> 3.8.0"
-  - PUPPET_VERSION="~> 3.8.0" PARSER="future"
-  - PUPPET_VERSION="~> 4.1.0"
-  - PUPPET_VERSION="~> 4.2.0"
-  - PUPPET_VERSION="~> 4.3.0"
+  - PUPPET_VERSION="~> 3.0" STRICT_VARIABLES="yes"
+  - PUPPET_VERSION="~> 3.0" STRICT_VARIABLES="yes" FUTURE_PARSER="yes"
+  - PUPPET_VERSION="~> 4.0" STRICT_VARIABLES="yes"
 matrix:
   exclude:
-  - rvm: 1.8.7
-    env: PUPPET_VERSION="~> 4.1.0"
-  - rvm: 1.8.7
-    env: PUPPET_VERSION="~> 4.2.0"
-  - rvm: 1.8.7
-    env: PUPPET_VERSION="~> 4.3.0"
+  # - rvm: 1.8.7
+  #   env: PUPPET_VERSION="~> 4.0" STRICT_VARIABLES="yes"
   - rvm: 2.2
-    env: PUPPET_VERSION="~> 3.7.0"
+    env: PUPPET_VERSION="~> 3.0" STRICT_VARIABLES="yes"
   - rvm: 2.2
-    env: PUPPET_VERSION="~> 3.7.0" PARSER="future"
-  - rvm: 2.2
-    env: PUPPET_VERSION="~> 3.8.0"
-  - rvm: 2.2
-    env: PUPPET_VERSION="~> 3.8.0" PARSER="future"
+    env: PUPPET_VERSION="~> 3.0" STRICT_VARIABLES="yes" FUTURE_PARSER="yes"
+  - rvm: 2.3.1
+    env: PUPPET_VERSION="~> 3.0" STRICT_VARIABLES="yes"
+  - rvm: 2.3.1
+    env: PUPPET_VERSION="~> 3.0" STRICT_VARIABLES="yes" FUTURE_PARSER="yes"
 notifications:
   email:
     - fatmcgav@gmail.com

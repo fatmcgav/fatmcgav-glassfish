@@ -17,9 +17,14 @@ describe 'glassfish::create_service' do
     let(:facts) { {
       :osfamily => 'RedHat'
     } }
+
+    # Need to eval glassfish class
+    let(:pre_condition) {
+      'include glassfish'
+    }
     
     # Test RedHat osfamily behaviour
-    context 'with a title' do
+    describe 'with a title' do
       let(:title) { 'test' }
       
       # Setup params
@@ -74,8 +79,13 @@ describe 'glassfish::create_service' do
       :osfamily => 'Debian'
     } }
     
+    # Need to eval glassfish class
+    let(:pre_condition) {
+      'include glassfish'
+    }
+
     # Test Debian osfamily behaviour
-    context 'with a title' do
+    describe 'with a title' do
       let(:title) { 'test' }
       
       # Setup params

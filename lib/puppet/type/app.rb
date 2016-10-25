@@ -1,6 +1,6 @@
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__),"..","..",".."))
 
-Puppet::Type.newtype(:application) do
+Puppet::Type.newtype(:app) do
   @doc = "Manage applications of Glassfish domains"
   ensurable
 
