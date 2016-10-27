@@ -86,43 +86,52 @@ define glassfish::create_service (
   }
 
   # Select operating system on which systemd is enabled
-  $use_systemd = $::operatingsystem ? {
+  $use_systemd = $::osfamily ? {
     'Debian' => $::lsbdistcodename ? {
       'jessie' => true,
       default  => false,
     },
+    'RedHat' => $::operatingsystemmajrelease ? {
+      '7'     => true,
+      default => false,
+    },
     default  => false,
   }
 
+  # What template do we want to use?
+  case $use_systemd {
+    true: { $service_type = 'systemd' }
+    false: { $service_type = 'init' }
+  }
+
   # What service_file should we be using, based on osfamily.
-  if $use_systemd {
-    $service_file = $mode ? {
-      'domain' => template('glassfish/systemd/domain.service.erb'),
+  case $::osfamily {
+    'RedHat' : {
+      case $mode {
+        'domain'   : { $service_file = template("glassfish/${service_type}/domain-el.service.erb") }
+        'cluster'  : { $service_file = template("glassfish/${service_type}/cluster-el.service.erb") }
+        'instance' : { $service_file = template("glassfish/${service_type}/instance-el.service.erb") }
+        default    : { fail("Mode ${mode} not supported.") }
+      }
     }
-  } else {
-    case $::osfamily {
-      'RedHat' : {
-        case $mode {
-          'domain'   : { $service_file = template('glassfish/glassfish-init-domain-el.erb') }
-          'cluster'  : { $service_file = template('glassfish/glassfish-init-cluster-el.erb') }
-          'instance' : { $service_file = template('glassfish/glassfish-init-instance-el.erb') }
-          default    : { fail("Mode ${mode} not supported.") }
-        }
-      }
-      'Debian' : {
-        $service_file = template('glassfish/glassfish-init-domain-debian.erb')
-      }
-      default  : {
-        fail("OSFamily ${::osfamily} not supported.")
-      }
+    'Debian' : {
+      $service_file = template("glassfish/${service_type}/domain-debian.service.erb")
+    }
+    default  : {
+      fail("OSFamily ${::osfamily} not supported.")
     }
   }
 
-
+  # SystemD uses a different path to init
   $service_config_path = $use_systemd ? {
-    true    => "/etc/systemd/system/${svc_name}.service",
+    true    => $::osfamily ? {
+      'Debian' => "/etc/systemd/system/${svc_name}.service",
+      'RedHat' => "/usr/lib/systemd/system/${svc_name}.service"
+    },
     default => "/etc/init.d/${svc_name}",
   }
+
+  # If using systemd, need to notify reload-systemd after creating service script
   $service_config_notify = $use_systemd ? {
     true  => [
       Service[$svc_name],
@@ -138,11 +147,6 @@ define glassfish::create_service (
     mode    => '0755',
     content => $service_file,
     notify  => $service_config_notify,
-  }
-  exec { 'reload-systemd':
-    command     => 'systemctl daemon-reload',
-    path        => ['/bin'],
-    refreshonly => true,
   }
 
   # Need to stop the domain if it was auto-started
