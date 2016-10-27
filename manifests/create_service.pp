@@ -135,7 +135,7 @@ define glassfish::create_service (
   $service_config_notify = $use_systemd ? {
     true  => [
       Service[$svc_name],
-      Exec['reload-systemd'],
+      Exec['systemctl-daemon-reload'],
     ],
     false => Service[$svc_name],
   }
