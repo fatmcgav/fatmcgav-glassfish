@@ -78,6 +78,9 @@ class glassfish::install {
         require => Anchor['glassfish::install::start'],
       }
 
+      # Make sure unzip is installed
+      ensure_packages(['unzip'], {'ensure' =>  'present'})
+
       # Use archive to download and extract
       archive { $glassfish_download_dest:
         ensure       => present,
