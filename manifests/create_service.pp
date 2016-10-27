@@ -101,7 +101,7 @@ define glassfish::create_service (
   # What template do we want to use?
   case $use_systemd {
     true: { $service_type = 'systemd' }
-    false: { $service_type = 'init' }
+    default: { $service_type = 'init' }
   }
 
   # What service_file should we be using, based on osfamily.
