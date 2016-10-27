@@ -28,8 +28,10 @@ group :development do
 end
 
 group :system_tests do
-  gem "beaker"
+  gem "beaker", "<3"
   gem "beaker-rspec"
+  gem "beaker-puppet_install_helper"
+  gem "serverspec"
   gem "vagrant-wrapper"
 end
 
