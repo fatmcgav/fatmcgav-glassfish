@@ -78,53 +78,38 @@ class glassfish::install {
         require => Anchor['glassfish::install::start'],
       }
 
-      # Download file
-      exec { "download_${glassfish_download_file}":
-        command => "wget -q ${glassfish_download_site}/${glassfish_download_file} -O ${glassfish_download_dest}",
-        path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        creates => $glassfish_download_dest,
-        timeout => '300',
-        require => File[$glassfish::tmp_dir]
+      # Make sure unzip is installed
+      ensure_packages(['unzip'], {'ensure' =>  'present'})
+
+      # Use archive to download and extract
+      archive { $glassfish_download_dest:
+        ensure       => present,
+        extract      => true,
+        extract_path => $glassfish::parent_dir,
+        source       => "${glassfish_download_site}/${glassfish_download_file}",
+        creates      => $glassfish::glassfish_dir,
+        require      => File[$glassfish::tmp_dir]
       }
 
-      # Unzip the downloaded glassfish zip file
-      exec { 'unzip-downloaded':
-        command => "unzip ${glassfish_download_dest}",
-        path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        cwd     => $glassfish::tmp_dir,
+      exec { "move-glassfish${mjversion}":
+        command => "mv ${glassfish::parent_dir}/glassfish${mjversion} ${glassfish::glassfish_dir}",
         creates => $glassfish::glassfish_dir,
-        require => Exec["download_${glassfish_download_file}"]
+        path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+        require => Archive[$glassfish_download_dest],
+        notify  => Exec['change-ownership']
       }
 
-      # Chown glassfish folder.
       exec { 'change-ownership':
-        command => "chown -R ${glassfish::user}:${glassfish::group} ${glassfish::tmp_dir}/glassfish${mjversion}",
-        path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        creates => $glassfish::glassfish_dir,
-        require => Exec['unzip-downloaded']
+        command     => "chown -R ${glassfish::user}:${glassfish::group} ${glassfish::glassfish_dir}",
+        path        => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+        refreshonly => true
       }
 
       # Make sure that user creation runs before ownership change, IF
       # manage_accounts = true.
       if $glassfish::manage_accounts {
+        # User[$glassfish::user] -> File[$glassfish::glassfish_dir]
         User[$glassfish::user] -> Exec['change-ownership']
-      }
-
-      # Chmod glassfish folder.
-      exec { 'change-mode':
-        command => "chmod -R g+rwX ${glassfish::tmp_dir}/glassfish${mjversion}",
-        path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        creates => $glassfish::glassfish_dir,
-        require => Exec['change-ownership']
-      }
-
-      # Move the glassfish3 folder.
-      exec { "move-glassfish${mjversion}":
-        command => "mv ${glassfish::tmp_dir}/glassfish${mjversion} ${glassfish::glassfish_dir}",
-        path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        cwd     => $glassfish::tmp_dir,
-        creates => $glassfish::glassfish_dir,
-        require => Exec['change-mode']
       }
 
       if $glassfish::remove_default_domain {

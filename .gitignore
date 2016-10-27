@@ -8,4 +8,5 @@ pkg
 /.rspec_system
 /coverage
 *.swp
-Gemfile.lock
+*.lock
+log
