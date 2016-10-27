@@ -6,6 +6,7 @@ describe 'glassfish::create_instance' do
   # Set the osfamily fact
   let(:facts) { {
     :osfamily => 'RedHat',
+    :operatingsystemmajrelease => '6',
     :hostname => 'testhost'
   } }
   

@@ -31,6 +31,7 @@ end
 context 'when creating a domain' do
   let(:manifest) {
     <<-EOS
+      include ::systemd
       class { 'glassfish':
         create_domain => true,
         domain_name   => 'test',
@@ -46,6 +47,10 @@ context 'when creating a domain' do
 
   describe file('/usr/local/glassfish-3.1.2.2/glassfish/domains/test') do
     it { should be_directory }
+  end
+
+  describe file('/usr/lib/systemd/system/glassfish_test.service') do
+    it { should be_file }
   end
 
   describe service('glassfish_test') do

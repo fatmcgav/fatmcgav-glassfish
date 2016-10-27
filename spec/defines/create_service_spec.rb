@@ -15,7 +15,8 @@ describe 'glassfish::create_service' do
   
     # Set the osfamily fact
     let(:facts) { {
-      :osfamily => 'RedHat'
+      :osfamily => 'RedHat',
+      :operatingsystemmajrelease => '6'
     } }
 
     # Need to eval glassfish class

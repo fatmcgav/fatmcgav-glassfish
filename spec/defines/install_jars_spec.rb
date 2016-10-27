@@ -5,7 +5,8 @@ describe 'glassfish::install_jars' do
 
   # Set the osfamily fact
   let(:facts) { {
-      :osfamily => 'RedHat'
+      :osfamily => 'RedHat',
+      :operatingsystemmajrelease => '6'
     } }
 
   # Include Glassfish class

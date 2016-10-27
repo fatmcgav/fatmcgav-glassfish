@@ -6,7 +6,8 @@ describe 'glassfish::create_domain' do
   
   # Set the osfamily fact
   let(:facts) { {
-    :osfamily => 'RedHat'
+    :osfamily => 'RedHat',
+    :operatingsystemmajrelease => '6'
   } }
   
   # Include Glassfish class 

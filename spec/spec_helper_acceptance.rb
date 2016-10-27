@@ -18,6 +18,7 @@ RSpec.configure do |c|
     hosts.each do |host|
       on host, puppet('module', 'install', 'puppetlabs-stdlib'), { :acceptable_exit_codes => [0,1] }
       on host, puppet('module', 'install', 'puppet-archive'), { :acceptable_exit_codes => [0,1] }
+      on host, puppet('module', 'install', 'camptocamp-systemd'), { :acceptable_exit_codes => [0,1] }
     end
   end
 end
