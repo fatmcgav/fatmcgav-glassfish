@@ -8,8 +8,8 @@ context 'with defaults' do
   }
 
   it 'should run without errors' do
-    apply_manifest(manifest, :catch_failures => true, :debug => true)
-    expect(apply_manifest(manifest, :catch_failures => true, :debug => true).exit_code).to be_zero
+    apply_manifest(manifest, :catch_failures => true)
+    expect(apply_manifest(manifest, :catch_failures => true).exit_code).to be_zero
   end
 
   describe user('glassfish') do
@@ -40,8 +40,8 @@ context 'when creating a domain' do
   }
 
   it 'should run without errors' do
-    apply_manifest(manifest, :catch_failures => true, :debug => true)
-    expect(apply_manifest(manifest, :catch_failures => true, :debug => true).exit_code).to be_zero
+    apply_manifest(manifest, :catch_failures => true)
+    expect(apply_manifest(manifest, :catch_failures => true).exit_code).to be_zero
   end
 
   describe file('/usr/local/glassfish-3.1.2.2/glassfish/domains/test') do
