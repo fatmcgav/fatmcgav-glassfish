@@ -5,10 +5,6 @@ require 'rspec-puppet-facts'
 include RspecPuppetFacts
 
 # Set systemd facts
-# add_custom_fact :systemd, false, :confine => ['redhat-5-x86_64', 'redhat-6-x86_64', 'debian-6-x86_64', 'ubuntu-10.04-x86_64']
-# add_custom_fact :systemd, 'false', :confine => ['redhat-5-x86_64', 'redhat-6-x86_64']
-# add_custom_fact :systemd, true, :confine => ['redhat-7-x86_64', 'debian-7-x86_64']
-
 add_custom_fact :systemd, ->(os,facts) {
   case facts[:osfamily]
   when 'RedHat'
