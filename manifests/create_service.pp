@@ -85,21 +85,11 @@ define glassfish::create_service (
     $svc_name = $service_name
   }
 
-  # Select operating system on which systemd is enabled
-  $use_systemd = $::osfamily ? {
-    'Debian' => $::lsbdistcodename ? {
-      'jessie' => true,
-      default  => false,
-    },
-    'RedHat' => $::operatingsystemmajrelease ? {
-      '7'     => true,
-      default => false,
-    },
-    default  => false,
-  }
+  # SystemD module provides a useful fact for identifying use of systemd
+  include ::systemd
 
   # What template do we want to use?
-  case $use_systemd {
+  case $::systemd {
     true: { $service_type = 'systemd' }
     default: { $service_type = 'init' }
   }
@@ -123,7 +113,7 @@ define glassfish::create_service (
   }
 
   # SystemD uses a different path to init
-  $service_config_path = $use_systemd ? {
+  $service_config_path = $::systemd ? {
     true    => $::osfamily ? {
       'Debian' => "/etc/systemd/system/${svc_name}.service",
       'RedHat' => "/usr/lib/systemd/system/${svc_name}.service"
@@ -132,7 +122,7 @@ define glassfish::create_service (
   }
 
   # If using systemd, need to notify reload-systemd after creating service script
-  $service_config_notify = $use_systemd ? {
+  $service_config_notify = $::systemd ? {
     true  => [
       Service[$svc_name],
       Exec['systemctl-daemon-reload'],
@@ -173,6 +163,11 @@ define glassfish::create_service (
     hasstatus  => $has_status,
     hasrestart => true,
     status     => $status_cmd
+  }
+
+  # Make sure systemd reloads before service if required
+  if $::systemd {
+    Exec['systemctl-daemon-reload'] ~> Service[$svc_name]
   }
 
 }
