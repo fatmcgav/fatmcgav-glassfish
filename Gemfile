@@ -15,6 +15,7 @@ group :test do
   #gem 'puppet-lint', '~>1.1.0'
   gem 'puppet-lint', '< 3.0'
   gem 'puppet-syntax'
+  gem 'rspec-puppet-facts'
   gem 'librarian-puppet', '< 2.0'
   gem 'simplecov', :platforms => [:ruby_20]
   gem 'coveralls', :platforms => [:ruby_20]
