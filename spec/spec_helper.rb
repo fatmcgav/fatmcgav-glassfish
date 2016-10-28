@@ -1,5 +1,34 @@
 require 'rubygems'
 require 'puppetlabs_spec_helper/module_spec_helper'
+require 'rspec-puppet-facts'
+
+include RspecPuppetFacts
+
+# Set systemd facts
+# add_custom_fact :systemd, false, :confine => ['redhat-5-x86_64', 'redhat-6-x86_64', 'debian-6-x86_64', 'ubuntu-10.04-x86_64']
+# add_custom_fact :systemd, 'false', :confine => ['redhat-5-x86_64', 'redhat-6-x86_64']
+# add_custom_fact :systemd, true, :confine => ['redhat-7-x86_64', 'debian-7-x86_64']
+
+add_custom_fact :systemd, ->(os,facts) {
+  case facts[:osfamily]
+  when 'RedHat'
+    case facts[:operatingsystemmajrelease]
+    when '5','6'
+      false
+    when '7'
+      true
+    end
+  when 'Debian'
+    case facts[:lsbdistcodename]
+    when 'jessie'
+      true
+    else
+      false
+    end
+  else
+    false
+  end
+}
 
 # Code Climate loading
 begin
