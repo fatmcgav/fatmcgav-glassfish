@@ -31,7 +31,6 @@ end
 context 'when creating a domain' do
   let(:manifest) {
     <<-EOS
-      include ::systemd
       class { 'glassfish':
         create_domain => true,
         domain_name   => 'test',
