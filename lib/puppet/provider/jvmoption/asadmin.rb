@@ -26,6 +26,9 @@ Puppet::Provider::Asadmin) do
     args = Array.new
     args << "list-jvm-options"
     args << "--target" << @resource[:target] if @resource[:target]
+    
+    #Remove escaped semi-colons for matching the jvm option name
+    name = @resource[:name].sub "\\:" , ":"
 
     #Remove escaped semi-colons for matching the jvm option name
     name = @resource[:name].sub "\\:" , ":"
