@@ -78,12 +78,6 @@ Puppet::Type.newtype(:domain) do
 
   newparam(:template) do
     desc "Path to Glassfish template to use when creating the domain"
-
-    validate do |value|
-      unless File.exists? value
-        raise ArgumentError, "%s does not exist" % value
-      end
-    end
   end
 
   # Validate multiple param values
