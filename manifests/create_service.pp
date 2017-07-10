@@ -43,16 +43,17 @@
 # Copyright 2014 Gavin Williams, unless otherwise noted.
 #
 define glassfish::create_service (
-  $domain_name   = undef,
-  $cluster_name  = undef,
-  $instance_name = undef,
-  $node_name     = undef,
-  $runuser       = $glassfish::user,
-  $running       = false,
-  $mode          = 'domain',
-  $das_port      = undef,
-  $status_cmd    = undef,
-  $service_name  = undef) {
+  $domain_name    = undef,
+  $cluster_name   = undef,
+  $instance_name  = undef,
+  $node_name      = undef,
+  $runuser        = $glassfish::user,
+  $running        = false,
+  $mode           = 'domain',
+  $das_port       = undef,
+  $status_cmd     = undef,
+  $service_name   = undef,
+  $service_enable = true ) {
   # Check that we've got a domain name if domain mode.
   if $mode == 'domain' and !$domain_name {
     fail('Domain name must be specified to install service for domain mode.')
@@ -159,7 +160,7 @@ define glassfish::create_service (
   # Make sure the service is running and enabled.
   service { $svc_name:
     ensure     => 'running',
-    enable     => true,
+    enable     => $service_enable,
     hasstatus  => $has_status,
     hasrestart => true,
     status     => $status_cmd

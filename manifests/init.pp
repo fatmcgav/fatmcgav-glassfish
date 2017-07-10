@@ -114,6 +114,7 @@ class glassfish (
   $parent_dir              = $glassfish::params::glassfish_parent_dir,
   $portbase                = $glassfish::params::glassfish_portbase,
   $remove_default_domain   = $glassfish::params::glassfish_remove_default_domain,
+  $service_enable          = $glassfish::params::glassfish_service_enable,
   $service_name            = $glassfish::params::glassfish_service_name,
   $start_domain            = $glassfish::params::glassfish_start_domain,
   $tmp_dir                 = $glassfish::params::glassfish_tmp_dir,

@@ -67,6 +67,8 @@ class glassfish::params {
   $glassfish_portbase            = '4800'
   # Default Glassfish service name
   $glassfish_service_name        = undef
+  # Default Glassfish service enable
+  $glassfish_service_enable      = true
 
   # Should the glassfish domain be started upon creation?
   $glassfish_start_domain        = true

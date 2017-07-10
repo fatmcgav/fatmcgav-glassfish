@@ -59,6 +59,7 @@ define glassfish::create_domain (
   $enable_secure_admin = $glassfish::enable_secure_admin,
   $ensure              = present,
   $portbase            = $glassfish::portbase,
+  $service_enable      = true,
   $service_name        = $glassfish::service_name,
   $start_domain        = $glassfish::start_domain) {
   # Service name
@@ -76,6 +77,7 @@ define glassfish::create_domain (
   validate_bool($start_domain)
   validate_bool($enable_secure_admin)
   validate_bool($create_service)
+  validate_bool($service_enable)
 
   # Validate the domain_template if specified...
   if $domain_template {
@@ -94,15 +96,16 @@ define glassfish::create_domain (
     template          => $domain_template
   }
 
-  # Create a init.d service if required
+  # Create a service if required
   if $create_service {
     glassfish::create_service { $domain_name:
-      running      => $start_domain,
-      mode         => 'domain',
-      domain_name  => $domain_name,
-      service_name => $svc_name,
-      runuser      => $domain_user,
-      require      => Domain[$domain_name]
+      running        => $start_domain,
+      mode           => 'domain',
+      domain_name    => $domain_name,
+      service_name   => $svc_name,
+      service_enable => $service_enable,
+      runuser        => $domain_user,
+      require        => Domain[$domain_name]
     }
   }
 
