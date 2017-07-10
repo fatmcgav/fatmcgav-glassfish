@@ -43,12 +43,6 @@ matrix:
       env: PUPPET_INSTALL_TYPE=agent BEAKER_debug=true BEAKER_set=docker/ubuntu-14.04 CHECK=beaker
       services: docker
       sudo: required
-    - rvm: 2.1.9
-      bundler_args: --without development
-      dist: trusty
-      env: PUPPET_INSTALL_TYPE=agent BEAKER_debug=true BEAKER_set=docker/ubuntu-16.04 CHECK=beaker
-      services: docker
-      sudo: required
   exclude:
   - rvm: 1.9.3
     env: PUPPET_VERSION="~> 4.0" CHECK=test
