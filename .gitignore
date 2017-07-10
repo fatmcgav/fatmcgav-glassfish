@@ -3,7 +3,8 @@
 /.bundle
 /.tmp
 /.vagrant
-spec/fixtures
+spec/fixtures/manifests
+spec/fixtures/modules
 pkg
 /.rspec_system
 /coverage
