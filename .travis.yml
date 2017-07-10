@@ -4,9 +4,10 @@ cache: bundler
 rvm: 
   # - 1.8.7
   - 1.9.3
-  - 2.1
+  - 2.1.9
   - 2.2
-  - 2.3.1
+  - 2.3
+  - 2.4
 bundler_args: --without system_tests development
 before_install:
   - bundle -v
@@ -20,8 +21,16 @@ sudo: false
 env:
   - PUPPET_VERSION="~> 3.0" STRICT_VARIABLES="yes"
   - PUPPET_VERSION="~> 3.0" STRICT_VARIABLES="yes" FUTURE_PARSER="yes"
-  - PUPPET_VERSION="~> 4.0" STRICT_VARIABLES="yes"
+  - PUPPET_VERSION="~> 4.0"
+  - PUPPET_VERSION="~> 5.0"
 matrix:
+  include:
+    - rvm: 2.1.9
+      bundler_args: --without development
+      dist: trusty
+      env: PUPPET_INSTALL_TYPE=agent BEAKER_debug=true BEAKER_set=docker/centos-7 CHECK=beaker
+      services: docker
+      sudo: required
   exclude:
   # - rvm: 1.8.7
   #   env: PUPPET_VERSION="~> 4.0" STRICT_VARIABLES="yes"
@@ -29,9 +38,13 @@ matrix:
     env: PUPPET_VERSION="~> 3.0" STRICT_VARIABLES="yes"
   - rvm: 2.2
     env: PUPPET_VERSION="~> 3.0" STRICT_VARIABLES="yes" FUTURE_PARSER="yes"
-  - rvm: 2.3.1
+  - rvm: 2.3
     env: PUPPET_VERSION="~> 3.0" STRICT_VARIABLES="yes"
-  - rvm: 2.3.1
+  - rvm: 2.3
+    env: PUPPET_VERSION="~> 3.0" STRICT_VARIABLES="yes" FUTURE_PARSER="yes"
+  - rvm: 2.4
+    env: PUPPET_VERSION="~> 3.0" STRICT_VARIABLES="yes"
+  - rvm: 2.4
     env: PUPPET_VERSION="~> 3.0" STRICT_VARIABLES="yes" FUTURE_PARSER="yes"
 notifications:
   email:
