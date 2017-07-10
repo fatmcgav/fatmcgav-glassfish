@@ -11,148 +11,84 @@ describe 'glassfish::create_service' do
     }
   end
   
-  context 'on a RedHat osfamily' do
-  
-    # Set the osfamily fact
-    let(:facts) { {
-      :osfamily => 'RedHat'
-    } }
+  on_supported_os.each do |os, facts|
+    context "on #{os}" do
+      let(:facts) {
+        facts
+      }
 
-    # Need to eval glassfish class
-    let(:pre_condition) {
-      'include glassfish'
-    }
-    
-    # Test RedHat osfamily behaviour
-    describe 'with a title' do
-      let(:title) { 'test' }
+      # Need to eval glassfish class
+      let(:pre_condition) {
+        'include glassfish'
+      }
       
-      # Setup params
-      let(:params) { default_params }
+      # Test RedHat osfamily behaviour
+      describe 'with a title' do
+        let(:title) { 'test' }
         
-      # Should create the init.d file
-      it do 
-        should contain_file('test_servicefile').with({
-          'ensure'  => 'present',
-          'path'    => '/etc/init.d/glassfish_test',
-          'mode'    => '0755',
-          'content' => /chkconfig:[\s\S]+="gfuser"/
-        }).that_notifies('Service[glassfish_test]')
-      end
-      
-      # Shouldn't contain a stop_domain exec with default params
-      it { should_not contain_exec('stop_test') }
-      
-      # Test running behaviour
-      context 'with running => true' do
-        
-        let(:params) do
-          default_params.merge( { :running => 'true' } )
+        # Setup params
+        let(:params) { default_params }
+
+        # Work out correct servicefile path and contents
+        case facts["systemd"]
+        when true
+          case facts[:osfamily]
+          when 'Debian'
+            servicefile_path = '/etc/systemd/system/glassfish_test.service'
+          when 'RedHat'
+            servicefile_path = '/usr/lib/systemd/system/glassfish_test.service'
+          end
+          servicefile_content = '\[Service\]\nUser=gfuser'
+        when false
+          servicefile_path = '/etc/init.d/glassfish_test'
+          case facts[:osfamily]
+          when 'Debian'
+            servicefile_content = 'END INIT INFO\n\nUSER=gfuser'
+          when 'RedHat'
+            servicefile_content = 'chkconfig:[\s\S]+="gfuser"'
+          end
         end
-          
+
+        # Should create the service file
         it do
-          should contain_exec('stop_test').with({
-            'command' => /stop-domain test/,
+          should contain_file('test_servicefile').with({
+            'ensure'  => 'present',
+            'path'    => servicefile_path,
+            'mode'    => '0755',
+            'content' => /#{servicefile_content}/
+          }).that_notifies('Service[glassfish_test]')
+        end
+
+        # Shouldn't contain a stop_domain exec with default params
+        it { should_not contain_exec('stop_test') }
+
+        # Test running behaviour
+        context 'with running => true' do
+
+          let(:params) do
+            default_params.merge( { :running => 'true' } )
+          end
+
+          it do
+            should contain_exec('stop_test').with({
+              'command' => /stop-domain test/,
+            })
+          end
+          
+        end
+        
+        # Should start the service and enable it
+        it do
+          should contain_service('glassfish_test').with({
+            'ensure'     => 'running',
+            'enable'     => true,
+            'hasstatus'  => true,
+            'hasrestart' => true
           })
         end
-        
       end
-      
-      # Should start the service and enable it
-      it do
-        should contain_service('glassfish_test').with({
-          'ensure'     => 'running',
-          'enable'     => true,
-          'hasstatus'  => true,
-          'hasrestart' => true
-        })
-      end
-      
     end
-    
   end
-  
-  context 'on a Debian osfamily' do
-    
-    # Set the osfamily fact
-    let(:facts) { {
-      :osfamily => 'Debian'
-    } }
-    
-    # Need to eval glassfish class
-    let(:pre_condition) {
-      'include glassfish'
-    }
-
-    # Test Debian osfamily behaviour
-    describe 'with a title' do
-      let(:title) { 'test' }
-      
-      # Setup params
-      let(:params) { default_params }
-        
-      # Should create the init.d file
-      it do 
-        should contain_file('test_servicefile').with({
-          'ensure' => 'present',
-          'path'   => '/etc/init.d/glassfish_test',
-          'mode'   => '0755',
-          'content' => /Provides:[\s\S]+=gfuser/
-        }).that_notifies('Service[glassfish_test]')
-      end
-      
-      # Shouldn't contain a stop_domain exec with default params
-      it { should_not contain_exec('stop_test') }
-      
-      # Test running behaviour
-      context 'with running => true' do
-        
-        let(:params) do
-          default_params.merge( { :running => 'true' } )
-        end
-          
-        it do
-          should contain_exec('stop_test').with({
-            'command' => /stop-domain test/,
-          })
-        end
-        
-      end
-      
-      # Should start the service and enable it
-      it do
-        should contain_service('glassfish_test').with({
-          'ensure'     => 'running',
-          'enable'     => true,
-          'hasstatus'  => true,
-          'hasrestart' => true
-        })
-      end
-      
-    end
-    
-  end
-    
-  context 'with an unsupported osfamily' do
-    
-    # Set the osfamily fact
-    let(:facts) { {
-      :osfamily => 'Suse'
-    } }
-    
-    # Test unsupported osfamily behaviour
-    context 'with a title to fail' do
-      let(:title) { 'test' }
-       
-      # Setup params
-      let(:params) { default_params }
-        
-      it do
-        should compile.and_raise_error(/OSFamily Suse not supported/)
-      end
-         
-    end
-    
-  end
-  
 end
+
+#EOF

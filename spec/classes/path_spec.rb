@@ -6,7 +6,8 @@ describe 'glassfish::path' do
   context 'on a RedHat OSFamily' do
     # Set the osfamily fact
     let(:facts) { {
-      :osfamily => 'RedHat'
+      :osfamily => 'RedHat',
+      :operatingsystemmajrelease => '6'
     } }
 
     # Include required classes

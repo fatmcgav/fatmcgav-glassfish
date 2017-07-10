@@ -5,7 +5,10 @@ describe 'glassfish::install_jars' do
 
   # Set the osfamily fact
   let(:facts) { {
-      :osfamily => 'RedHat'
+      :osfamily                  => 'RedHat',
+      :operatingsystemmajrelease => '6',
+      :path                      => "/home/vagrant/vendor/bundler/ruby/1.8/bin:/usr/local/sbin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin:/var/lib/gems/1.8/bin/:/usr/local/bin:/root/.gem/ruby/2.1.0/bin:/usr/lib64/ruby/gems/1.9.1/gems/bundler-1.7.12/bin:/usr/lib64/ruby/gems/2.0.0/gems/bundler-1.7.12/bin",
+      :systemd                   => false
     } }
 
   # Include Glassfish class
