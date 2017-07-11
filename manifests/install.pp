@@ -88,7 +88,7 @@ class glassfish::install {
         extract_path => $glassfish::parent_dir,
         source       => "${glassfish_download_site}/${glassfish_download_file}",
         creates      => $glassfish::glassfish_dir,
-        require      => [File[$glassfish::tmp_dir], Package['unzip']]
+        require      => File[$glassfish::tmp_dir]
       }
 
       exec { "move-glassfish${mjversion}":
