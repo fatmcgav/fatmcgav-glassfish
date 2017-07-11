@@ -79,7 +79,7 @@ class glassfish::install {
       }
 
       # Make sure unzip is installed
-      ensure_packages(['unzip'], {'ensure' =>  'present'})
+      # ensure_packages(['unzip'], {'ensure' =>  'present'})
 
       # Use archive to download and extract
       archive { $glassfish_download_dest:
