@@ -79,7 +79,7 @@ class glassfish::install {
       }
 
       # Make sure unzip is installed
-      ensure_packages(['unzip'], {'ensure' =>  'present', 'before' => "Archive[${glassfish_download_dest}]"})
+      ensure_packages(['unzip'], {'ensure' =>  'present'})
 
       # Use archive to download and extract
       archive { $glassfish_download_dest:
@@ -88,7 +88,7 @@ class glassfish::install {
         extract_path => $glassfish::parent_dir,
         source       => "${glassfish_download_site}/${glassfish_download_file}",
         creates      => $glassfish::glassfish_dir,
-        require      => File[$glassfish::tmp_dir]
+        require      => [File[$glassfish::tmp_dir], Package['unzip']]
       }
 
       exec { "move-glassfish${mjversion}":
