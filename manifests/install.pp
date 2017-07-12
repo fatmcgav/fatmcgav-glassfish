@@ -112,6 +112,13 @@ class glassfish::install {
         User[$glassfish::user] -> Exec['change-ownership']
       }
 
+      # Set permissions on 'domains' folder
+      file { "${glassfish::glassfish_dir}/glassfish/domains":
+        ensure  => 'directory',
+        mode    => '0775', # TODO: Make this a top-level param
+        require => Exec["move-glassfish${mjversion}"]
+      }
+
       if $glassfish::remove_default_domain {
         # Remove default domain1.
         file { 'remove-domain1':
