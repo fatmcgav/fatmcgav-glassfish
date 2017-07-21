@@ -1,6 +1,6 @@
 [Unit]
 Description = GlassFish Server <%= scope.lookupvar('glassfish::version') %> - <%= @domain_name %>
-After = syslog.target network.target
+After = syslog.target network-online.target
 
 [Service]
 User=<%= @runuser %>
