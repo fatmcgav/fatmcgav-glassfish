@@ -27,8 +27,9 @@ Puppet::Provider::Asadmin) do
     args << "list-jvm-options"
     args << "--target" << @resource[:target] if @resource[:target]
 
-    #Remove escaped semi-colons for matching the jvm option name
+    #Remove escaped semi-colons and qoutes for matching the jvm option name
     name = @resource[:name].sub "\\:" , ":"
+    name = name.gsub "\\\"" , "\""
 
     asadmin_exec(args).each do |line|
       line.sub!(/-XX: ([^\ ]+)/, '-XX:+\1')

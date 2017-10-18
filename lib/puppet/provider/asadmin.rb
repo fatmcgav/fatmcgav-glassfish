@@ -51,8 +51,8 @@ class Puppet::Provider::Asadmin < Puppet::Provider
   end
 
   def escape(value)
-    # Add three backslashes to escape the colon
-    return value.gsub(/:/) { '\\:' }
+    # Add backslashes to colons and already-escaped qoutes.
+    return value.gsub(/:/){ '\\:' }.gsub(/\"/) { '\\\\"' }
   end
   
   # def exists?

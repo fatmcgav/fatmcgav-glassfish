@@ -52,8 +52,13 @@ describe Puppet::Type.type(:jvmoption) do
         described_class.new(:option => '-Dtest.url=http\:www.gmail.com', :ensure => :present)[:option].should == '-Dtest.url=http\:www.gmail.com'
       end
 
-      it "should not support spaces" do
+      it "should not support spaces in the option name" do
         expect { described_class.new(:option => '-X Option', :ensure => :present) }.to raise_error(Puppet::Error, /-X Option is not a valid JVM option/)
+        expect { described_class.new(:option => '-X Option=value', :ensure => :present) }.to raise_error(Puppet::Error, /-X Option=value is not a valid JVM option/)
+      end
+
+      it "should support spaces contained within escaped double-qoutes in an option value" do
+        described_class.new(:option => '-XOption=\"a value\"', :ensure => :present)[:option].should == '-XOption=\"a value\"'
       end
     end
 
