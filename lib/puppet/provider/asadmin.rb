@@ -43,7 +43,7 @@ class Puppet::Provider::Asadmin < Puppet::Provider
     self.fail output unless $? == 0
     
     # Split into array, for later processing...
-    result = output.split(/\n/)
+    result = output.split(/\n/).map!(&:strip)
     Puppet.debug("result = \n#{result.inspect}")
 
     # Return the result

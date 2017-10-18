@@ -33,6 +33,18 @@ class glassfish::install {
       gid        => $glassfish::group,
       require    => Group[$glassfish::group]
     }
+
+    case $::osfamily {
+      'RedHat', 'Debian' : { $userhome = "/home/${glassfish::user}" }
+      'Solaris'          : { $userhome = "/export/home/${glassfish::user}" }
+      default            : { fail("${::osfamily} not supported by this module.") }
+    }
+
+    # Make sure motd doesn't interfere with SU commands
+    file { "${userhome}/.hushlogin":
+      ensure  => 'present',
+      require => User[$glassfish::user]
+    }
   }
 
   # Anchor the install class
@@ -69,8 +81,8 @@ class glassfish::install {
       $glassfish_download_dest = "${glassfish::tmp_dir}/${glassfish_download_file}"
 
       # Work out major version for installation
-      $version_arr             = split($glassfish::version, '[.]')
-      $mjversion               = $version_arr[0]
+      $version_arr = split($glassfish::version, '[.]')
+      $mjversion = $version_arr[0]
 
       # Make sure that $tmp_dir exists.
       file { $glassfish::tmp_dir:

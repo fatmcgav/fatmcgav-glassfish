@@ -20,7 +20,7 @@
 #
 class glassfish::path {
   case $::osfamily {
-    'RedHat' : {
+    'RedHat'  : {
       # Add a file to the profile.d directory
       file { '/etc/profile.d/glassfish.sh':
         ensure  => present,
@@ -31,7 +31,7 @@ class glassfish::path {
         require => Class['glassfish::install']
       }
     }
-    'Debian' : {
+    'Debian'  : {
       # Add a file to the profile.d directory
       file { '/etc/profile.d/glassfish.sh':
         ensure  => present,
@@ -42,7 +42,18 @@ class glassfish::path {
         require => Class['glassfish::install']
       }
     }
-    default  : {
+    'Solaris' : {
+      # Add asadmin path to the .profile of the glassfish user
+      file { "/export/home/${::glassfish::user}/.profile":
+        ensure  => present,
+        owner   => $::glassfish::user,
+        group   => $::glassfish::group,
+        mode    => '0644',
+        content => template('glassfish/glassfish-profile-sol.erb'),
+        require => Class['glassfish::install']
+      }
+    }
+    default   : {
       fail("OSFamily ${::osfamily} is not currently supported.")
     }
   }
