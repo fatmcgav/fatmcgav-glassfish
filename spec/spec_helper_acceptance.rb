@@ -25,3 +25,32 @@ RSpec.configure do |c|
     end
   end
 end
+
+def apply(pp, options = {})
+  if ENV.key?('PUPPET_DEBUG')
+    options[:debug] = true
+  end
+
+  apply_manifest(pp, options)
+end
+
+# Run it twice and test for idempotency
+def apply2(pp)
+  apply(pp, :catch_failures => true)
+  apply(pp, :catch_changes => true)
+end
+
+# probe stolen from:
+# https://github.com/camptocamp/puppet-systemd/blob/master/lib/facter/systemd.rb#L26
+#
+# See these issues for an explination of why this is nessicary rather than
+# using fact() from beaker-facter in the DSL:
+#
+# https://tickets.puppetlabs.com/browse/BKR-1040
+# https://tickets.puppetlabs.com/browse/BKR-1041
+#
+if shell('ps -p 1 -o comm=').stdout =~ /systemd/
+  $systemd = true
+else
+  $systemd = false
+end

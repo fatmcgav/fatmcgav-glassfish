@@ -2,7 +2,8 @@ require 'spec_helper_acceptance'
 
 describe 'glassfish' do
 
-  case fact('systemd')
+  # case fact('systemd')
+  case $systemd
   when true
     service_file = '/usr/lib/systemd/system/glassfish_test.service'
   else
@@ -17,8 +18,9 @@ describe 'glassfish' do
     }
 
     it 'should run without errors' do
-      apply_manifest(manifest, :catch_failures => true)
-      expect(apply_manifest(manifest, :catch_failures => true).exit_code).to be_zero
+      apply2(manifest)
+      # apply_manifest(manifest, :catch_failures => true)
+      # expect(apply_manifest(manifest, :catch_failures => true).exit_code).to be_zero
     end
 
     describe user('glassfish') do
@@ -49,17 +51,18 @@ describe 'glassfish' do
     }
 
     it 'should run without errors' do
-      apply_manifest(manifest, :catch_failures => true, :debug => true)
-      expect(apply_manifest(manifest, :catch_failures => true, :debug => true).exit_code).to be_zero
+      apply2(manifest)
+      # apply_manifest(manifest, :catch_failures => true, :debug => true)
+      # expect(apply_manifest(manifest, :catch_failures => true, :debug => true).exit_code).to be_zero
     end
 
     describe file('/usr/local/glassfish-3.1.2.2/glassfish/domains/test') do
       it { should be_directory }
     end
 
-    # describe file(service_file) do
-    #   it { should be_file }
-    # end
+    describe file(service_file) do
+      it { should be_file }
+    end
 
     describe service('glassfish_test') do
       it { should be_enabled }
