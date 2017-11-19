@@ -57,9 +57,9 @@ describe 'glassfish' do
       it { should be_directory }
     end
 
-    describe file(service_file) do
-      it { should be_file }
-    end
+    # describe file(service_file) do
+    #   it { should be_file }
+    # end
 
     describe service('glassfish_test') do
       it { should be_enabled }
