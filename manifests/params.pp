@@ -69,6 +69,8 @@ class glassfish::params {
   $glassfish_service_name        = undef
   # Default Glassfish service enable
   $glassfish_service_enable      = true
+  # Default Glassfish service status
+  $glassfish_service_status      = 'enabled'
 
   # Should the glassfish domain be started upon creation?
   $glassfish_start_domain        = true
@@ -78,6 +80,9 @@ class glassfish::params {
 
   # Glassfish domain tempalte
   $glassfish_domain_template     = undef
+
+  # Should Glassfish be restarted on config change?
+  $restart_config_change = false
 
   # Should the path be updated?
   case $::osfamily {
@@ -107,6 +112,53 @@ class glassfish::params {
     }
     default : {
       fail("${::osfamily} not supported by this module.")
+    }
+  }
+
+  # Service provider
+  case $::operatingsystem {
+    'RedHat', 'CentOS', 'Fedora', 'Scientific', 'OracleLinux': {
+      if versioncmp($::operatingsystemmajrelease, '7') >= 0 {
+        $service_domain_template   = 'systemd/domain.service.erb'
+        $service_instance_template = 'systemd/instance.service.erb'
+        $service_provider          = 'systemd'
+        $systemd_service_path      = '/lib/systemd/system'
+      } else {
+        $service_domain_template   = 'init/domain-el.service.erb'
+        $service_instance_template = 'init/instance-el.service.erb'
+        $service_provider          = 'init'
+        $systemd_service_path      = undef
+      }
+    }
+    'Debian': {
+      if versioncmp($::operatingsystemmajrelease, '8') >= 0 {
+        $service_domain_template   = 'systemd/domain.service.erb'
+        $service_instance_template = 'systemd/instance.service.erb'
+        $service_provider          = 'systemd'
+        $systemd_service_path      = '/lib/systemd/system'
+      } else {
+        $service_domain_template   = 'init/domain-deban.service.erb'
+        $service_instance_template = 'init/instance-deban.service.erb'
+        $service_provider          = 'init'
+        $systemd_service_path      = undef
+      }
+    }
+    'Ubuntu': {
+      if versioncmp($::operatingsystemmajrelease, '15') >= 0 {
+        $service_domain_template   = 'systemd/domain.service.erb'
+        $service_instance_template = 'systemd/instance.service.erb'
+        $service_provider          = 'systemd'
+        $systemd_service_path      = '/lib/systemd/system'
+      } else {
+        $service_domain_template   = 'init/domain-deban.service.erb'
+        $service_instance_template = 'init/instance-deban.service.erb'
+        $service_provider          = 'init'
+        $systemd_service_path      = undef
+      }
+    }
+    default: {
+      fail("\"${module_name}\" provides no service parameters
+            for \"${::operatingsystem}\"")
     }
   }
 
