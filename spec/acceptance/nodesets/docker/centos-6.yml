@@ -5,6 +5,7 @@ HOSTS:
     platform: el-6-x86_64
     image : centos:6
     hypervisor : docker
+    type: aio
     docker_image_commands:
       - 'yum -y install which tar ntpdate wget'
 CONFIG:
