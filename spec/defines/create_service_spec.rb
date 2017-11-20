@@ -124,6 +124,7 @@ describe 'glassfish::create_service', :type => :define do
         it do
           should contain_exec('stop_test').with({
             'command' => /stop-domain test && touch [\w\-\/.]+\/test\/.puppet_managed/,
+            'creates' => '/usr/local/glassfish-3.1.2.2/glassfish/domains/test/.puppet_managed',
           }).that_comes_before('Service[glassfish_test-running]')
         end
 

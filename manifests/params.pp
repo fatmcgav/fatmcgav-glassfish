@@ -82,7 +82,7 @@ class glassfish::params {
   $glassfish_domain_template     = undef
 
   # Should Glassfish be restarted on config change?
-  $restart_config_change = false
+  $restart_config_change = true
 
   # Should the path be updated?
   case $facts['os']['family'] {
@@ -116,7 +116,7 @@ class glassfish::params {
   }
 
   # Service provider
-  case $facts['os']['release']['name'] {
+  case $facts['os']['name'] {
     'RedHat', 'CentOS', 'Fedora', 'Scientific', 'OracleLinux': {
       if versioncmp($facts['os']['release']['major'], '7') >= 0 {
         $service_domain_template   = 'systemd/domain.service.erb'
@@ -157,8 +157,7 @@ class glassfish::params {
       }
     }
     default: {
-      fail("\"${module_name}\" provides no service parameters
-            for \"${facts['os']['release']['name']}\"")
+      fail("\"${module_name}\" provides no service parameters for \"${facts['os']['release']['name']}\"")
     }
   }
 
