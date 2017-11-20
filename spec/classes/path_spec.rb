@@ -3,56 +3,80 @@ require 'spec_helper'
 # Start to describe glassfish::path class
 describe 'glassfish::path' do
   
-  context 'on a RedHat OSFamily' do
-    # Set the osfamily fact
-    let(:facts) { {
-      :osfamily => 'RedHat',
-      :operatingsystemmajrelease => '6'
-    } }
+  on_supported_os({
+    :hardwaremodels => ['x86_64'],
+    :supported_os => [
+      {
+        'operatingsystem' => 'CentOS',
+        'operatingsystemrelease' => ['7'],
+      }
+    ]
+  }).each do |os, facts|
 
-    # Include required classes
-    let(:pre_condition) { 'include glassfish' }
-    
-    it do 
-      should contain_file('/etc/profile.d/glassfish.sh').with({
-        'ensure'  => 'present',
-        'owner'   => 'root',
-        'group'   => 'root',
-        'mode'    => '0644',
-        'content' =>  /glassfish/
-      }).that_requires('Class[glassfish::install]')
-    end
-  end
-  
-  context 'on a Debian OSFamily' do
-    # Set the osfamily fact
-    let(:facts) { {
-      :osfamily => 'Debian'
-    } }
-    
-    # Include required classes
-    let(:pre_condition) { 'include glassfish' }
+    context "on #{os}" do
+      # Set the osfamily fact
+      let(:facts) {
+        facts
+      }
 
-    it do 
-      should contain_file('/etc/profile.d/glassfish.sh').with({
-        'ensure'  => 'present',
-        'owner'   => 'root',
-        'group'   => 'root',
-        'mode'    => '0644',
-        'content' =>  /glassfish/
-      }).that_requires('Class[glassfish::install]')
-    end
-  end
+      # Include required classes
+      let(:pre_condition) { 'include glassfish' }
+      
+      it do 
+        should contain_file('/etc/profile.d/glassfish.sh').with({
+          'ensure'  => 'present',
+          'owner'   => 'root',
+          'group'   => 'root',
+          'mode'    => '0644',
+          'content' =>  /glassfish/
+        }).that_requires('Class[glassfish::install]')
+      end
+    end # context 'on #{os}'
+  end # on_supported_os
   
-  context 'on an unsupport OSFamily' do
+  on_supported_os({
+    :hardwaremodels => ['x86_64'],
+    :supported_os => [
+      {
+        'operatingsystem' => 'Debian',
+        'operatingsystemrelease' => ['7'],
+      }
+    ]
+  }).each do |os, facts|
+
+    context "on #{os}" do
+      # Set the osfamily fact
+      let(:facts) {
+        facts
+      }
+    
+      # Include required classes
+      let(:pre_condition) { 'include glassfish' }
+
+      it do 
+        should contain_file('/etc/profile.d/glassfish.sh').with({
+          'ensure'  => 'present',
+          'owner'   => 'root',
+          'group'   => 'root',
+          'mode'    => '0644',
+          'content' =>  /glassfish/
+        }).that_requires('Class[glassfish::install]')
+      end
+    end # context 'on #{os}'
+  end # on_supported_os
+  
+  context 'on an unsupported OSFamily' do
     # Set the osfamily fact
     let(:facts) { {
-      :osfamily => 'Suse'
+      :osfamily => 'Suse',
+      :os =>{
+        :name => 'Suse'
+      }
     } }
     
     it do 
       should compile.and_raise_error(/OSFamily Suse is not currently supported./)
     end
-  end
+  end # context 'on an unsupported OSFamily'
   
 end
