@@ -3,89 +3,102 @@ require 'spec_helper'
 # Start to describe glassfish::create_asadmin_passfile define
 describe 'glassfish::create_asadmin_passfile' do
   
-  # Set the osfamily fact
-  let(:facts) { {
-    :osfamily => 'RedHat'
-  } }
+  on_supported_os({
+    :hardwaremodels => ['x86_64'],
+    :supported_os => [
+      {
+        'operatingsystem' => 'CentOS',
+        'operatingsystemrelease' => ['7'],
+      }
+    ]
+  }).each do |os, facts|
+
+    context "on #{os}" do
+      # Set the osfamily fact
+      let(:facts) {
+        facts
+      }
   
-  # Include Glassfish class 
-  let (:pre_condition) { "class {'glassfish':
-                         create_passfile => false
-                         }" }
-  
-  # Set-up default params values
-  let :default_params do 
-    {
-      :group               => 'glassfish',
-      :path                => '/tmp/asadmin.pass',
-      :user                => 'glassfish'
-    }
-  end
-  
-  context 'with default params' do 
-    # Set the title
-    let(:title) { 'glassfish_asadmin_passfile' }
+      # Include Glassfish class 
+      let (:pre_condition) { "class {'glassfish':
+                             create_passfile => false
+                             }" }
       
-    # Set the params
-    let(:params) { default_params }
-    
-    it do
-      should contain_file('glassfish_asadmin_passfile').with({
-        'ensure' => 'present',
-        'path'   => '/tmp/asadmin.pass',
-        'owner'  => 'glassfish',
-        'group'  => 'glassfish',
-        'mode'   => '0600'
-      }).with_content(/AS_ADMIN_PASSWORD=adminadmin/).
-      with_content(/AS_ADMIN_MASTERPASSWORD=changeit/)
-    end
-  end
-  
-  context 'with a different master and asadmin password' do
-    # Set the title
-    let(:title) { 'glassfish_asadmin_passfile' }
+      # Set-up default params values
+      let :default_params do 
+        {
+          :group               => 'glassfish',
+          :path                => '/tmp/asadmin.pass',
+          :user                => 'glassfish'
+        }
+      end
       
-    # Set the params
-    let(:params) do 
-      default_params.merge({
-        :asadmin_master_password => 'different',
-        :asadmin_password        => 'password'
-      })
-    end
-    
-    it do
-      should contain_file('glassfish_asadmin_passfile').with({
-        'ensure' => 'present',
-        'path'   => '/tmp/asadmin.pass',
-        'owner'  => 'glassfish',
-        'group'  => 'glassfish',
-        'mode'   => '0600'
-      }).with_content(/AS_ADMIN_PASSWORD=password/).
-      with_content(/AS_ADMIN_MASTERPASSWORD=different/)
-    end
-  end
-  
-  context 'with a different path' do
-    # Set the title
-    let(:title) { 'glassfish_asadmin_passfile' }
+      context 'with default params' do 
+        # Set the title
+        let(:title) { 'glassfish_asadmin_passfile' }
+          
+        # Set the params
+        let(:params) { default_params }
+        
+        it do
+          should contain_file('glassfish_asadmin_passfile').with({
+            'ensure' => 'present',
+            'path'   => '/tmp/asadmin.pass',
+            'owner'  => 'glassfish',
+            'group'  => 'glassfish',
+            'mode'   => '0600'
+          }).with_content(/AS_ADMIN_PASSWORD=adminadmin/).
+          with_content(/AS_ADMIN_MASTERPASSWORD=changeit/)
+        end
+      end
       
-    # Set the params
-    let(:params) do 
-      default_params.merge({
-        :path => '/tmp/asadmin.pass2'
-      })
-    end
-    
-    it do
-      should contain_file('glassfish_asadmin_passfile').with({
-        'ensure' => 'present',
-        'path'   => '/tmp/asadmin.pass2',
-        'owner'  => 'glassfish',
-        'group'  => 'glassfish',
-        'mode'   => '0600'
-      }).with_content(/AS_ADMIN_PASSWORD=adminadmin/).
-      with_content(/AS_ADMIN_MASTERPASSWORD=changeit/)
-    end
-  end
-  
+      context 'with a different master and asadmin password' do
+        # Set the title
+        let(:title) { 'glassfish_asadmin_passfile' }
+          
+        # Set the params
+        let(:params) do 
+          default_params.merge({
+            :asadmin_master_password => 'different',
+            :asadmin_password        => 'password'
+          })
+        end
+        
+        it do
+          should contain_file('glassfish_asadmin_passfile').with({
+            'ensure' => 'present',
+            'path'   => '/tmp/asadmin.pass',
+            'owner'  => 'glassfish',
+            'group'  => 'glassfish',
+            'mode'   => '0600'
+          }).with_content(/AS_ADMIN_PASSWORD=password/).
+          with_content(/AS_ADMIN_MASTERPASSWORD=different/)
+        end
+      end
+      
+      context 'with a different path' do
+        # Set the title
+        let(:title) { 'glassfish_asadmin_passfile' }
+          
+        # Set the params
+        let(:params) do 
+          default_params.merge({
+            :path => '/tmp/asadmin.pass2'
+          })
+        end
+        
+        it do
+          should contain_file('glassfish_asadmin_passfile').with({
+            'ensure' => 'present',
+            'path'   => '/tmp/asadmin.pass2',
+            'owner'  => 'glassfish',
+            'group'  => 'glassfish',
+            'mode'   => '0600'
+          }).with_content(/AS_ADMIN_PASSWORD=adminadmin/).
+          with_content(/AS_ADMIN_MASTERPASSWORD=changeit/)
+        end
+      end
+
+    end # context 'on #{os}'
+  end # on_supported_os
 end

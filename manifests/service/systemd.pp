@@ -73,7 +73,7 @@ define glassfish::service::systemd (
       $_template = $glassfish::params::service_domain_template
     }
     'instance': {
-      $_template = $glassfish::params::service_intance_template
+      $_template = $glassfish::params::service_instance_template
     }
     default: {
       fail("Service ${mode} is not currently supported.")
