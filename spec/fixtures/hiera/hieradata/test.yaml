@@ -1,0 +1,4 @@
+---
+# Hiera Test fixtures
+
+glassfish::service_enable: false
