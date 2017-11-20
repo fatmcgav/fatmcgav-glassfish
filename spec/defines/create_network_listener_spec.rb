@@ -2,76 +2,89 @@ require 'spec_helper'
 
 describe 'glassfish::create_network_listener' do
   
-  let(:facts) { {
-    :osfamily => 'RedHat'
-  } }
-  
-  let (:pre_condition) { "include glassfish" }
-  
-  let :default_params do 
-    {
-      :asadmin_path        => '/usr/local/glassfish3.1.2.2/bin/asadmin',
-      :asadmin_user        => 'admin',
-      :asadmin_passfile    => '/tmp/asadmin.pass',
-      :portbase            => '8000',
-    }
-  end
-  
-  context 'with default params' do 
+  on_supported_os({
+    :hardwaremodels => ['x86_64'],
+    :supported_os => [
+      {
+        'operatingsystem' => 'CentOS',
+        'operatingsystemrelease' => ['7'],
+      }
+    ]
+  }).each do |os, facts|
 
-    let(:title) { 'test' }
+    context "on #{os}" do
+      # Set the osfamily fact
+      let(:facts) {
+        facts
+      }
+  
+      let (:pre_condition) { "include glassfish" }
       
-    let(:params) { default_params }
-    
-    it do
-      should contain_networklistener('test').with({
-        'ensure'            => 'present',
-        'address'           => nil,
-        'port'              => nil,
-        'threadpool'        => nil,
-        'protocol'          => nil,
-        'transport'         => 'tcp',
-        'enabled'           => true,
-        'jkenabled'         => false,
-        'target'            => 'server',
-        'asadminuser'       => 'admin',
-        'passwordfile'      => '/tmp/asadmin.pass',
-        'portbase'          => '8000',
-      })
-    end
-    
-  end
+      let :default_params do 
+        {
+          :asadmin_path        => '/usr/local/glassfish3.1.2.2/bin/asadmin',
+          :asadmin_user        => 'admin',
+          :asadmin_passfile    => '/tmp/asadmin.pass',
+          :portbase            => '8000',
+        }
+      end
+      
+      context 'with default params' do 
 
-  context 'with all parameters set' do
+        let(:title) { 'test' }
+          
+        let(:params) { default_params }
+        
+        it do
+          should contain_networklistener('test').with({
+            'ensure'            => 'present',
+            'address'           => nil,
+            'port'              => nil,
+            'threadpool'        => nil,
+            'protocol'          => nil,
+            'transport'         => 'tcp',
+            'enabled'           => true,
+            'jkenabled'         => false,
+            'target'            => 'server',
+            'asadminuser'       => 'admin',
+            'passwordfile'      => '/tmp/asadmin.pass',
+            'portbase'          => '8000',
+          })
+        end
+        
+      end
 
-    let(:title) { 'test' }
+      context 'with all parameters set' do
 
-    let(:params) {
-      default_params.merge({
-        :address    => '172.16.10.5',
-        :port       => '8009',
-        :threadpool => 'test',
-        :protocol   => 'http-listener-1',
-        :transport  => 'udp',
-        :enabled    => false,
-        :jkenabled  => true,
-        :target     => 'test' 
-      })
-    }
+        let(:title) { 'test' }
 
-    it do
-      should contain_networklistener('test').with({
-        'address'    => '172.16.10.5',
-        'port'       => '8009',
-        'threadpool' => 'test',
-        'protocol'   => 'http-listener-1',
-        'transport'  => 'udp',
-        'enabled'    => false,
-        'jkenabled'  => true,
-        'target'     => 'test'
-      })
-    end
+        let(:params) {
+          default_params.merge({
+            :address    => '172.16.10.5',
+            :port       => '8009',
+            :threadpool => 'test',
+            :protocol   => 'http-listener-1',
+            :transport  => 'udp',
+            :enabled    => false,
+            :jkenabled  => true,
+            :target     => 'test' 
+          })
+        }
 
-  end
+        it do
+          should contain_networklistener('test').with({
+            'address'    => '172.16.10.5',
+            'port'       => '8009',
+            'threadpool' => 'test',
+            'protocol'   => 'http-listener-1',
+            'transport'  => 'udp',
+            'enabled'    => false,
+            'jkenabled'  => true,
+            'target'     => 'test'
+          })
+        end
+      end
 
+    end # context 'on #{os}'
+  end # on_supported_os
 end 
