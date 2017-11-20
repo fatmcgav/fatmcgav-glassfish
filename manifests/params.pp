@@ -85,7 +85,7 @@ class glassfish::params {
   $restart_config_change = false
 
   # Should the path be updated?
-  case $::osfamily {
+  case $facts['os']['family'] {
     'RedHat'  : { $glassfish_add_path = true }
     'Debian'  : { $glassfish_add_path = true }
     default : { $glassfish_add_path = false }
@@ -97,7 +97,7 @@ class glassfish::params {
   $glassfish_java_ver    = 'java-7-openjdk'
 
   # Set package names based on Operating System...
-  case $::osfamily {
+  case $facts['os']['family'] {
     'RedHat' : {
       $java6_openjdk_package = 'java-1.6.0-openjdk-devel'
       $java6_sun_package     = undef
@@ -111,14 +111,14 @@ class glassfish::params {
       $java7_sun_package     = undef
     }
     default : {
-      fail("${::osfamily} not supported by this module.")
+      fail("${facts['os']['family']} not supported by this module.")
     }
   }
 
   # Service provider
-  case $::operatingsystem {
+  case $facts['os']['release']['name'] {
     'RedHat', 'CentOS', 'Fedora', 'Scientific', 'OracleLinux': {
-      if versioncmp($::operatingsystemmajrelease, '7') >= 0 {
+      if versioncmp($facts['os']['release']['major'], '7') >= 0 {
         $service_domain_template   = 'systemd/domain.service.erb'
         $service_instance_template = 'systemd/instance.service.erb'
         $service_provider          = 'systemd'
@@ -131,7 +131,7 @@ class glassfish::params {
       }
     }
     'Debian': {
-      if versioncmp($::operatingsystemmajrelease, '8') >= 0 {
+      if versioncmp($facts['os']['release']['major'], '8') >= 0 {
         $service_domain_template   = 'systemd/domain.service.erb'
         $service_instance_template = 'systemd/instance.service.erb'
         $service_provider          = 'systemd'
@@ -144,7 +144,7 @@ class glassfish::params {
       }
     }
     'Ubuntu': {
-      if versioncmp($::operatingsystemmajrelease, '15') >= 0 {
+      if versioncmp($facts['os']['release']['major'], '15') >= 0 {
         $service_domain_template   = 'systemd/domain.service.erb'
         $service_instance_template = 'systemd/instance.service.erb'
         $service_provider          = 'systemd'
@@ -158,7 +158,7 @@ class glassfish::params {
     }
     default: {
       fail("\"${module_name}\" provides no service parameters
-            for \"${::operatingsystem}\"")
+            for \"${facts['os']['release']['name']}\"")
     }
   }
 
