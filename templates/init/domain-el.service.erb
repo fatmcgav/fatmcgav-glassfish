@@ -12,8 +12,8 @@ RETVAL=0
 GLASSFISH_BIN="<%= scope.lookupvar('glassfish::glassfish_dir') %>/glassfish/bin"
 
 # Setup Domain and User values
-DOMAIN="<%= @domain_name %>"
-USER="<%= @runuser %>"
+DOMAIN="<%= @domain %>"
+USER="<%= @user %>"
 
 start() {
 	echo -n "Starting glassfish domain $DOMAIN: "

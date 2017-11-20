@@ -9,7 +9,7 @@
 # Short-Description:	Oracle Glassfish Java EE Application Server ver. <%= scope.lookupvar('glassfish::glassfish_version') %>
 ### END INIT INFO
 
-USER=<%= @runuser %>
+USER=<%= @user %>
 GLASSFISHPATH=<%= scope.lookupvar('glassfish::glassfish_dir') %>/glassfish/bin
 __NAME="Oracle Glassfish Java EE Application Server ver. <%= scope.lookupvar('glassfish::glassfish_version') %>"
 

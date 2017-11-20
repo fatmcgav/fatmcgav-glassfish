@@ -137,8 +137,8 @@ class glassfish::params {
         $service_provider          = 'systemd'
         $systemd_service_path      = '/lib/systemd/system'
       } else {
-        $service_domain_template   = 'init/domain-deban.service.erb'
-        $service_instance_template = 'init/instance-deban.service.erb'
+        $service_domain_template   = 'init/domain-debian.service.erb'
+        $service_instance_template = 'init/instance-debian.service.erb'
         $service_provider          = 'init'
         $systemd_service_path      = undef
       }
@@ -150,8 +150,8 @@ class glassfish::params {
         $service_provider          = 'systemd'
         $systemd_service_path      = '/lib/systemd/system'
       } else {
-        $service_domain_template   = 'init/domain-deban.service.erb'
-        $service_instance_template = 'init/instance-deban.service.erb'
+        $service_domain_template   = 'init/domain-debian.service.erb'
+        $service_instance_template = 'init/instance-debian.service.erb'
         $service_provider          = 'init'
         $systemd_service_path      = undef
       }

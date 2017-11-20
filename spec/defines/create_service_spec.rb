@@ -11,15 +11,7 @@ describe 'glassfish::create_service', :type => :define do
     }
   end
   
-  on_supported_os(
-    :hardwaremodels => ['x86_64'],
-    :supported_os => [
-      {
-        'operatingsystem' => 'CentOS',
-        'operatingsystemrelease' => %w[7]
-      }
-    ]
-  ).each do |os, facts|
+  on_supported_os.each do |os, facts|
     context "on #{os}" do
       let(:facts) {
         facts
@@ -38,37 +30,71 @@ describe 'glassfish::create_service', :type => :define do
         let(:params) { default_params }
 
         # Work out correct servicefile path and contents
-        case facts["systemd"]
-        when true
-          case facts[:osfamily]
-          when 'Debian'
-            servicefile_path = '/etc/systemd/system/glassfish_test.service'
-          when 'RedHat'
-            servicefile_path = '/lib/systemd/system/glassfish_test.service'
-          end
-          servicefile_content = '\[Service\]\nUser=gfuser'
-        when false
-          servicefile_path = '/etc/init.d/glassfish_test'
-          case facts[:osfamily]
-          when 'Debian'
-            servicefile_content = 'END INIT INFO\n\nUSER=gfuser'
-          when 'RedHat'
+        case facts[:os]['name']
+        when 'RedHat', 'CentOS', 'Fedora', 'OracleLinux'
+          case facts[:os]['release']['major']
+          when '7'
+            servicefile_path    = '/lib/systemd/system/glassfish_test.service'
+            servicefile_content = '\[Service\]\nUser=gfuser'
+            systemd             = true
+          else
+            servicefile_path    = '/etc/init.d/glassfish_test'
             servicefile_content = 'chkconfig:[\s\S]+="gfuser"'
+            systemd             = false
+          end
+        when 'Debian'
+          case facts[:os]['release']['major']
+          when '8', '9'
+            servicefile_path    = '/lib/systemd/system/glassfish_test.service'
+            servicefile_content = '\[Service\]\nUser=gfuser'
+            systemd             = true
+          else
+            servicefile_path    = '/etc/init.d/glassfish_test'
+            servicefile_content = 'USER=gfuser'
+            systemd             = false
+          end
+        when 'Ubuntu'
+          case facts[:os]['release']['major']
+          when '16.04'
+            servicefile_path    = '/lib/systemd/system/glassfish_test.service'
+            servicefile_content = '\[Service\]\nUser=gfuser'
+            systemd              = true
+          else
+            servicefile_path    = '/etc/init.d/glassfish_test'
+            servicefile_content = 'USER=gfuser'
+            systemd             = false
           end
         end
 
-        it do
-          should contain_glassfish__service__systemd('glassfish_test')
-        end
+        case systemd
+        when true
+          it do
+              should contain_glassfish__service__systemd('glassfish_test')
+          end
 
-        # Should create the service file
-        it do
-          should contain_file('glassfish_test-servicefile').with({
-            'ensure'  => 'present',
-            'path'    => servicefile_path,
-            'mode'    => '0644',
-            'content' => /#{servicefile_content}/
-          }).that_notifies('Exec[systemctl-daemon-reload]')
+          # Should create the service file
+          it do
+            should contain_file('glassfish_test-servicefile').with({
+              'ensure'  => 'present',
+              'path'    => servicefile_path,
+              'mode'    => '0644',
+              'content' => /#{servicefile_content}/
+            }).that_notifies('Exec[systemctl-daemon-reload]')
+          end
+        else
+          it do
+            should contain_glassfish__service__init('glassfish_test')
+          end
+
+          # Should create the service file
+          it do
+            should contain_file('glassfish_test-servicefile').with({
+              'ensure'  => 'present',
+              'path'    => servicefile_path,
+              'mode'    => '0755',
+              'content' => /#{servicefile_content}/
+            })
+          end
         end
 
         # Shouldn't contain a stop_domain exec with default params
@@ -97,7 +123,7 @@ describe 'glassfish::create_service', :type => :define do
 
         it do
           should contain_exec('stop_test').with({
-            'command' => /stop-domain test/,
+            'command' => /stop-domain test && touch [\w\-\/.]+\/test\/.puppet_managed/,
           }).that_comes_before('Service[glassfish_test-running]')
         end
 
@@ -127,30 +153,60 @@ describe 'glassfish::create_service', :type => :define do
         # Should create the service file
         it do
           should contain_file('glassfish_test-restart-servicefile')
-            .that_notifies(['Exec[systemctl-daemon-reload]', 'Service[glassfish_test-restart]'])
+            .that_notifies('Service[glassfish_test-restart]')
         end
 
         it do
           should contain_service('glassfish_test-restart')
         end
       end # describe 'with restart_config_change => true'
+    end # context 'on #{os}'
+  end # on_supported_os
+
+  # Systemd specific tests
+  on_supported_os({
+    :hardwaremodels => ['x86_64'],
+    :supported_os => [
+      {
+        'operatingsystem' => 'CentOS',
+        'operatingsystemrelease' => ['7'],
+      },
+      {
+        'operatingsystem' => 'Debian',
+        'operatingsystemrelease' => ['8', '9'],
+      },
+      {
+        'operatingsystem' => 'Ubuntu',
+        'operatingsystemrelease' => ['16.04'],
+      }
+    ]
+  }).each do |os, facts|
+    context "on #{os}" do
+      let(:facts) {
+        facts
+      }
+
+      # Need to eval glassfish class
+      let(:pre_condition) {
+        'include glassfish'
+      }
 
       describe 'with a systemd_start_timeout' do
         let(:title) { 'test-start-timeout' }
 
         let(:params) do
-          default_params.merge( { :systemd_start_timeout => '5m' } )
+          default_params.merge({
+            :systemd_start_timeout => '5m'
+          })
         end
 
         it do
           should contain_file('glassfish_test-start-timeout-servicefile')
             .with_content(/TimeoutStartSec = 5m/)
         end
-
       end # describe 'with a systemd_start_timeout'
-
-    end
-  end
+    end # context 'on #{os}'
+  end # on_supported_os
 end
 
 #EOF

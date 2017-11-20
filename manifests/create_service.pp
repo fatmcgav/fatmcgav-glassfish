@@ -169,9 +169,13 @@ define glassfish::create_service (
 
   # Need to stop the domain if it was auto-started
   if $running {
+    # Setup a puppet flag in the domain being managed
+    $_puppet_indicator = "${glassfish::glassfish_dir}/glassfish/domains/${domain_name}/.puppet_managed"
+
     exec { "stop_${domain_name}":
-      command => "su - ${runuser} -c \"${glassfish::glassfish_asadmin_path} stop-domain ${domain_name}\"",
-      unless  => "service ${svc_name} status && pgrep -f domains/${domain_name}",
+      command => "su - ${runuser} -c \"${glassfish::glassfish_asadmin_path} stop-domain ${domain_name}\
+ && touch ${_puppet_indicator}\"",
+      creates => $_puppet_indicator,
       path    => ['/sbin', '/usr/sbin', '/bin', '/usr/bin'],
       before  => Service[$svc_name]
     }

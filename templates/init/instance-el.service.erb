@@ -15,7 +15,7 @@ GLASSFISH_BIN="<%= scope.lookupvar('glassfish::glassfish_dir') %>/glassfish/bin"
 INSTANCE="<%= @instance_name %>"
 NODE="<%= @node_name %>"
 PWFILE="<%= @asadmin_passfile %>"
-USER="<%= @runuser %>"
+USER="<%= @user %>"
 
 start() {
 	echo -n "Starting glassfish  instance $INSTANCE on node $NODE: "
