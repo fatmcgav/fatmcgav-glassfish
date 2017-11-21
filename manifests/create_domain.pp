@@ -49,19 +49,21 @@
 # Copyright 2014 Gavin Williams, unless otherwise noted.
 #
 define glassfish::create_domain (
-  $asadmin_path        = $glassfish::glassfish_asadmin_path,
-  $asadmin_user        = $glassfish::asadmin_user,
-  $asadmin_passfile    = $glassfish::asadmin_passfile,
-  $create_service      = $glassfish::create_service,
-  $domain_name         = $name,
-  $domain_template     = $glassfish::domain_template,
-  $domain_user         = $glassfish::user,
-  $enable_secure_admin = $glassfish::enable_secure_admin,
-  $ensure              = present,
-  $portbase            = $glassfish::portbase,
-  $service_enable      = true,
-  $service_name        = $glassfish::service_name,
-  $start_domain        = $glassfish::start_domain) {
+  $asadmin_path          = $glassfish::glassfish_asadmin_path,
+  $asadmin_user          = $glassfish::asadmin_user,
+  $asadmin_passfile      = $glassfish::asadmin_passfile,
+  $create_service        = $glassfish::create_service,
+  $domain_name           = $name,
+  $domain_template       = $glassfish::domain_template,
+  $domain_user           = $glassfish::user,
+  $enable_secure_admin   = $glassfish::enable_secure_admin,
+  $ensure                = present,
+  $portbase              = $glassfish::portbase,
+  $service_enable        = true,
+  $service_name          = $glassfish::service_name,
+  $start_domain          = $glassfish::start_domain,
+  $systemd_start_timeout = $glassfish::systemd_start_timeout
+) {
   # Service name
   if ($service_name == undef) {
     $svc_name = "glassfish_${domain_name}"
@@ -99,13 +101,14 @@ define glassfish::create_domain (
   # Create a service if required
   if $create_service {
     glassfish::create_service { $domain_name:
-      running        => $start_domain,
-      mode           => 'domain',
-      domain_name    => $domain_name,
-      service_name   => $svc_name,
-      service_enable => $service_enable,
-      runuser        => $domain_user,
-      require        => Domain[$domain_name]
+      domain_name           => $domain_name,
+      mode                  => 'domain',
+      running               => $start_domain,
+      runuser               => $domain_user,
+      service_name          => $svc_name,
+      service_enable        => $service_enable,
+      systemd_start_timeout => $systemd_start_timeout,
+      require               => Domain[$domain_name]
     }
   }
 

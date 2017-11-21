@@ -120,6 +120,7 @@ class glassfish (
   $service_name            = $glassfish::params::glassfish_service_name,
   $service_provider        = $glassfish::params::service_provider,
   $start_domain            = $glassfish::params::glassfish_start_domain,
+  $systemd_start_timeout   = undef,
   $tmp_dir                 = $glassfish::params::glassfish_tmp_dir,
   $user                    = $glassfish::params::glassfish_user,
   $version                 = $glassfish::params::glassfish_version
