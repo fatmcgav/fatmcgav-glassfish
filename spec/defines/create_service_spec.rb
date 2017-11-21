@@ -35,7 +35,7 @@ describe 'glassfish::create_service', :type => :define do
           case facts[:os]['release']['major']
           when '7'
             servicefile_path    = '/lib/systemd/system/glassfish_test.service'
-            servicefile_content = '\[Service\]\nUser=gfuser'
+            servicefile_content = '\[Service\]\nUser = gfuser\n.+start-domain test'
             systemd             = true
           else
             servicefile_path    = '/etc/init.d/glassfish_test'
@@ -46,7 +46,7 @@ describe 'glassfish::create_service', :type => :define do
           case facts[:os]['release']['major']
           when '8', '9'
             servicefile_path    = '/lib/systemd/system/glassfish_test.service'
-            servicefile_content = '\[Service\]\nUser=gfuser'
+            servicefile_content = '\[Service\]\nUser = gfuser\n.+start-domain test'
             systemd             = true
           else
             servicefile_path    = '/etc/init.d/glassfish_test'
@@ -57,7 +57,7 @@ describe 'glassfish::create_service', :type => :define do
           case facts[:os]['release']['major']
           when '16.04'
             servicefile_path    = '/lib/systemd/system/glassfish_test.service'
-            servicefile_content = '\[Service\]\nUser=gfuser'
+            servicefile_content = '\[Service\]\nUser = gfuser\n.+start-domain test'
             systemd              = true
           else
             servicefile_path    = '/etc/init.d/glassfish_test'

@@ -1,15 +1,17 @@
+# This file is managed by Puppet
+<% $domain_name = @svc_name.gsub('glassfish_', '') -%>
 [Unit]
-Description = GlassFish Server <%= scope.lookupvar('glassfish::version') %> - <%= @domain_name %>
+Description = GlassFish Server <%= scope.lookupvar('glassfish::version') %> - <%= $domain_name %>
 After = syslog.target network-online.target
 
 [Service]
-User=<%= @user %>
+User = <%= @user %>
 <% if @start_timeout -%>
 TimeoutStartSec = <%= @start_timeout %>
 <% end -%>
-ExecStart = <%= scope.lookupvar('glassfish::glassfish_dir') %>/bin/asadmin start-domain <%= @domain_name %>
-ExecStop = <%= scope.lookupvar('glassfish::glassfish_dir') %>/bin/asadmin stop-domain <%= @domain_name %>
-ExecReload = <%= scope.lookupvar('glassfish::glassfish_dir') %>/bin/asadmin restart-domain <%= @domain_name %>
+ExecStart = <%= scope.lookupvar('glassfish::glassfish_dir') %>/bin/asadmin start-domain <%= $domain_name %>
+ExecStop = <%= scope.lookupvar('glassfish::glassfish_dir') %>/bin/asadmin stop-domain <%= $domain_name %>
+ExecReload = <%= scope.lookupvar('glassfish::glassfish_dir') %>/bin/asadmin restart-domain <%= $domain_name %>
 Type = forking
 
 [Install]

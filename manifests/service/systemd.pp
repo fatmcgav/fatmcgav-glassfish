@@ -22,6 +22,7 @@ define glassfish::service::systemd (
   $start_timeout = undef,
   $status        = $glassfish::service_status,
   $status_cmd    = undef,
+  $svc_name      = $title,
   $user          = $glassfish::user
 ) {
 
