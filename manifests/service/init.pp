@@ -19,9 +19,10 @@ define glassfish::service::init (
   $ensure,
   $enable,
   $mode,
-  $status        = $glassfish::service_status,
-  $status_cmd    = undef,
-  $user          = $glassfish::user
+  $status     = $glassfish::service_status,
+  $status_cmd = undef,
+  $svc_name   = $title,
+  $user       = $glassfish::user
 ) {
   # set params: in operation
   if $ensure == 'present' {

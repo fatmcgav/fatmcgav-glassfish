@@ -2,7 +2,7 @@
 #
 # chkconfig: 2345 99 35
 # description: Starts and stops the Glassfish Server \
-#              used to provide <%= @domain %> Domain.
+#              used to provide <%= @svc_name.gsub('glassfish_', '') %> Domain.
 #
 
 # source function library
@@ -12,7 +12,7 @@ RETVAL=0
 GLASSFISH_BIN="<%= scope.lookupvar('glassfish::glassfish_dir') %>/glassfish/bin"
 
 # Setup Domain and User values
-DOMAIN="<%= @domain %>"
+DOMAIN="<%= @svc_name.gsub('glassfish_', '') %>"
 USER="<%= @user %>"
 
 start() {

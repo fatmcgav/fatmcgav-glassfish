@@ -39,7 +39,7 @@ describe 'glassfish::create_service', :type => :define do
             systemd             = true
           else
             servicefile_path    = '/etc/init.d/glassfish_test'
-            servicefile_content = 'chkconfig:[\s\S]+="gfuser"'
+            servicefile_content = 'chkconfig:[\s\S]+DOMAIN="test"\nUSER="gfuser"'
             systemd             = false
           end
         when 'Debian'
