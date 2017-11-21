@@ -12,20 +12,61 @@ before_install:
   - gem update bundler
   - gem --version
   - bundle -v
-script: bundle exec rake test
+script: bundle exec rake $CHECK
 sudo: false
 env:
   - PUPPET_VERSION="~> 3.0" STRICT_VARIABLES="yes" FUTURE_PARSER="yes"
   - PUPPET_VERSION="~> 4.0" STRICT_VARIABLES="yes"
   - PUPPET_VERSION="~> 5.0" STRICT_VARIABLES="yes"
 matrix:
+  include:
+    - rvm: 2.1.9
+      bundler_args: --without development
+      dist: trusty
+      env: PUPPET_INSTALL_TYPE=agent BEAKER_debug=true BEAKER_set=docker/centos-6 CHECK=beaker
+      services: docker
+      sudo: required
+    - rvm: 2.1.9
+      bundler_args: --without development
+      dist: trusty
+      env: PUPPET_INSTALL_TYPE=agent BEAKER_debug=true BEAKER_set=docker/centos-7 CHECK=beaker
+      services: docker
+      sudo: required
+    - rvm: 2.1.9
+      bundler_args: --without development
+      dist: trusty
+      env: PUPPET_INSTALL_TYPE=agent BEAKER_debug=true BEAKER_set=docker/debian-7 CHECK=beaker
+      services: docker
+      sudo: required
+    - rvm: 2.1.9
+      bundler_args: --without development
+      dist: trusty
+      env: PUPPET_INSTALL_TYPE=agent BEAKER_debug=true BEAKER_set=docker/debian-8 CHECK=beaker
+      services: docker
+      sudo: required
+    - rvm: 2.1.9
+      bundler_args: --without development
+      dist: trusty
+      env: PUPPET_INSTALL_TYPE=agent BEAKER_debug=true BEAKER_set=docker/debian-9 CHECK=beaker
+      services: docker
+      sudo: required
+    - rvm: 2.1.9
+      bundler_args: --without development
+      dist: trusty
+      env: PUPPET_INSTALL_TYPE=agent BEAKER_debug=true BEAKER_set=docker/ubuntu-14.04 CHECK=beaker
+      services: docker
+      sudo: required
+    - rvm: 2.1.9
+      bundler_args: --without development
+      dist: trusty
+      env: PUPPET_INSTALL_TYPE=agent BEAKER_debug=true BEAKER_set=docker/ubuntu-16.04 CHECK=beaker
+      services: docker
+      sudo: required
   exclude:
   - rvm: 1.9.3
     env: PUPPET_VERSION="~> 4.0" STRICT_VARIABLES="yes"
   - rvm: 1.9.3
     env: PUPPET_VERSION="~> 5.0" STRICT_VARIABLES="yes"
-  - rvm: 2.3.1
-    env: PUPPET_VERSION="~> 3.0" STRICT_VARIABLES="yes"
   - rvm: 2.3.1
     env: PUPPET_VERSION="~> 3.0" STRICT_VARIABLES="yes" FUTURE_PARSER="yes"
 notifications:

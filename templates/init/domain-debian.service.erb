@@ -39,14 +39,13 @@ function procStatus() {
 		echo "This script must be run as root" 1>&2
 		exit 1
 	fi
-	log_daemon_msg "Status for $__NAME"
-	_isOk=0
 	sudo -u $USER ${GLASSFISHPATH}/asadmin list-domains | grep run | grep -v not > /dev/null
 	if [[ $? -ne 0 ]]; then
-		_isOk=3
+		log_failure_msg "$__NAME is not running"
+		return $?
 	fi
-	log_end_msg $_isOk
-	return $_isOk
+	log_success_msg "$__NAME is running"
+	return 0
 }
 
 function procStop() {
