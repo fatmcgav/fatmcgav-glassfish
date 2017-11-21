@@ -29,9 +29,10 @@ group :development do
 end
 
 group :system_tests do
-  gem "beaker", "<3"
+  gem "beaker"
   gem "beaker-rspec"
   gem "beaker-puppet_install_helper"
+  gem "beaker-module_install_helper"
   gem "serverspec"
   gem "vagrant-wrapper"
 end

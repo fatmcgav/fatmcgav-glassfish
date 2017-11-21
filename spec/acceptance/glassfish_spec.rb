@@ -5,7 +5,7 @@ describe 'glassfish' do
   # case fact('systemd')
   case $systemd
   when true
-    service_file = '/usr/lib/systemd/system/glassfish_test.service'
+    service_file = '/lib/systemd/system/glassfish_test.service'
   else
     service_file = '/etc/init.d/glassfish_test'
   end
