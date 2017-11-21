@@ -7,7 +7,7 @@ HOSTS:
     hypervisor : docker
     type: aio
     docker_image_commands:
-      - 'yum -y install which tar ntpdate wget'
+      - 'yum -y install which tar ntpdate wget unzip'
 CONFIG:
   log_level: debug
   type: git

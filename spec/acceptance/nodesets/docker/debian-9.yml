@@ -7,7 +7,7 @@ HOSTS:
     docker_preserve_image: true
     docker_cmd: '["/sbin/init"]'
     docker_image_commands:
-      - 'apt-get update && apt-get install -y cron locales-all net-tools wget systemd-sysv'
+      - 'apt-get update && apt-get install -y cron locales-all net-tools wget systemd-sysv unzip'
       - 'rm -f /usr/sbin/policy-rc.d'
       - 'systemctl mask getty@tty1.service getty-static.service'
 CONFIG:

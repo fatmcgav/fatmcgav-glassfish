@@ -11,7 +11,7 @@ HOSTS:
       - 'apt-get install -y software-properties-common'
       - 'add-apt-repository ppa:openjdk-r/ppa'
       - 'apt-get update'
-      - 'apt-get install -y net-tools wget locales'
+      - 'apt-get install -y net-tools wget locales unzip'
       - 'locale-gen en_US.UTF-8'
 CONFIG:
   trace_limit: 200
